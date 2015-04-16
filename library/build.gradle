@@ -1,0 +1,101 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+android {
+	compileSdkVersion 22
+	buildToolsVersion "21.1.2"
+
+	defaultConfig {
+		minSdkVersion 7
+		targetSdkVersion 22
+		versionCode 1
+		versionName "1.0"
+	}
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+}
+
+version = "1.1.0"
+group = "com.rafalzajfert"
+
+def siteUrl = 'https://github.com/RafalZajfert/android-logger'
+def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+	user = properties.getProperty("bintray.user")
+	key = properties.getProperty("bintray.apikey")
+
+	configurations = ['archives']
+	pkg {
+		repo = "maven"
+		name = "AndroidLogger"
+
+		websiteUrl = siteUrl
+		vcsUrl = gitUrl
+		licenses = ["Apache-2.0"]
+		publish = true
+	}
+}
+
+install {
+	repositories.mavenInstaller {
+		pom {
+			project {
+				packaging 'aar'
+				name 'Simple Android logger library'
+				url siteUrl
+				licenses {
+					license {
+						name 'The Apache Software License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+				developers {
+					developer {
+						id 'rafalzajfert'
+						name 'Rafal Zajfert'
+						email 'rafal.zajfert@gmail.com'
+					}
+				}
+				scm {
+					connection gitUrl
+					developerConnection gitUrl
+					url siteUrl
+
+				}
+			}
+		}
+	}
+}
+
+
+task sourcesJar(type: Jar) {
+	from android.sourceSets.main.java.srcDirs
+	classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+	source = android.sourceSets.main.java.srcDirs
+	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+artifacts {
+	archives javadocJar
+	archives sourcesJar
+}
+
+task findConventions << {
+	println project.getConvention()
+}
