@@ -2,14 +2,17 @@ package com.rafalzajfert.androidlogger;
 
 import android.util.Log;
 
+import com.rafalzajfert.androidlogger.logcat.LogCatLogger;
+
 /**
  * Logger class
  *
  * @author Rafal Zajfert
- * @version 1.1.0 (15/04/2015)
+ * @version 1.0.1 (15/04/2015)
  */
 public abstract class Logger {
 
+	/** Logger tag used to identify logger. This tag will not be used to write log message */
 	String loggerTag;
 
 	/**
@@ -47,7 +50,12 @@ public abstract class Logger {
 	 */
 	public static final String PARAM_LINE_NUMBER = "$LineNumber";
 
-	private static LoggerConfig globalConfig;
+
+	private static LoggerConfig globalConfig = new LoggerConfig.Builder()
+			.addLogger(new LogCatLogger())
+			.enabled(true)
+			.logLevel(Level.DEBUG)
+			.build();
 
 	/**
 	 * Configure logger properties

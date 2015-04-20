@@ -10,7 +10,7 @@ android {
 		minSdkVersion 7
 		targetSdkVersion 22
 		versionCode 1
-		versionName "1.0"
+		versionName "1.0.1"
 	}
 	buildTypes {
 		release {
@@ -20,38 +20,26 @@ android {
 	}
 }
 
-version = "1.1.0"
-group = "com.rafalzajfert"
+def siteUrl = 'https://github.com/RafalZajfert/android-logger'      // Homepage URL of the library
+def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'   // Git repository URL
+version = "1.0.1"
+group = "com.rafalzajfert"                      // Maven Group ID for the artifact
 
-def siteUrl = 'https://github.com/RafalZajfert/android-logger'
-def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-	user = properties.getProperty("bintray.user")
-	key = properties.getProperty("bintray.apikey")
-
-	configurations = ['archives']
-	pkg {
-		repo = "maven"
-		name = "AndroidLogger"
-
-		websiteUrl = siteUrl
-		vcsUrl = gitUrl
-		licenses = ["Apache-2.0"]
-		publish = true
-	}
-}
 
 install {
 	repositories.mavenInstaller {
+		// This generates POM.xml with proper parameters
 		pom {
 			project {
 				packaging 'aar'
-				name 'Simple Android logger library'
+
+				// Add your description here
+				name 'Android Logger'
+				artifactId = 'com.rafalzajfert'
+				description = 'Simple Android logger library'
 				url siteUrl
+
+				// Set your license
 				licenses {
 					license {
 						name 'The Apache Software License, Version 2.0'
@@ -76,7 +64,6 @@ install {
 	}
 }
 
-
 task sourcesJar(type: Jar) {
 	from android.sourceSets.main.java.srcDirs
 	classifier = 'sources'
@@ -91,11 +78,40 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 	classifier = 'javadoc'
 	from javadoc.destinationDir
 }
+
 artifacts {
 	archives javadocJar
 	archives sourcesJar
 }
 
-task findConventions << {
-	println project.getConvention()
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+	user = properties.getProperty("bintray.user")
+	key = properties.getProperty("bintray.apikey")
+
+	configurations = ['archives']
+	pkg {
+		repo = "maven"
+		// it is the name that appears in bintray when logged
+		name = "android-logger"
+		websiteUrl = siteUrl
+		vcsUrl = gitUrl
+		licenses = ["Apache-2.0"]
+		publish = true
+		version {
+			gpg {
+				sign = true //Determines whether to GPG sign the files. The default is false
+				passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+			}
+//            mavenCentralSync {
+//                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+//                user = properties.getProperty("bintray.oss.user") //OSS user token
+//                password = properties.getProperty("bintray.oss.password") //OSS user password
+//                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+//            }
+		}
+	}
 }

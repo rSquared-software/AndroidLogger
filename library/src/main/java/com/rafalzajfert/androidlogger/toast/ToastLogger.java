@@ -11,7 +11,7 @@ import com.rafalzajfert.androidlogger.StandardLogger;
  * console
  *
  * @author Rafal Zajfert
- * @version 1.1.0 (15/04/2015)
+ * @version 1.0.1 (15/04/2015)
  */
 public class ToastLogger extends StandardLogger {
 
