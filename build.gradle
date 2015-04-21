@@ -13,9 +13,6 @@ buildscript {
 	}
 }
 
-def bintray_user = 'rafalzajfert'
-def bintray_api_key = '1589d884b09a36371caaff6ad625c900d0533ee8'
-
 
 allprojects {
 	repositories {
