@@ -77,8 +77,12 @@ public class TextViewLogger extends StandardLogger {
 	}
 
 
-	private void append(String type, String message) {
-		textView.append((textView.length() > 0 ? "\n" : "") + type + " " + getTag() + " " + message);
+	protected void append(String type, String message) {
+		textView.append((textView.length() > 0 ? getMessageSeparator() : "") + type + " " + getTag() + " " + message);
+	}
+
+	protected String getMessageSeparator(){
+		return config.eachInNewLine ? "\n" : " ";
 	}
 
 }

@@ -97,7 +97,7 @@ public class FileLogger extends StandardLogger {
 		appendFile("W", message);
 	}
 
-	private void appendFile(String type, String message) {
+	protected void appendFile(String type, String message) {
 		String tag = getTag();
 		RandomAccessFile file = null;
 		try {

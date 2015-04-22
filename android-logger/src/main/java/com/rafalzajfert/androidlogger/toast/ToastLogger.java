@@ -78,7 +78,7 @@ public class ToastLogger extends StandardLogger {
 	}
 
 
-	private void show(String message) {
+	protected void show(String message) {
 		Toast.makeText(context, message, config.duration).show();
 	}
 

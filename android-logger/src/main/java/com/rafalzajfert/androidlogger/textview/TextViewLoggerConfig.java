@@ -9,11 +9,13 @@ import com.rafalzajfert.androidlogger.Level;
  */
 public class TextViewLoggerConfig {
 	Boolean enabled;
+	boolean eachInNewLine;
 	Level logLevel;
 	String tag;
 
-	private TextViewLoggerConfig(Boolean enabled, Level logLevel, String tag) {
+	private TextViewLoggerConfig(Boolean enabled, boolean eachInNewLine, Level logLevel, String tag) {
 		this.enabled = enabled;
+		this.eachInNewLine = eachInNewLine;
 		this.logLevel = logLevel;
 		this.tag = tag;
 	}
@@ -46,9 +48,10 @@ public class TextViewLoggerConfig {
 		private Boolean enabled;
 		private Level logLevel;
 		private String tag;
+		boolean eachInNewLine;
 
 		public TextViewLoggerConfig build(){
-			return new TextViewLoggerConfig(enabled, logLevel, tag);
+			return new TextViewLoggerConfig(enabled, eachInNewLine, logLevel, tag);
 		}
 
 		/**
@@ -79,6 +82,14 @@ public class TextViewLoggerConfig {
 		 */
 		public Builder logLevel(Level level) {
 			this.logLevel = level;
+			return this;
+		}
+
+		/**
+		 * Minimal {@link com.rafalzajfert.androidlogger.Level Level} of message to sent
+		 */
+		public Builder setEachInNewLine(boolean eachInNewLine) {
+			this.eachInNewLine = eachInNewLine;
 			return this;
 		}
 	}

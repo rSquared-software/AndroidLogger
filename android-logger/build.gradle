@@ -10,7 +10,7 @@ android {
 		minSdkVersion 7
 		targetSdkVersion 22
 		versionCode 1
-		versionName "1.0.1"
+		versionName "1.0.2"
 	}
 	buildTypes {
 		release {
@@ -22,7 +22,7 @@ android {
 
 def siteUrl = 'https://github.com/RafalZajfert/android-logger'      // Homepage URL of the library
 def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'   // Git repository URL
-version = "1.0.1"
+version = "1.0.2"
 group = "com.rafalzajfert"                      // Maven Group ID for the artifact
 
 
@@ -35,7 +35,7 @@ install {
 
 				// Add your description here
 				name 'Android Logger'
-				artifactId = 'com.rafalzajfert'
+				artifactId = 'android-logger'
 				description = 'Simple Android logger library'
 				url siteUrl
 

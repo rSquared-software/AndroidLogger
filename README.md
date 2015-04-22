@@ -22,17 +22,57 @@ Maven Dependency
 </dependency>
 ```
 
-Usage
+Sample Usage
 =======
-```java
 
+```java
+//Send a message to all loggers added in global configuration
+Logger.verbose("Verbose log");
+Logger.debug("Debug log");
+Logger.info("Info log");
+Logger.warning("Warning log");
+Logger.error("Error log");
+
+// log multi argument message
+Logger.debug("User:", user.id, user.name);
+
+// log throwable
+try {
+    ...
+} catch (Throwable t){
+    Logger.error("error", t);
+}
+
+//--------------------------------------------------------------
+
+//Send message to one logger
+Logger logcat = new LogCatLogger();
+logcat.v("Verbose log");
+logcat.d("Debug log");
+logcat.i("Info log");
+logcat.w("Warning log");
+logcat.e("Error log");
+
+//--------------------------------------------------------------
+
+// get logger from configuration by tag
+LoggerConfig config = new LoggerConfig.Builder()
+        .addLogger("logcatTag", new LogCatLogger()).build();
+Logger.setGlobalConfiguration(config);
+
+Logger logcatLogger = Logger.getGlobalConfiguration().getLogger("logcatTag");
+
+// remove logger from global configuration
+Logger.getGlobalConfiguration().removeLogger("fileLoggerTag");
+
+Logger.getGlobalConfiguration().removeLogger(logcatLogger);
 ```
 
 Configuration
 =======
 
 Global Configuration
----
+-----------
 
 ```java
 LoggerConfig config = new LoggerConfig.Builder()
@@ -66,6 +106,8 @@ Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
 least one. For better management you can also set tag for each logger.  
 This library provide four types of logger: LogCatLogger, FileLogger, TextViewLogger, ToastLogger.
 You can create custom logger by extending StandardLogger class.
+
+Each Logger can also specified own config.
 
 Developed By
 =======
