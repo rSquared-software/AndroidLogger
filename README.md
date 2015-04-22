@@ -6,7 +6,7 @@ Gradle Dependency (jCenter)
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.0.2'
+    compile 'com.rafalzajfert:android-logger:1.0.3'
 }
 ```
 
