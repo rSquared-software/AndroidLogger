@@ -25,12 +25,7 @@ Maven Dependency
 Usage
 =======
 ```java
-new MaterialDialog.Builder(this)
-        .title(R.string.title)
-        .content(R.string.content)
-        .positiveText(R.string.agree)
-        .negativeText(R.string.disagree)
-        .show();
+
 ```
 
 Configuration
