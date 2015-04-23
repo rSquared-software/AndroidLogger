@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
 		logTextView = (TextView) findViewById(R.id.log);
 		logger.setConfiguration(new LogCatLoggerConfig.Builder()
 				.tag(Logger.PARAM_SIMPLE_CLASS_NAME +" "+ Logger.PARAM_METHOD_NAME).build());
-		Logger.setGlobalConfiguration(new LoggerConfig.Builder().enabled(true).logLevel(Level.VERBOSE).build());
+		Logger.setGlobalConfiguration(new LoggerConfig.Builder().enabled(false).logLevel(Level.VERBOSE).build());
 		logger.d("test");
 	}
 

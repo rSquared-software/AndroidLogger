@@ -60,8 +60,8 @@ public class LoggerConfig {
 	 * @param logger
 	 */
 	public void addLogger(Logger logger) {
-		logger.loggerTag = logger.getClass().getSimpleName();
-		addLogger(logger.getClass().getSimpleName(), logger);
+		String loggerTag = logger.getClass().getSimpleName() + "_" + System.currentTimeMillis();
+		addLogger(loggerTag, logger);
 	}
 
 	/**
@@ -69,7 +69,6 @@ public class LoggerConfig {
 	 * @param logger
 	 */
 	public void addLogger(String loggerTag, Logger logger) {
-		logger.loggerTag = loggerTag;
 		loggers.put(loggerTag, logger);
 	}
 

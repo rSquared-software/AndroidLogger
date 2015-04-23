@@ -74,6 +74,9 @@ Configuration
 Global Configuration
 -----------
 
+Global configuration sets log parameters for all loggers from this library. If you do not set this configuration then
+ it is set to use LogcatLogger with minimal Debug level.
+
 ```java
 LoggerConfig config = new LoggerConfig.Builder()
         .tag(Logger.PARAM_CLASS_NAME + " (" + Logger.PARAM_LINE_NUMBER + ")")
@@ -81,7 +84,7 @@ LoggerConfig config = new LoggerConfig.Builder()
         .logLevel(Level.DEBUG)
         .separator(" ")
         .throwableSeparator("\n")
-        .addLogger(logger)
+        .addLogger(fileLogger)
         .addLogger("logcatTag", logcatLogger).build();
 Logger.setGlobalConfiguration(config);
 ```
@@ -93,7 +96,7 @@ Logger.PARAM_METHOD_NAME
 Logger.PARAM_FILE_NAME  
 Logger.PARAM_LINE_NUMBER  
 
-`enabled` - Enable or disable loggers, if this parameters is set true no message will be send to loggers
+`enabled` - Enable or disable  loggers, if this parameters is set true no message will be send to loggers
  
 `logLevel` - Minimal log level, all messages with level below this will be ignored.  
 Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
@@ -102,12 +105,10 @@ Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
 
 `throwableSeparator` - String used to separate message and Throwable stack trace
 
-`addLogger` - You can add more then one logger and if you set custom global configuration then you should add at 
-least one. For better management you can also set tag for each logger.  
+`addLogger` - You can add more then one logger and if you set custom global configuration then you should add at
+least one instance of logger. For better management you can also set tag for each logger.  
 This library provide four types of logger: LogCatLogger, FileLogger, TextViewLogger, ToastLogger.
 You can create custom logger by extending StandardLogger class.
-
-Each Logger can also specified own config.
 
 Developed By
 =======
