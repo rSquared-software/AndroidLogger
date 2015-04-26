@@ -6,37 +6,29 @@ import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.StandardLogger;
 
 /**
- * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to LogCat
+ * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
  * console
  * 
  * @author Rafal Zajfert
- * @version 1.0.1 (15/04/2015)
+ * @version 1.0.5 (26/04/2015)
  */
-public class LogCatLogger extends StandardLogger {
+public class LogcatLogger extends StandardLogger {
 
-	private LogCatLoggerConfig config;
+	private final LogcatLoggerConfig config = new LogcatLoggerConfig();
 
-	public LogCatLogger() {
-		config = new LogCatLoggerConfig.Builder().build();
-	}
-
-	/**
-	 * Configure logger properties
-	 */
-	public void setConfiguration(LogCatLoggerConfig config) {
-		this.config = config;
+	public LogcatLogger(){
 	}
 
 	/**
 	 * Returns Logger configuration
 	 */
-	public LogCatLoggerConfig getConfiguration() {
+	public LogcatLoggerConfig config() {
 		return this.config;
 	}
 
 	@Override
 	protected String getTag() {
-		if (config == null || config.tag == null){
+		if (config.tag == null){
 			return getFormattedTag();
 		} else {
 			return formatTag(config.getTag());
@@ -45,7 +37,7 @@ public class LogCatLogger extends StandardLogger {
 
 	@Override
 	protected boolean canLogMessage(Level level) {
-		return config == null || (config.isEnabled() && config.isLevelAllowed(level));
+		return config.isEnabled() && config.isLevelAllowed(level);
 	}
 
 	@Override

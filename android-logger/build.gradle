@@ -10,7 +10,7 @@ android {
 		minSdkVersion 7
 		targetSdkVersion 22
 		versionCode 1
-		versionName "1.0.4"
+		versionName "1.0.5"
 	}
 	buildTypes {
 		release {
@@ -22,7 +22,7 @@ android {
 
 def siteUrl = 'https://github.com/RafalZajfert/android-logger'      // Homepage URL of the library
 def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'   // Git repository URL
-version = "1.0.4"
+version = "1.0.5"
 group = "com.rafalzajfert"                      // Maven Group ID for the artifact
 
 

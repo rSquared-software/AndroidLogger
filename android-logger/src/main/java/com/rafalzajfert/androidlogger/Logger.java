@@ -2,13 +2,11 @@ package com.rafalzajfert.androidlogger;
 
 import android.util.Log;
 
-import com.rafalzajfert.androidlogger.logcat.LogCatLogger;
-
 /**
  * Logger class
  *
  * @author Rafal Zajfert
- * @version 1.0.1 (15/04/2015)
+ * @version 1.0.5 (26/04/2015)
  */
 public abstract class Logger {
 
@@ -51,24 +49,10 @@ public abstract class Logger {
 	public static final String PARAM_LINE_NUMBER = "$LineNumber";
 
 
-	private static LoggerConfig globalConfig = new LoggerConfig.Builder()
-			.addLogger(new LogCatLogger())
-			.enabled(true)
-			.logLevel(Level.DEBUG)
-			.build();
+	private final static LoggerConfig globalConfig = new LoggerConfig();
 
-	/**
-	 * Configure logger properties
-	 */
-	public static void setGlobalConfiguration(LoggerConfig config) {
-		Logger.globalConfig = config;
-	}
-
-	/**
-	 * Returns Logger configuration
-	 */
-	public static LoggerConfig getGlobalConfiguration() {
-		return Logger.globalConfig;
+	public static LoggerConfig globalConfig(){
+		return globalConfig;
 	}
 
 	/**
@@ -103,7 +87,7 @@ public abstract class Logger {
 	 */
 	public static void info(Object message) {
 		if (canLog(Level.INFO)) {
-			for (Logger logger : globalConfig.loggers.values()) {
+			for (Logger logger : globalConfig.getLoggers()) {
 				logger.i(message);
 			}
 		}
@@ -231,7 +215,7 @@ public abstract class Logger {
 	 */
 	public static void error(Object message) {
 		if (canLog(Level.ERROR)) {
-			for (Logger logger : globalConfig.loggers.values()) {
+			for (Logger logger : globalConfig.getLoggers()) {
 				logger.e(message);
 			}
 		}
@@ -359,7 +343,7 @@ public abstract class Logger {
 	 */
 	public static void debug(Object message) {
 		if (canLog(Level.DEBUG)) {
-			for (Logger logger : globalConfig.loggers.values()) {
+			for (Logger logger : globalConfig.getLoggers()) {
 				logger.d(message);
 			}
 		}
@@ -487,7 +471,7 @@ public abstract class Logger {
 	 */
 	public static void verbose(Object message) {
 		if (canLog(Level.VERBOSE)) {
-			for (Logger logger : globalConfig.loggers.values()) {
+			for (Logger logger : globalConfig.getLoggers()) {
 				logger.v(message);
 			}
 		}
@@ -615,7 +599,7 @@ public abstract class Logger {
 	 */
 	public static void warning(Object message) {
 		if (canLog(Level.WARNING)) {
-			for (Logger logger : globalConfig.loggers.values()) {
+			for (Logger logger : globalConfig.getLoggers()) {
 				logger.w(message);
 			}
 		}

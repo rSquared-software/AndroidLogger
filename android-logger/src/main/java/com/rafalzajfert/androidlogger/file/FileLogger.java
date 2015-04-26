@@ -17,7 +17,7 @@ import java.util.Date;
  * default file is saved in application files directory
  *
  * @author Rafal Zajfert
- * @version 1.0.1 (15/04/2015)
+ * @version 1.0.5 (26/04/2015)
  * @see {@link android.content.Context#getFilesDir() getFilesDir()}
  */
 public class FileLogger extends StandardLogger {
@@ -26,25 +26,17 @@ public class FileLogger extends StandardLogger {
 
 	private Context context;
 
-	private FileLoggerConfig config;
-
-	/**
-	 * Configure logger properties
-	 */
-	public void setConfiguration(FileLoggerConfig config) {
-		this.config = config;
-	}
+	private final FileLoggerConfig config = new FileLoggerConfig();
 
 	/**
 	 * Returns Logger configuration
 	 */
-	public FileLoggerConfig getConfiguration() {
+	public FileLoggerConfig config() {
 		return this.config;
 	}
 
 	public FileLogger(Context context) {
 		this.context = context;
-		config = new FileLoggerConfig.Builder().build();
 	}
 
 	/**
@@ -60,7 +52,7 @@ public class FileLogger extends StandardLogger {
 
 	@Override
 	protected String getTag() {
-		if (config == null || config.tag == null) {
+		if (config.tag == null) {
 			return getFormattedTag();
 		} else {
 			return formatTag(config.getTag());
@@ -69,7 +61,7 @@ public class FileLogger extends StandardLogger {
 
 	@Override
 	protected boolean canLogMessage(Level level) {
-		return config == null || (config.isEnabled() && config.isLevelAllowed(level));
+		return config.isEnabled() && config.isLevelAllowed(level);
 	}
 
 	@Override

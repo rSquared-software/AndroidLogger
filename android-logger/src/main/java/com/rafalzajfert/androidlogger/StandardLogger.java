@@ -9,7 +9,7 @@ import java.util.Map.Entry;
  * Logger class
  *
  * @author Rafal Zajfert
- * @version 1.0.1 (15/04/2015)
+ * @version 1.0.5 (26/04/2015)
  */
 public abstract class StandardLogger extends Logger {
 
@@ -23,7 +23,7 @@ public abstract class StandardLogger extends Logger {
 	 * @return formatted global tag from configuration
 	 */
 	protected String getFormattedTag() {
-		return formatTag(Logger.getGlobalConfiguration().tag);
+		return formatTag(Logger.globalConfig().tag);
 	}
 
 	/**

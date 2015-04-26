@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 
  * @author Rafal Zajfert
- * @version 1.0.0 (04/02/2015)
+ * @version 1.0.5 (26/04/2015)
  */
 class LoggerUtils {
 
@@ -35,14 +35,14 @@ class LoggerUtils {
 		return new HashMap<String, String>() {
 			private static final long serialVersionUID = -5934767247384989357L;
 			{
-				put("$SimpleClassName",
+				put( Logger.PARAM_SIMPLE_CLASS_NAME,
 						getField(element, StackTraceField.SIMPLE_CLASS_NAME));
-				put("$FullClassName",
+				put(Logger.PARAM_CLASS_NAME,
 						getField(element, StackTraceField.FULL_CLASS_NAME));
-				put("$MethodName",
+				put(Logger.PARAM_METHOD_NAME,
 						getField(element, StackTraceField.METHOD_NAME));
-				put("$FileName", getField(element, StackTraceField.FILE_NAME));
-				put("$LineNumber",
+				put(Logger.PARAM_FILE_NAME, getField(element, StackTraceField.FILE_NAME));
+				put(Logger.PARAM_LINE_NUMBER,
 						getField(element, StackTraceField.LINE_NUMBER));
 			}
 		};

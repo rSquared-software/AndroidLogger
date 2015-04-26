@@ -6,7 +6,7 @@ Gradle Dependency (jCenter)
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.0.4'
+    compile 'com.rafalzajfert:android-logger:1.0.5'
 }
 ```
 
@@ -18,7 +18,7 @@ Maven Dependency
 <dependency>
     <groupId>com.rafalzajfert</groupId>
     <artifactId>android-logger</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ try {
 //--------------------------------------------------------------
 
 //Send message to one logger
-Logger logcat = new LogCatLogger();
+Logger logcat = new LogcatLogger();
 logcat.v("Verbose log");
 logcat.d("Debug log");
 logcat.i("Info log");
@@ -56,16 +56,14 @@ logcat.e("Error log");
 //--------------------------------------------------------------
 
 // get logger from configuration by tag
-LoggerConfig config = new LoggerConfig.Builder()
-        .addLogger("logcatTag", new LogCatLogger()).build();
-Logger.setGlobalConfiguration(config);
+Logger.globalConfig().addLogger("logcatTag", new LogcatLogger());
 
-Logger logcatLogger = Logger.getGlobalConfiguration().getLogger("logcatTag");
+Logger logcatLogger = Logger.globalConfig().getLogger("logcatTag");
 
 // remove logger from global configuration
-Logger.getGlobalConfiguration().removeLogger("fileLoggerTag");
+Logger.globalConfig().removeLogger("fileLoggerTag");
 
-Logger.getGlobalConfiguration().removeLogger(logcatLogger);
+Logger.globalConfig().removeLogger(logcatLogger);
 ```
 
 Configuration
@@ -74,19 +72,19 @@ Configuration
 Global Configuration
 -----------
 
-Global configuration sets log parameters for all loggers from this library. If you do not set this configuration then
- it is set to use LogcatLogger with minimal Debug level.
+Global configuration sets log parameters for all loggers from this library. Default it is set to use LogcatLogger 
+with minimal level as Debug. If you add a logger to this configuration then default LogcatLogger will be disabled and
+ if you want to use it further, you have to add it manually with method addLogger().
 
 ```java
-LoggerConfig config = new LoggerConfig.Builder()
+Logger.globalConfig()
         .tag(Logger.PARAM_CLASS_NAME + " (" + Logger.PARAM_LINE_NUMBER + ")")
         .enabled(true)
         .logLevel(Level.DEBUG)
         .separator(" ")
         .throwableSeparator("\n")
         .addLogger(fileLogger)
-        .addLogger("logcatTag", logcatLogger).build();
-Logger.setGlobalConfiguration(config);
+        .addLogger("logcatTag", logcatLogger);
 ```
 `tag` - Tag, used to identify source of a log message, default it's class name with line number  
 You can also use auto generated values:  
@@ -105,15 +103,14 @@ Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
 
 `throwableSeparator` - String used to separate message and Throwable stack trace
 
-`addLogger` - You can add more then one logger and if you set custom global configuration then you should add at
-least one instance of logger. For better management you can also set tag for each logger.  
-This library provide four types of logger: LogCatLogger, FileLogger, TextViewLogger, ToastLogger.
+`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.  
+This library provide four types of logger: LogcatLogger, FileLogger, TextViewLogger, ToastLogger.
 You can create custom logger by extending StandardLogger class.
 
 Developed By
 =======
 
- * Rafal Zajfer - <rafal.zajfert@gmail.com>
+ * Rafal Zajfert - <rafal.zajfert@gmail.com>
 
 License
 =======

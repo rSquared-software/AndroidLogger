@@ -7,40 +7,32 @@ import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.StandardLogger;
 
 /**
- * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to LogCat
+ * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
  * console
  *
  * @author Rafal Zajfert
- * @version 1.0.1 (15/04/2015)
+ * @version 1.0.5 (26/04/2015)
  */
 public class ToastLogger extends StandardLogger {
 
-	private ToastLoggerConfig config;
+	private final ToastLoggerConfig config = new ToastLoggerConfig();
 
 	private Context context;
 
 	public ToastLogger(Context context) {
 		this.context = context;
-		config = new ToastLoggerConfig.Builder().build();
-	}
-
-	/**
-	 * Configure logger properties
-	 */
-	public void setConfiguration(ToastLoggerConfig config) {
-		this.config = config;
 	}
 
 	/**
 	 * Returns Logger configuration
 	 */
-	public ToastLoggerConfig getConfiguration() {
+	public ToastLoggerConfig config() {
 		return this.config;
 	}
 
 	@Override
 	protected String getTag() {
-		if (config == null || config.tag == null) {
+		if (config.tag == null) {
 			return getFormattedTag();
 		} else {
 			return formatTag(config.getTag());
@@ -49,7 +41,7 @@ public class ToastLogger extends StandardLogger {
 
 	@Override
 	protected boolean canLogMessage(Level level) {
-		return config == null || (config.isEnabled() && config.isLevelAllowed(level));
+		return config.isEnabled() && config.isLevelAllowed(level);
 	}
 
 	@Override
