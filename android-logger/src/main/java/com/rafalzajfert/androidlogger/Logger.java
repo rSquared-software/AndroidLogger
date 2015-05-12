@@ -8,6 +8,7 @@ import android.util.Log;
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
+@SuppressWarnings("unused")
 public abstract class Logger {
 
 	/** Logger tag used to identify logger. This tag will not be used to write log message */
@@ -108,7 +109,7 @@ public abstract class Logger {
 	 */
 	public void i(Object message) {
 		if (canLog(Level.INFO) && canLogMessage(Level.INFO)) {
-			printInfo(getMessage(message));
+			print(Level.INFO, getMessage(message));
 		}
 	}
 
@@ -236,7 +237,7 @@ public abstract class Logger {
 	 */
 	public void e(Object message) {
 		if (canLog(Level.ERROR) && canLogMessage(Level.ERROR)) {
-			printError(getMessage(message));
+			print(Level.ERROR, getMessage(message));
 		}
 	}
 
@@ -364,7 +365,7 @@ public abstract class Logger {
 	 */
 	public void d(Object message) {
 		if (canLog(Level.DEBUG) && canLogMessage(Level.DEBUG)) {
-			printDebug(getMessage(message));
+			print(Level.DEBUG, getMessage(message));
 		}
 	}
 
@@ -492,7 +493,7 @@ public abstract class Logger {
 	 */
 	public void v(Object message) {
 		if (canLog(Level.VERBOSE) && canLogMessage(Level.VERBOSE)) {
-			printVerbose(getMessage(message));
+			print(Level.VERBOSE, getMessage(message));
 		}
 	}
 
@@ -620,7 +621,7 @@ public abstract class Logger {
 	 */
 	public void w(Object message) {
 		if (canLog(Level.WARNING) && canLogMessage(Level.WARNING)) {
-			printWarning(getMessage(message));
+			print(Level.WARNING, getMessage(message));
 		}
 	}
 
@@ -712,14 +713,46 @@ public abstract class Logger {
 		w(message + globalConfig.throwableSeparator + Log.getStackTraceString(th));
 	}
 
-	protected abstract void printError(String message);
+	/**
+	 * @deprecated use {@link #print(Level, String)} instead.
+	 * @param message message to print with logger
+	 */
+	@Deprecated
+	protected void printError(String message){
+	}
 
-	protected abstract void printInfo(String message);
+	/**
+	 * @deprecated use {@link #print(Level, String)} instead.
+	 * @param message message to print with logger
+	 */
+	@Deprecated
+	protected void printInfo(String message){
+	}
 
-	protected abstract void printDebug(String message);
+	/**
+	 * @deprecated use {@link #print(Level, String)} instead.
+	 * @param message message to print with logger
+	 */
+	@Deprecated
+	protected void printDebug(String message){
+	}
 
-	protected abstract void printVerbose(String message);
+	/**
+	 * @deprecated use {@link #print(Level, String)} instead.
+	 * @param message message to print with logger
+	 */
+	@Deprecated
+	protected void printVerbose(String message){
+	}
 
-	protected abstract void printWarning(String message);
+	/**
+	 * @deprecated use {@link #print(Level, String)} instead.
+	 * @param message message to print with logger
+	 */
+	@Deprecated
+	protected void printWarning(String message){
+	}
+
+	protected abstract void print(Level level, String message);
 
 }

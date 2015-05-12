@@ -41,28 +41,23 @@ public class LogcatLogger extends StandardLogger {
 	}
 
 	@Override
-	protected void printError(String message) {
-		Log.e(getTag(), message);
+	protected void print(Level level, String message) {
+		switch (level){
+			case ERROR:
+				Log.e(getTag(), message);
+				break;
+			case INFO:
+				Log.i(getTag(), message);
+				break;
+			case DEBUG:
+				Log.d(getTag(), message);
+				break;
+			case VERBOSE:
+				Log.v(getTag(), message);
+				break;
+			case WARNING:
+				Log.w(getTag(), message);
+				break;
+		}
 	}
-
-	@Override
-	protected void printInfo(String message) {
-		Log.i(getTag(), message);
-	}
-
-	@Override
-	protected void printDebug(String message) {
-		Log.d(getTag(), message);
-	}
-
-	@Override
-	protected void printVerbose(String message) {
-		Log.v(getTag(), message);
-	}
-
-	@Override
-	protected void printWarning(String message) {
-		Log.w(getTag(), message);
-	}
-
 }

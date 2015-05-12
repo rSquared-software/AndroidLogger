@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
+import com.rafalzajfert.androidlogger.LoggerANRWatchDog;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 import com.rafalzajfert.androidlogger.textview.TextViewLogger;
 import com.rafalzajfert.androidlogger.toast.ToastLogger;
@@ -24,7 +25,9 @@ public class MainActivity extends ActionBarActivity {
 	private boolean isToastAdded = false;
 	private boolean isTextViewAdded = false;
 	private LogcatLogger logger = new LogcatLogger();
+	private LogcatLogger l;
 
+	double r;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +37,20 @@ public class MainActivity extends ActionBarActivity {
 		logTextView = (TextView) findViewById(R.id.log);
 		logger.config().tag(Logger.PARAM_CLASS_NAME + " " + Logger
 				.PARAM_METHOD_NAME);
-		Logger.globalConfig().enabled(true).logLevel(Level.VERBOSE);
-		logger.d("test");
+
+		Logger.globalConfig()
+				.tag(Logger.PARAM_CLASS_NAME + "("+Logger.PARAM_LINE_NUMBER+")")
+				.startANRWatchDog(new LoggerANRWatchDog(2000).preventCrash(true))
+				.catchAllExceptions()
+				.enabled(true)
+				.logLevel(Level.VERBOSE);
+		Logger.error("start");
+		int i =0;
+		while (i<10000){
+			i++;
+		}
+		l.d("");
+		logger.e("test");
 	}
 
 	public void sendToAll(View v) {

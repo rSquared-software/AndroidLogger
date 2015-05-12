@@ -7,10 +7,16 @@ import com.rafalzajfert.androidlogger.Level;
  * @version 1.0.5 (26/04/2015)
  */
 public class TextViewLoggerConfig {
+
+	public static enum Method{
+		APPEND, APPEND_START, OVERWRITE
+	}
+
 	Boolean enabled;
 	boolean eachInNewLine;
 	Level logLevel;
 	String tag;
+	Method method = Method.APPEND;
 
 	TextViewLoggerConfig() {
 	}
@@ -51,6 +57,14 @@ public class TextViewLoggerConfig {
 	 */
 	public TextViewLoggerConfig tag(String tag) {
 		this.tag = tag;
+		return this;
+	}
+
+	/**
+	 * Set Method to print messages in the TextView
+	 */
+	public TextViewLoggerConfig printMethod(Method method){
+		this.method = method;
 		return this;
 	}
 

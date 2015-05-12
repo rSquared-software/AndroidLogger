@@ -45,33 +45,17 @@ public class ToastLogger extends StandardLogger {
 	}
 
 	@Override
-	protected void printError(String message) {
-		show(message);
-	}
-
-	@Override
-	protected void printInfo(String message) {
-		show(message);
-	}
-
-	@Override
-	protected void printDebug(String message) {
-		show(message);
-	}
-
-	@Override
-	protected void printVerbose(String message) {
-		show(message);
-	}
-
-	@Override
-	protected void printWarning(String message) {
-		show(message);
-	}
-
-
-	protected void show(String message) {
+	protected void print(Level level, String message) {
 		Toast.makeText(context, message, config.duration).show();
+	}
+
+	/**
+	 * @deprecated use {@link #print(Level, String)} instead.
+	 * @param message message to print with logger
+	 */
+	@Deprecated
+	protected void show(String message) {
+		throw new UnsupportedOperationException("show(String) method is deprecated");
 	}
 
 

@@ -12,9 +12,10 @@ import java.util.Map;
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
+@SuppressWarnings("unused")
 public class LoggerConfig {
 	private Map<String, Logger> loggers = new HashMap<>();
-	private List<Logger> standardLogger = new ArrayList<Logger>();
+	private List<Logger> standardLogger = new ArrayList<>();
 
 	boolean enabled = true;
 
@@ -49,7 +50,7 @@ public class LoggerConfig {
 	/**
 	 * Remove {@link com.rafalzajfert.androidlogger.Logger Logger} instance
 	 *
-	 * @param tag
+	 * @param tag tag of the logger to remove
 	 */
 	public LoggerConfig removeLogger(String tag) {
 		loggers.remove(tag);
@@ -57,9 +58,35 @@ public class LoggerConfig {
 	}
 
 	/**
+	 * Create new {@link com.github.anrwatchdog.ANRWatchDog} thread.<br/><br/>
+	 * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a>
+	 */
+	public LoggerConfig startANRWatchDog(LoggerANRWatchDog watchDog){
+		watchDog.start();
+		return this;
+	}
+
+	/**
+	 * Setup Thread to catch and log all uncaught exceptions<br/>
+	 * This method not prevent app crash.
+	 * @return
+	 */
+	public LoggerConfig catchAllExceptions(){
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread thread, Throwable ex) {
+				Logger.error(ex);
+				android.os.Process.killProcess(android.os.Process.myPid());
+				System.exit(10);
+			}
+		});
+		return this;
+	}
+
+	/**
 	 * Remove {@link com.rafalzajfert.androidlogger.Logger Logger} instance
 	 *
-	 * @param logger
+	 * @param logger Logger instance to remove
 	 */
 	public LoggerConfig removeLogger(Logger logger) {
 		loggers.remove(logger.loggerTag);
@@ -69,7 +96,7 @@ public class LoggerConfig {
 	/**
 	 * Get {@link com.rafalzajfert.androidlogger.Logger Logger} instance
 	 *
-	 * @param tag
+	 * @param tag tag of the logger to return
 	 */
 	public Logger getLogger(String tag) {
 		return loggers.get(tag);
@@ -86,8 +113,8 @@ public class LoggerConfig {
 	/**
 	 * Add logger to which you want send messages<br>
 	 *
-	 * @param logger
-	 * @return Config instance
+	 * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger.Logger#debug(Object)}
+	 * @return Config this config instance
 	 */
 	public LoggerConfig addLogger(Logger logger) {
 		String loggerTag = logger.getClass().getSimpleName() + "_" + System.currentTimeMillis();
@@ -98,8 +125,9 @@ public class LoggerConfig {
 	/**
 	 * Add logger to which you want send messages<br>
 	 *
-	 * @param logger
-	 * @return Config instance
+	 * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger
+	 * .Logger#debug(Object)}
+	 * @return Config this config instance
 	 */
 	public LoggerConfig addLogger(String loggerTag, Logger logger) {
 		logger.loggerTag = loggerTag;

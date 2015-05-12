@@ -55,7 +55,7 @@ public class FileLogger extends StandardLogger {
 		if (config.tag == null) {
 			return getFormattedTag();
 		} else {
-			return formatTag(config.getTag());
+			return formatTag(config.tag);
 		}
 	}
 
@@ -65,28 +65,26 @@ public class FileLogger extends StandardLogger {
 	}
 
 	@Override
-	protected void printError(String message) {
-		appendFile("E", message);
-	}
-
-	@Override
-	protected void printInfo(String message) {
-		appendFile("I", message);
-	}
-
-	@Override
-	protected void printDebug(String message) {
-		appendFile("D", message);
-	}
-
-	@Override
-	protected void printVerbose(String message) {
-		appendFile("V", message);
-	}
-
-	@Override
-	protected void printWarning(String message) {
-		appendFile("W", message);
+	protected void print(Level level, String message) {
+		String textTag="";
+		switch (level){
+			case ERROR:
+				textTag = "E";
+				break;
+			case INFO:
+				textTag = "I";
+				break;
+			case DEBUG:
+				textTag = "D";
+				break;
+			case VERBOSE:
+				textTag = "V";
+				break;
+			case WARNING:
+				textTag = "W";
+				break;
+		}
+		appendFile(textTag, message);
 	}
 
 	protected void appendFile(String type, String message) {
@@ -134,6 +132,7 @@ public class FileLogger extends StandardLogger {
 		return config.writeTimeEnabled ? config.format.format(new Date()) + "" : "";
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void checkLogFile() {
 		if (config.logFile == null) {
 			config.logFile = getDefaultFile();

@@ -10,7 +10,7 @@ android {
 		minSdkVersion 7
 		targetSdkVersion 22
 		versionCode 1
-		versionName "1.0.5"
+		versionName "1.0.6"
 	}
 	buildTypes {
 		release {
@@ -20,9 +20,14 @@ android {
 	}
 }
 
+dependencies {
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+	compile 'com.github.anrwatchdog:anrwatchdog:1.1.1'
+}
+
 def siteUrl = 'https://github.com/RafalZajfert/android-logger'      // Homepage URL of the library
 def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'   // Git repository URL
-version = "1.0.5"
+version = "1.0.6"
 group = "com.rafalzajfert"                      // Maven Group ID for the artifact
 
 

@@ -49,28 +49,41 @@ public class TextViewLogger extends StandardLogger {
 	}
 
 	@Override
-	protected void printInfo(String message) {
-		append("I", message);
+	protected void print(Level level, String message) {
+		String textTag="";
+		switch (level){
+			case ERROR:
+				textTag = "E";
+				break;
+			case INFO:
+				textTag = "I";
+				break;
+			case DEBUG:
+				textTag = "D";
+				break;
+			case VERBOSE:
+				textTag = "V";
+				break;
+			case WARNING:
+				textTag = "W";
+				break;
+		}
+		append(textTag, message);
 	}
-
-	@Override
-	protected void printDebug(String message) {
-		append("D", message);
-	}
-
-	@Override
-	protected void printVerbose(String message) {
-		append("V", message);
-	}
-
-	@Override
-	protected void printWarning(String message) {
-		append("W", message);
-	}
-
 
 	protected void append(String type, String message) {
-		textView.append((textView.length() > 0 ? getMessageSeparator() : "") + type + " " + getTag() + " " + message);
+		switch (config.method){
+			case APPEND:
+				textView.append((textView.length() > 0 ? getMessageSeparator() : "") + type + " " + getTag() + " " + message);
+				break;
+			case OVERWRITE:
+				textView.setText(type + " " + getTag() + " " + message);
+				break;
+			case APPEND_START:
+				textView.setText(type + " " + getTag() + " " + message + (textView.length() > 0 ? getMessageSeparator()
+						: "") + textView.getText());
+				break;
+		}
 	}
 
 	protected String getMessageSeparator(){
