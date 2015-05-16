@@ -8,56 +8,57 @@ import com.rafalzajfert.androidlogger.StandardLogger;
 /**
  * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
  * console
- * 
+ *
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
+@SuppressWarnings("unused")
 public class LogcatLogger extends StandardLogger {
 
-	private final LogcatLoggerConfig config = new LogcatLoggerConfig();
+    private final LogcatLoggerConfig config = new LogcatLoggerConfig();
 
-	public LogcatLogger(){
-	}
+    public LogcatLogger() {
+    }
 
-	/**
-	 * Returns Logger configuration
-	 */
-	public LogcatLoggerConfig config() {
-		return this.config;
-	}
+    /**
+     * Returns Logger configuration
+     */
+    public LogcatLoggerConfig config() {
+        return this.config;
+    }
 
-	@Override
-	protected String getTag() {
-		if (config.tag == null){
-			return getFormattedTag();
-		} else {
-			return formatTag(config.getTag());
-		}
-	}
+    @Override
+    protected String getTag() {
+        if (config.tag == null) {
+            return super.getTag();
+        } else {
+            return formatTag(config.getTag());
+        }
+    }
 
-	@Override
-	protected boolean canLogMessage(Level level) {
-		return config.isEnabled() && config.isLevelAllowed(level);
-	}
+    @Override
+    protected boolean canLogMessage(Level level) {
+        return config.isEnabled() && config.isLevelAllowed(level);
+    }
 
-	@Override
-	protected void print(Level level, String message) {
-		switch (level){
-			case ERROR:
-				Log.e(getTag(), message);
-				break;
-			case INFO:
-				Log.i(getTag(), message);
-				break;
-			case DEBUG:
-				Log.d(getTag(), message);
-				break;
-			case VERBOSE:
-				Log.v(getTag(), message);
-				break;
-			case WARNING:
-				Log.w(getTag(), message);
-				break;
-		}
-	}
+    @Override
+    protected void print(Level level, String tag, String message) {
+        switch (level) {
+            case ERROR:
+                Log.e(tag, message);
+                break;
+            case INFO:
+                Log.i(tag, message);
+                break;
+            case DEBUG:
+                Log.d(tag, message);
+                break;
+            case VERBOSE:
+                Log.v(tag, message);
+                break;
+            case WARNING:
+                Log.w(tag, message);
+                break;
+        }
+    }
 }

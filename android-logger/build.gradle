@@ -3,26 +3,26 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-	compileSdkVersion 22
-	buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "21.1.2"
 
-	defaultConfig {
-		minSdkVersion 7
-		targetSdkVersion 22
-		versionCode 1
-		versionName "1.0.6"
-	}
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-		}
-	}
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0.6"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile 'com.github.anrwatchdog:anrwatchdog:1.1.1'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.github.anrwatchdog:anrwatchdog:1.1.1'
 }
 
 def siteUrl = 'https://github.com/RafalZajfert/android-logger'      // Homepage URL of the library
@@ -32,61 +32,61 @@ group = "com.rafalzajfert"                      // Maven Group ID for the artifa
 
 
 install {
-	repositories.mavenInstaller {
-		// This generates POM.xml with proper parameters
-		pom {
-			project {
-				packaging 'aar'
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
 
-				// Add your description here
-				name 'Android Logger'
-				artifactId = 'android-logger'
-				description = 'Simple Android logger library'
-				url siteUrl
+                // Add your description here
+                name 'Android Logger'
+                artifactId = 'android-logger'
+                description = 'Simple Android logger library'
+                url siteUrl
 
-				// Set your license
-				licenses {
-					license {
-						name 'The Apache Software License, Version 2.0'
-						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					}
-				}
-				developers {
-					developer {
-						id 'rafalzajfert'
-						name 'Rafal Zajfert'
-						email 'rafal.zajfert@gmail.com'
-					}
-				}
-				scm {
-					connection gitUrl
-					developerConnection gitUrl
-					url siteUrl
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'rafalzajfert'
+                        name 'Rafal Zajfert'
+                        email 'rafal.zajfert@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
 
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
 
 task sourcesJar(type: Jar) {
-	from android.sourceSets.main.java.srcDirs
-	classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
 }
 
 task javadoc(type: Javadoc) {
-	source = android.sourceSets.main.java.srcDirs
-	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = 'javadoc'
-	from javadoc.destinationDir
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
 artifacts {
-	archives javadocJar
-	archives sourcesJar
+    archives javadocJar
+    archives sourcesJar
 }
 
 Properties properties = new Properties()
@@ -94,29 +94,32 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 // https://github.com/bintray/gradle-bintray-plugin
 bintray {
-	user = properties.getProperty("bintray.user")
-	key = properties.getProperty("bintray.apikey")
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
 
-	configurations = ['archives']
-	pkg {
-		repo = "maven"
-		// it is the name that appears in bintray when logged
-		name = "android-logger"
-		websiteUrl = siteUrl
-		vcsUrl = gitUrl
-		licenses = ["Apache-2.0"]
-		publish = true
-		version {
-			gpg {
-				sign = true //Determines whether to GPG sign the files. The default is false
-				passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
-			}
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        // it is the name that appears in bintray when logged
+        name = "android-logger"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+        version {
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
             mavenCentralSync {
-                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                sync = true
+                //Optional (true by default). Determines whether to sync the version to Maven Central.
                 user = properties.getProperty("bintray.oss.user") //OSS user token
                 password = properties.getProperty("bintray.oss.password") //OSS user password
-                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                close = '1'
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
             }
-		}
-	}
+        }
+    }
 }

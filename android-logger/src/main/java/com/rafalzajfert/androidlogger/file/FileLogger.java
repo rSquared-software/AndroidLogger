@@ -18,131 +18,129 @@ import java.util.Date;
  *
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
- * @see {@link android.content.Context#getFilesDir() getFilesDir()}
+ * @see android.content.Context#getFilesDir()
  */
+@SuppressWarnings("unused")
 public class FileLogger extends StandardLogger {
 
-	private static final String DEFAULT_PATH = "log.txt";
+    private static final String DEFAULT_PATH = "log.txt";
+    private final FileLoggerConfig config = new FileLoggerConfig();
+    private Context context;
 
-	private Context context;
+    public FileLogger(Context context) {
+        this.context = context;
+    }
 
-	private final FileLoggerConfig config = new FileLoggerConfig();
+    /**
+     * Returns Logger configuration
+     */
+    public FileLoggerConfig config() {
+        return this.config;
+    }
 
-	/**
-	 * Returns Logger configuration
-	 */
-	public FileLoggerConfig config() {
-		return this.config;
-	}
+    /**
+     * Get {@link java.io.File} where log messages are saved
+     */
+    public File getLogFile() {
+        return config.logFile == null ? getDefaultFile() : config.logFile;
+    }
 
-	public FileLogger(Context context) {
-		this.context = context;
-	}
+    private File getDefaultFile() {
+        return new File(context.getFilesDir(), DEFAULT_PATH);
+    }
 
-	/**
-	 * Get {@link java.io.File} where log messages are saved
-	 */
-	public File getLogFile() {
-		return config.logFile == null ? getDefaultFile() : config.logFile;
-	}
+    @Override
+    protected String getTag() {
+        if (config.tag == null) {
+            return super.getTag();
+        } else {
+            return formatTag(config.tag);
+        }
+    }
 
-	private File getDefaultFile() {
-		return new File(context.getFilesDir(), DEFAULT_PATH);
-	}
+    @Override
+    protected boolean canLogMessage(Level level) {
+        return config.isEnabled() && config.isLevelAllowed(level);
+    }
 
-	@Override
-	protected String getTag() {
-		if (config.tag == null) {
-			return getFormattedTag();
-		} else {
-			return formatTag(config.tag);
-		}
-	}
+    @Override
+    protected void print(Level level, String tag, String message) {
+        String type = "";
+        switch (level) {
+            case ERROR:
+                type = "E";
+                break;
+            case INFO:
+                type = "I";
+                break;
+            case DEBUG:
+                type = "D";
+                break;
+            case VERBOSE:
+                type = "V";
+                break;
+            case WARNING:
+                type = "W";
+                break;
+        }
+        appendFile(type, tag, message);
+    }
 
-	@Override
-	protected boolean canLogMessage(Level level) {
-		return config.isEnabled() && config.isLevelAllowed(level);
-	}
+    private void appendFile(String type, String tag, String message) {
+        RandomAccessFile file = null;
+        try {
+            checkLogFile();
+            file = new RandomAccessFile(getLogFile(), "rw");
+            String string = type + " " + getTime() + " " + tag + " " + message + "\r\n";
+            file.seek(file.length());
+            file.writeChars(string);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (file != null) {
+                    file.close();
+                }
+            } catch (IOException e) {
+                Log.e(FileLogger.class.getSimpleName(), "Failed to close file", e);
+            }
+        }
+    }
 
-	@Override
-	protected void print(Level level, String message) {
-		String textTag="";
-		switch (level){
-			case ERROR:
-				textTag = "E";
-				break;
-			case INFO:
-				textTag = "I";
-				break;
-			case DEBUG:
-				textTag = "D";
-				break;
-			case VERBOSE:
-				textTag = "V";
-				break;
-			case WARNING:
-				textTag = "W";
-				break;
-		}
-		appendFile(textTag, message);
-	}
+    public void clearLogFile() {
+        RandomAccessFile file = null;
+        try {
+            checkLogFile();
+            file = new RandomAccessFile(getLogFile(), "rw");
+            file.setLength(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (file != null) {
+                    file.close();
+                }
+            } catch (IOException e) {
+                Log.e(FileLogger.class.getSimpleName(), "Cannot create Log file", e);
+            }
+        }
+    }
 
-	protected void appendFile(String type, String message) {
-		String tag = getTag();
-		RandomAccessFile file = null;
-		try {
-			checkLogFile();
-			file = new RandomAccessFile(getLogFile(), "rw");
-			String string = type + " " + getTime() + " " + tag + " " + message + "\r\n";
-			file.seek(file.length());
-			file.writeChars(string);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (file != null) {
-					file.close();
-				}
-			} catch (IOException e) {
-				Log.e(FileLogger.class.getSimpleName(), "Failed to close file", e);
-			}
-		}
-	}
+    private String getTime() {
+        return config.writeTimeEnabled ? config.format.format(new Date()) + "" : "";
+    }
 
-	public void clearLogFile() {
-		RandomAccessFile file = null;
-		try {
-			checkLogFile();
-			file = new RandomAccessFile(getLogFile(), "rw");
-			file.setLength(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (file != null) {
-					file.close();
-				}
-			} catch (IOException e) {
-				Log.e(FileLogger.class.getSimpleName(), "Cannot create Log file", e);
-			}
-		}
-	}
-
-	private String getTime() {
-		return config.writeTimeEnabled ? config.format.format(new Date()) + "" : "";
-	}
-
-	@SuppressWarnings("ResultOfMethodCallIgnored")
-	private void checkLogFile() {
-		if (config.logFile == null) {
-			config.logFile = getDefaultFile();
-		}
-		if (!config.logFile.exists()) {
-			try {
-				config.logFile.createNewFile();
-			} catch (IOException e) {
-				Log.e(FileLogger.class.getSimpleName(), "Cannot create Log file", e);
-			}
-		}
-	}
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void checkLogFile() {
+        if (config.logFile == null) {
+            config.logFile = getDefaultFile();
+        }
+        if (!config.logFile.exists()) {
+            try {
+                config.logFile.createNewFile();
+            } catch (IOException e) {
+                Log.e(FileLogger.class.getSimpleName(), "Cannot create Log file", e);
+            }
+        }
+    }
 }
