@@ -1,11 +1,12 @@
 package com.rafalzajfert.androidlogger;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,33 +14,98 @@ import java.util.Map;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class LoggerConfig {
-    boolean enabled = true;
-    Level logLevel = Level.DEBUG;
-    String tag = Logger.PARAM_SIMPLE_CLASS_NAME + "(" + Logger.PARAM_LINE_NUMBER + ")";
-    String separator = Logger.SPACE;
-    String throwableSeparator = Logger.NEW_LINE;
-    private Map<String, Logger> loggers = new HashMap<>();
-    private List<Logger> standardLogger = new ArrayList<>();
+public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
+    private String separator = Logger.SPACE;
+    private String throwableSeparator = Logger.NEW_LINE;
+    private final Map<String, Logger> loggers = new HashMap<>();
 
-    LoggerConfig() {
-        standardLogger.add(new LogcatLogger());
+    {
+        this.loggers.put("default_logger", new LogcatLogger());
+        this.tag = Logger.PARAM_SIMPLE_CLASS_NAME + "(" + Logger.PARAM_LINE_NUMBER + ")";
+        this.logThrowableWithStackTrace = true;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LoggerConfig setTag(@SuppressWarnings("NullableProblems") @NonNull String tag) {
+        if (TextUtils.isEmpty(tag)){
+            throw new IllegalArgumentException("Tag for all loggers cannot be empty");
+        }
+        this.tag = tag;
+        return this;
     }
 
-    public Level getLogLevel() {
-        return logLevel;
+    @NonNull
+    @Override
+    public String getTag() {
+        if (TextUtils.isEmpty(tag)){
+            throw new IllegalArgumentException("Tag for all loggers cannot be empty");
+        }
+        return tag;
     }
 
-    public boolean isLevelAllowed(Level level) {
-        return level.ordinal() >= logLevel.ordinal();
+    @Override
+    public LoggerConfig setLogThrowableWithStackTrace(@SuppressWarnings("NullableProblems") @NonNull Boolean logThrowableWithStackTrace) {
+        if (logThrowableWithStackTrace == null){
+            throw new IllegalArgumentException("logThrowableWithStackTrace for all loggers cannot be null");
+        }
+        this.logThrowableWithStackTrace = logThrowableWithStackTrace;
+        return this;
     }
 
+    @NonNull
+    @Override
+    public Boolean isLogThrowableWithStackTrace() {
+        if (this.logThrowableWithStackTrace == null){
+            throw new IllegalArgumentException("logThrowableWithStackTrace for all loggers cannot be null");
+        }
+        return this.logThrowableWithStackTrace;
+    }
+
+    /**
+     * Get {@link com.rafalzajfert.androidlogger.Logger Logger} instance
+     *
+     * @param tag tag of the logger to return
+     */
+    public Logger getLogger(String tag) {
+        return this.loggers.get(tag);
+    }
+
+    /**
+     * Get all loggers that wil be added in this configuration
+     */
+    @NonNull
     public Collection<Logger> getLoggers() {
-        return loggers.isEmpty() ? standardLogger : loggers.values();
+        return this.loggers.values();
+    }
+
+    /**
+     * Add logger to which you want send messages<br>
+     *
+     * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger.Logger#debug(Object)}
+     * @return Config this config instance
+     */
+    @NonNull
+    public LoggerConfig addLogger(@NonNull Logger logger) {
+        String loggerTag = logger.getClass().getSimpleName() + "_" + System.currentTimeMillis();
+        addLogger(logger, loggerTag);
+        return this;
+    }
+
+    /**
+     * Add logger to which you want send messages<br>
+     *
+     * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger
+     *               .Logger#debug(Object)}
+     * @return Config this config instance
+     */
+    @NonNull
+    public LoggerConfig addLogger(@NonNull Logger logger, @NonNull String loggerTag) {
+        logger.loggerTag = loggerTag;
+        this.loggers.put(loggerTag, logger);
+        return this;
     }
 
     /**
@@ -47,8 +113,29 @@ public class LoggerConfig {
      *
      * @param tag tag of the logger to remove
      */
-    public LoggerConfig removeLogger(String tag) {
-        loggers.remove(tag);
+    @NonNull
+    public LoggerConfig removeLogger(@NonNull String tag) {
+        this.loggers.remove(tag);
+        return this;
+    }
+
+    /**
+     * Remove {@link com.rafalzajfert.androidlogger.Logger Logger} instance
+     *
+     * @param logger Logger instance to remove
+     */
+    @NonNull
+    public LoggerConfig removeLogger(@NonNull Logger logger) {
+        this.loggers.remove(logger.loggerTag);
+        return this;
+    }
+
+    /**
+     * Remove all {@link com.rafalzajfert.androidlogger.Logger Loggers}
+     */
+    @NonNull
+    public LoggerConfig removeAllLoggers() {
+        this.loggers.clear();
         return this;
     }
 
@@ -57,8 +144,9 @@ public class LoggerConfig {
      * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><br/>
      * This should not be used in your final release
      */
-    @SuppressWarnings("deprecated")
-    public LoggerConfig startANRWatchDog(LoggerANRWatchDog watchDog) {
+    @NonNull
+    public LoggerConfig useANRWatchDog(@NonNull ANRWatchDog watchDog) {
+        //noinspection deprecation
         watchDog.start();
         return this;
     }
@@ -66,10 +154,9 @@ public class LoggerConfig {
     /**
      * Setup Thread to catch and log all uncaught exceptions<br/>
      * This method not prevent app crash and it should not be used in your final release.
-     *
-     * @return
      */
-    public LoggerConfig catchAllExceptions() {
+    @NonNull
+    public LoggerConfig catchUncaughtExceptions() {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
@@ -82,103 +169,36 @@ public class LoggerConfig {
     }
 
     /**
-     * Remove {@link com.rafalzajfert.androidlogger.Logger Logger} instance
-     *
-     * @param logger Logger instance to remove
+     * String used to separate message chunks
      */
-    public LoggerConfig removeLogger(Logger logger) {
-        loggers.remove(logger.loggerTag);
-        return this;
-    }
-
-    /**
-     * Get {@link com.rafalzajfert.androidlogger.Logger Logger} instance
-     *
-     * @param tag tag of the logger to return
-     */
-    public Logger getLogger(String tag) {
-        return loggers.get(tag);
-    }
-
-    /**
-     * Remove all {@link com.rafalzajfert.androidlogger.Logger Loggers}
-     */
-    public LoggerConfig clearLoggers() {
-        loggers.clear();
-        return this;
-    }
-
-    /**
-     * Add logger to which you want send messages<br>
-     *
-     * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger.Logger#debug(Object)}
-     * @return Config this config instance
-     */
-    public LoggerConfig addLogger(Logger logger) {
-        String loggerTag = logger.getClass().getSimpleName() + "_" + System.currentTimeMillis();
-        addLogger(loggerTag, logger);
-        return this;
-    }
-
-    /**
-     * Add logger to which you want send messages<br>
-     *
-     * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger
-     *               .Logger#debug(Object)}
-     * @return Config this config instance
-     */
-    public LoggerConfig addLogger(String loggerTag, Logger logger) {
-        logger.loggerTag = loggerTag;
-        this.loggers.put(loggerTag, logger);
-        return this;
-    }
-
-    /**
-     * Tag, used to identify source of a log message,<br>
-     * default is class name with line number<br>
-     * <br>
-     * You can also use auto generated values:<br>
-     * {@link Logger#PARAM_SIMPLE_CLASS_NAME PARAM_SIMPLE_CLASS_NAME}<br>
-     * {@link Logger#PARAM_CLASS_NAME PARAM_CLASS_NAME}<br>
-     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br>
-     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br>
-     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}
-     */
-    public LoggerConfig tag(String tag) {
-        this.tag = tag;
-        return this;
-    }
-
-    /**
-     * Set logger enabled or disabled<br>
-     * If the logger is disabled messages will not be logged
-     */
-    public LoggerConfig enabled(boolean enabled) {
-        this.enabled = enabled;
-        return this;
-    }
-
-    /**
-     * Minimal {@link com.rafalzajfert.androidlogger.Level Level} of message to sent
-     */
-    public LoggerConfig logLevel(Level level) {
-        this.logLevel = level;
-        return this;
-    }
-
-    /**
-     * String used to separate message parameters
-     */
-    public LoggerConfig separator(String separator) {
+    @NonNull
+    public LoggerConfig setSeparator(@NonNull String separator) {
         this.separator = separator;
+        return this;
+    }
+
+    /**
+     * String used to separate message chunks
+     */
+    @NonNull
+    public String getSeparator(){
+        return this.separator;
+    }
+
+    /**
+     * String used to separate message and {@link Throwable} log
+     */
+    @NonNull
+    public LoggerConfig setThrowableSeparator(@NonNull String throwableSeparator) {
+        this.throwableSeparator = throwableSeparator;
         return this;
     }
 
     /**
      * String used to separate message and {@link Throwable} log
      */
-    public LoggerConfig throwableSeparator(String throwableSeparator) {
-        this.throwableSeparator = throwableSeparator;
-        return this;
+    @NonNull
+    public  String getThrowableSeparator(){
+        return this.throwableSeparator;
     }
 }

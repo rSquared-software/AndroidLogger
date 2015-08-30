@@ -1,9 +1,10 @@
 package com.rafalzajfert.androidlogger.textview;
 
+import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import com.rafalzajfert.androidlogger.Level;
-import com.rafalzajfert.androidlogger.StandardLogger;
+import com.rafalzajfert.androidlogger.Logger;
 
 /**
  * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
@@ -13,7 +14,7 @@ import com.rafalzajfert.androidlogger.StandardLogger;
  * @version 1.0.1 (15/04/2015)
  */
 @SuppressWarnings("unused")
-public class TextViewLogger extends StandardLogger {
+public class TextViewLogger extends Logger {
 
     private final TextViewLoggerConfig config = new TextViewLoggerConfig();
 
@@ -40,7 +41,7 @@ public class TextViewLogger extends StandardLogger {
     }
 
     @Override
-    protected boolean canLogMessage(Level level) {
+    protected boolean isLevelAllowed(@NonNull Level level) {
         return config.isEnabled() && config.isLevelAllowed(level);
     }
 
@@ -76,7 +77,7 @@ public class TextViewLogger extends StandardLogger {
             case OVERWRITE:
                 textView.setText(type + " " + tag + " " + message);
                 break;
-            case APPEND_START:
+            case PREPEND:
                 textView.setText(type + " " + tag + " " + message + (textView.length() > 0 ? messageSeparator
                         : "") + textView.getText());
                 break;

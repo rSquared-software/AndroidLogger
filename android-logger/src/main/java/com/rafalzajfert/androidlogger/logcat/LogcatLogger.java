@@ -1,9 +1,10 @@
 package com.rafalzajfert.androidlogger.logcat;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.rafalzajfert.androidlogger.Level;
-import com.rafalzajfert.androidlogger.StandardLogger;
+import com.rafalzajfert.androidlogger.Logger;
 
 /**
  * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
@@ -13,7 +14,7 @@ import com.rafalzajfert.androidlogger.StandardLogger;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class LogcatLogger extends StandardLogger {
+public class LogcatLogger extends Logger {
 
     private final LogcatLoggerConfig config = new LogcatLoggerConfig();
 
@@ -37,7 +38,7 @@ public class LogcatLogger extends StandardLogger {
     }
 
     @Override
-    protected boolean canLogMessage(Level level) {
+    protected boolean isLevelAllowed(@NonNull Level level) {
         return config.isEnabled() && config.isLevelAllowed(level);
     }
 

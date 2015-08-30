@@ -1,21 +1,21 @@
 package com.rafalzajfert.logger.sample;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.rafalzajfert.androidlogger.ANRWatchDog;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
-import com.rafalzajfert.androidlogger.LoggerANRWatchDog;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 import com.rafalzajfert.androidlogger.textview.TextViewLogger;
 import com.rafalzajfert.androidlogger.toast.ToastLogger;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
 	private EditText editText;
 	private Spinner typeSpinner;
@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity {
 
 		Logger.globalConfig()
 				.tag(Logger.PARAM_CLASS_NAME + "("+Logger.PARAM_LINE_NUMBER+")")
-				.startANRWatchDog(new LoggerANRWatchDog(2000).preventCrash(true))
+				.startANRWatchDog(new ANRWatchDog(2000).preventCrash(true))
 				.catchAllExceptions()
 				.enabled(true)
 				.logLevel(Level.VERBOSE);

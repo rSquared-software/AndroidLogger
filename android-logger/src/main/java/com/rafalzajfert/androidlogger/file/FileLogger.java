@@ -1,10 +1,11 @@
 package com.rafalzajfert.androidlogger.file;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.rafalzajfert.androidlogger.Level;
-import com.rafalzajfert.androidlogger.StandardLogger;
+import com.rafalzajfert.androidlogger.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.util.Date;
  * @see android.content.Context#getFilesDir()
  */
 @SuppressWarnings("unused")
-public class FileLogger extends StandardLogger {
+public class FileLogger extends Logger {
 
     private static final String DEFAULT_PATH = "log.txt";
     private final FileLoggerConfig config = new FileLoggerConfig();
@@ -59,7 +60,7 @@ public class FileLogger extends StandardLogger {
     }
 
     @Override
-    protected boolean canLogMessage(Level level) {
+    protected boolean isLevelAllowed(@NonNull Level level) {
         return config.isEnabled() && config.isLevelAllowed(level);
     }
 
