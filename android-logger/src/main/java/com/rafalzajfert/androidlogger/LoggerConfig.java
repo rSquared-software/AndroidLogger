@@ -37,7 +37,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
 
     {
         this.loggers.put(DEFAULT_LOGGER, new LogcatLogger());
-        this.tag = Logger.PARAM_METHOD_NAME + Logger.PARAM_CODE_LINE;
+        this.tag = Logger.PARAM_CODE_LINE;
         this.logThrowableWithStackTrace = true;
     }
 

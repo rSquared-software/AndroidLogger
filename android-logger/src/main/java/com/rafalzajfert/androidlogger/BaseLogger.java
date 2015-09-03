@@ -17,7 +17,7 @@ import static com.rafalzajfert.androidlogger.Level.WARNING;
  * @version 1.1.0 (29/04/2015)
  */
 @SuppressWarnings("unused")
-public class BaseLogger {
+class BaseLogger {
     /**
      * Space: " "
      */
