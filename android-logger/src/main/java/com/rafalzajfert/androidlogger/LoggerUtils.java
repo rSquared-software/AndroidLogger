@@ -1,5 +1,10 @@
 package com.rafalzajfert.androidlogger;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,19 +12,22 @@ import java.util.Map;
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
-class LoggerUtils {
+abstract class LoggerUtils {
 
     @SafeVarargs
-    static String array2String(String separator, Object... array) {
+    static <T> String array2String(@NonNull String separator, @NonNull T... array) {
         StringBuilder builder = new StringBuilder();
-        for (Object t : array) {
-            builder.append(t).append(separator);
-        }
-        if (builder.length() >= separator.length()) {
-            builder.deleteCharAt(builder.length() - separator.length());
+        String str;
+        for (int i = 0; i < array.length; i++) {
+            if (i>0){
+                builder.append(separator);
+            }
+            str = array[i] + "";
+            builder.append(str);
         }
         return builder.toString();
     }
+
 
     static Map<String, String> getStackTraceFieldMap() {
         final StackTraceElement element = getStackTraceElement();
@@ -28,8 +36,8 @@ class LoggerUtils {
         }
         Map<String, String> stackMap = new HashMap<>();
 
-        stackMap.put(Logger.PARAM_SIMPLE_CLASS_NAME, getField(element, StackTraceField.SIMPLE_CLASS_NAME));
-        stackMap.put(Logger.PARAM_CLASS_NAME, getField(element, StackTraceField.FULL_CLASS_NAME));
+        stackMap.put(Logger.PARAM_CLASS_NAME, getField(element, StackTraceField.SIMPLE_CLASS_NAME));
+        stackMap.put(Logger.PARAM_FULL_CLASS_NAME, getField(element, StackTraceField.FULL_CLASS_NAME));
         stackMap.put(Logger.PARAM_METHOD_NAME, getField(element, StackTraceField.METHOD_NAME));
         stackMap.put(Logger.PARAM_FILE_NAME, getField(element, StackTraceField.FILE_NAME));
         stackMap.put(Logger.PARAM_LINE_NUMBER, getField(element, StackTraceField.LINE_NUMBER));
@@ -37,7 +45,8 @@ class LoggerUtils {
         return stackMap;
     }
 
-    static String getStackTraceField(StackTraceField field) {
+    @Nullable
+    static String getStackTraceField(@NonNull StackTraceField field) {
         StackTraceElement element = getStackTraceElement();
         if (element == null) {
             return null;
@@ -45,6 +54,7 @@ class LoggerUtils {
         return getField(element, field);
     }
 
+    @Nullable
     private static StackTraceElement getStackTraceElement() {
         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
         if (elements == null || elements.length <= 2) {
@@ -53,18 +63,19 @@ class LoggerUtils {
 
         for (int i = 2; i < elements.length; i++) {
             String className = elements[i].getClassName();
-            if (!isLogger(className)) {
+            if (!isLoggerClass(className)) {
                 return elements[i];
             }
         }
         return null;
     }
 
-    private static boolean isLogger(String className) {
+    private static boolean isLoggerClass(String className) {
         return className.startsWith(BuildConfig.APPLICATION_ID) || classExtendLogger(className);
     }
 
-    private static String getField(StackTraceElement element, StackTraceField field) {
+    @NonNull
+    private static String getField(@NonNull StackTraceElement element, @NonNull StackTraceField field) {
         switch (field) {
             case FULL_CLASS_NAME:
                 return element.getClassName();
@@ -81,7 +92,8 @@ class LoggerUtils {
         }
     }
 
-    private static String getSimpleName(String className) {
+    @NonNull
+    private static String getSimpleName(@NonNull String className) {
         int idx = className.lastIndexOf('.');
         boolean canSubstring = idx >= 0 && idx < className.length();
         return canSubstring ? className.substring(idx + 1) : className;
@@ -93,6 +105,56 @@ class LoggerUtils {
             return Logger.class.isAssignableFrom(clazz);
         } catch (ClassNotFoundException e) {
             return false;
+        }
+    }
+
+    /**
+     * @return tag with replaced constant tags
+     */
+    @NonNull
+    static String formatTag(@NonNull String tag, @NonNull Level level) {
+        Map<String, String> map = LoggerUtils.getStackTraceFieldMap();
+        if (map != null) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                tag = tag.replace(entry.getKey(), entry.getValue());
+            }
+        }
+        tag = tag.replace(Logger.PARAM_LEVEL, level.name());
+        tag = tag.replace(Logger.PARAM_SHORT_LEVEL, level.name().substring(0, 1));
+        tag = tag.replace(Logger.PARAM_TIME, Logger.getTime());
+        return tag;
+    }
+
+    /**
+     * @return message with replaced constant tags
+     */
+    @NonNull
+    static String formatMessage(@NonNull Object msg) {
+        if (!(msg instanceof String)) {
+            msg = msg + "";
+        }
+
+        String message = (String) msg;
+        if (TextUtils.isEmpty(message)) {
+            return "";
+        }
+
+        Map<String, String> map = LoggerUtils.getStackTraceFieldMap();
+        if (map != null) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                message = message.replace(entry.getKey(), entry.getValue());
+            }
+        }
+        return message;
+    }
+
+    @NonNull
+    static String throwableToString(@NonNull Throwable throwable, @NonNull BaseLoggerConfig config){
+        //noinspection ConstantConditions
+        if (!config.isLogThrowableWithStackTrace()) {
+            return throwable.getMessage();
+        } else {
+            return Log.getStackTraceString(throwable);
         }
     }
 

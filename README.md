@@ -1,12 +1,12 @@
 # Logger
-Simple Android logger library
+Simple and useful Android logger library.
 
 Gradle Dependency (jCenter)
 =======
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.0.7'
+    compile 'com.rafalzajfert:android-logger:1.1.0'
 }
 ```
 
@@ -18,7 +18,7 @@ Maven Dependency
 <dependency>
     <groupId>com.rafalzajfert</groupId>
     <artifactId>android-logger</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@ Sample Usage
 =======
 
 ```java
-//Send a message to all loggers added in global configuration
+//Send a message to all loggers defined in LoggerConfig
 Logger.verbose("Verbose log");
 Logger.debug("Debug log");
 Logger.info("Info log");
@@ -45,65 +45,69 @@ try {
 
 //--------------------------------------------------------------
 
-//Send message to one logger
+//Send message to the single logger
 Logger logcat = new LogcatLogger();
 logcat.v("Verbose log");
 logcat.d("Debug log");
 logcat.i("Info log");
 logcat.w("Warning log");
-logcat.e("Error log");
-
+logcat.e("Error log");s
 //--------------------------------------------------------------
 
-// get logger from configuration by tag
-Logger.globalConfig().addLogger("logcatTag", new LogcatLogger());
+// add logger to configuration
+Logger.getBaseConfig().addLogger(new LogcatLogger());
+Logger.getBaseConfig().addLogger("logcatTag", new LogcatLogger());
 
-Logger logcatLogger = Logger.globalConfig().getLogger("logcatTag");
+// get logger from configuration by tag
+Logger logcatLogger = Logger.getBaseConfig().getLogger("logcatTag");
 
 // remove logger from global configuration
-Logger.globalConfig().removeLogger("fileLoggerTag");
-
-Logger.globalConfig().removeLogger(logcatLogger);
+Logger.getBaseConfig().removeLogger("fileLoggerTag");
+Logger.getBaseConfig().removeLogger(logcatLogger);
 ```
 
 Configuration
 =======
 
-Global Configuration
+Base Configuration
 -----------
 
-Global configuration sets log parameters for all loggers from this library. Default it is set to use LogcatLogger 
-with minimal level as Debug. If you add a logger to this configuration then default LogcatLogger will be disabled and
- if you want to use it further, you have to add it manually with method addLogger().
+Global configuration sets log parameters for all loggers from this library.
+LoggerConfiguration is created with default LogcatLogger, if you want you can remove it by calling removeLogger method with LoggerConfig.DEFAULT_LOGGER tag
 
 ```java
-Logger.globalConfig()
-        .tag(Logger.PARAM_CLASS_NAME + " (" + Logger.PARAM_LINE_NUMBER + ")")
-        .enabled(true)
-        .logLevel(Level.DEBUG)
-        .separator(" ")
-        .throwableSeparator("\n")
-        .addLogger(fileLogger)
-        .addLogger("logcatTag", logcatLogger);
+LoggerConfig loggerConfig = new LoggerConfig()
+        .removeLogger(LoggerConfig.DEFAULT_LOGGER)
+        .setTag(Logger.PARAM_CODE_LINE)
+        .useANRWatchDog(new ANRWatchDog(2000).preventCrash(true))
+        .catchUncaughtExceptions()
+        .setLevel(Level.VERBOSE)
+        .setSeparator(Logger.PARAM_SPACE)
+        .setThrowableSeparator(Logger.PARAM_NEW_LINE)
+        .addLogger(fileLogger);
+
+Logger.setBaseConfig(loggerConfig);
 ```
-`tag` - Tag, used to identify source of a log message, default it's class name with line number  
-You can also use auto generated values:  
-Logger.PARAM_SIMPLE_CLASS_NAME  
-Logger.PARAM_CLASS_NAME  
-Logger.PARAM_METHOD_NAME  
-Logger.PARAM_FILE_NAME  
-Logger.PARAM_LINE_NUMBER  
+`setTag()` - Tag, used to identify source of a log message, default it's class name with line number
+You can also use auto generated values:
+Logger.PARAM_SIMPLE_CLASS_NAME
+Logger.PARAM_CLASS_NAME
+Logger.PARAM_METHOD_NAME
+Logger.PARAM_FILE_NAME
+Logger.PARAM_LINE_NUMBER
+Logger.PARAM_LEVEL
+Logger.PARAM_SHORT_LEVEL
+Logger.PARAM_TIME
+Logger.PARAM_CODE_LINE
 
-`enabled` - Enable or disable  loggers, if this parameters is set true no message will be send to loggers
- 
-`logLevel` - Minimal log level, all messages with level below this will be ignored.  
+`setLevel()` - Minimal log level, all messages with level below this will be ignored.
 Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
-  
-`separator` - String used to separate parts of message e.g. in method Logger.debug(String...)
 
-`throwableSeparator` - String used to separate message and Throwable stack trace
+`setSeparator` - String used to separate parts of message e.g. in method Logger.debug(String...)
 
-`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.  
+`setThrowableSeparator` - String used to separate message and Throwable stack trace
+
+`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.
 This library provide four types of logger: LogcatLogger, FileLogger, TextViewLogger, ToastLogger.
 You can create custom logger by extending StandardLogger class.
 

@@ -1,26 +1,28 @@
 package com.rafalzajfert.androidlogger;
 
 import com.github.anrwatchdog.ANRError;
-import com.github.anrwatchdog.ANRWatchDog;
+import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
 /**
- * LoggerANRWatchDog class<br/><br/>
+ * ANRWatchDog class<br/><br/>
  * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a>
  *
  * @author Rafal Zajfert
- * @version 1.0.7s (16/05/2015)
+ * @version 1.0.7 (16/05/2015)
  */
 @SuppressWarnings("unused")
-public class LoggerANRWatchDog extends ANRWatchDog {
+public class ANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
+
+    private LogcatLogger logger = new LogcatLogger();
 
     private ANRListener customListener;
     private boolean preventCrash = false;
 
-    public LoggerANRWatchDog() {
+    public ANRWatchDog() {
         super();
     }
 
-    public LoggerANRWatchDog(int timeoutInterval) {
+    public ANRWatchDog(int timeoutInterval) {
         super(timeoutInterval);
     }
 
@@ -34,9 +36,10 @@ public class LoggerANRWatchDog extends ANRWatchDog {
     }
 
     /**
-     * prevent app crash in the case that an ANR is detected
+     * prevent app crash in the case that an ANR is detected.<br/><br/>
+     * <b>NOTE:</b> This is experimental future and may not working correctly
      */
-    public LoggerANRWatchDog preventCrash(boolean preventCrash) {
+    public ANRWatchDog preventCrash(boolean preventCrash) {
         this.preventCrash = preventCrash;
         return this;
     }
@@ -44,7 +47,8 @@ public class LoggerANRWatchDog extends ANRWatchDog {
     /**
      * {@inheritDoc}
      */
-    public LoggerANRWatchDog setInterruptionListener(InterruptionListener listener) {
+    @Override
+    public ANRWatchDog setInterruptionListener(InterruptionListener listener) {
         super.setInterruptionListener(listener);
         return this;
     }
@@ -52,7 +56,8 @@ public class LoggerANRWatchDog extends ANRWatchDog {
     /**
      * {@inheritDoc}
      */
-    public LoggerANRWatchDog setReportThreadNamePrefix(String prefix) {
+    @Override
+    public ANRWatchDog setReportThreadNamePrefix(String prefix) {
         super.setReportThreadNamePrefix(prefix);
         return this;
     }
@@ -60,17 +65,21 @@ public class LoggerANRWatchDog extends ANRWatchDog {
     /**
      * {@inheritDoc}
      */
-    public LoggerANRWatchDog setReportMainThreadOnly() {
+    @Override
+    public ANRWatchDog setReportMainThreadOnly() {
         super.setReportMainThreadOnly();
         return this;
     }
 
     /**
-     * @deprecated use {@link com.rafalzajfert.androidlogger.LoggerConfig#startANRWatchDog(LoggerANRWatchDog)} instead
+     * @deprecated use {@link LoggerConfig#useANRWatchDog(ANRWatchDog)} instead
      */
     @Deprecated
     @Override
     public synchronized void start() {
+        logger.w("=======================================");
+        logger.w("ANRWatchDog is running. Please use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).");
+        logger.w("=======================================");
         super.setANRListener(new ANRListener() {
             @Override
             public void onAppNotResponding(ANRError error) {

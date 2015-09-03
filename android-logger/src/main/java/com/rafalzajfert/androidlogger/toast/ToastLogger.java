@@ -1,22 +1,25 @@
 package com.rafalzajfert.androidlogger.toast;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.rafalzajfert.androidlogger.BaseLoggerConfig;
+import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
-import com.rafalzajfert.androidlogger.StandardLogger;
+import com.rafalzajfert.androidlogger.Logger;
 
 /**
- * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
+ * {@link Logger Logger} that send messages to Logcat
  * console
  *
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class ToastLogger extends StandardLogger {
+public class ToastLogger extends Logger implements Configurable<ToastLoggerConfig> {
 
-    private final ToastLoggerConfig config = new ToastLoggerConfig();
+    private ToastLoggerConfig config = new ToastLoggerConfig();
 
     private Context context;
 
@@ -25,39 +28,27 @@ public class ToastLogger extends StandardLogger {
     }
 
     /**
-     * Returns Logger configuration
+     * {@inheritDoc}
      */
-    public ToastLoggerConfig config() {
-        return this.config;
-    }
-
+    @NonNull
     @Override
-    protected String getTag() {
-        if (config.tag == null) {
-            return getFormattedTag();
-        } else {
-            return formatTag(config.getTag());
-        }
-    }
-
-    @Override
-    protected boolean canLogMessage(Level level) {
-        return config.isEnabled() && config.isLevelAllowed(level);
-    }
-
-    @Override
-    protected void print(Level level, String tag, String message) {
-        Toast.makeText(context, message, config.duration).show();
+    public ToastLoggerConfig getConfig() {
+        return config;
     }
 
     /**
-     * @param message message to print with logger
-     * @deprecated use {@link #print(Level, String)} instead.
+     * {@inheritDoc}
      */
-    @Deprecated
-    protected void show(String message) {
-        throw new UnsupportedOperationException("show(String) method is deprecated");
+    @Override
+    public void setConfig(@NonNull ToastLoggerConfig config) {
+        this.config = config;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void print(Level level, String message) {
+        Toast.makeText(context, getTag(level) + PARAM_SPACE + message, config.getDuration()).show();
+    }
 }
