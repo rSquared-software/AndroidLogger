@@ -3,12 +3,12 @@ package com.rafalzajfert.androidlogger;
 
 /**
  * Level of {@link com.rafalzajfert.androidlogger.Logger Logger} used to limit logged
- * message types<br>
- * <br>
+ * message types<br/>
+ * <br/>
  * e.g if you set <code>LogLevel</code> as {@link #WARNING} then only massages
  * sent with level {@link #WARNING} or {@link #ERROR} will be sent, other will
- * be ignored<br>
- * <br>
+ * be ignored<br/>
+ * <br/>
  * <p/>
  * Level order: {@link #VERBOSE} < {@link #DEBUG} < {@link #INFO} <
  * {@link #WARNING} < {@link #ERROR} < {@link #SILENT}
@@ -19,27 +19,27 @@ package com.rafalzajfert.androidlogger;
 @SuppressWarnings("unused")
 public enum Level {
     /**
-     * verbose {@link com.rafalzajfert.androidlogger.Level}, used in {@link Logger#verbose(Object)}
+     * verbose {@link Level}, used in {@link Logger#verbose(Object)}
      */
     VERBOSE,
     /**
-     * debug {@link com.rafalzajfert.androidlogger.Level}, used in {@link Logger#debug(Object)}
+     * debug {@link Level}, used in {@link Logger#debug(Object)}
      */
     DEBUG,
     /**
-     * info {@link com.rafalzajfert.androidlogger.Level}, used in {@link Logger#info(Object)}
+     * info {@link Level}, used in {@link Logger#info(Object)}
      */
     INFO,
     /**
-     * warning {@link com.rafalzajfert.androidlogger.Level}, used in {@link Logger#warning(Object)}
+     * warning {@link Level}, used in {@link Logger#warning(Object)}
      */
     WARNING,
     /**
-     * error {@link com.rafalzajfert.androidlogger.Level}, used in {@link Logger#error(Object)}
+     * error {@link Level}, used in {@link Logger#error(Object)}
      */
     ERROR,
     /**
-     * silent {@link com.rafalzajfert.androidlogger.Level} (none of massages will be sent)
+     * silent {@link Level} (none of massages will be sent)
      */
     SILENT
 }

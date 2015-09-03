@@ -2,23 +2,22 @@ package com.rafalzajfert.androidlogger.toast;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
+import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
-import com.rafalzajfert.androidlogger.LoggerConfig;
 
 /**
- * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
+ * {@link Logger Logger} that send messages to Logcat
  * console
  *
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class ToastLogger extends Logger {
+public class ToastLogger extends Logger implements Configurable<ToastLoggerConfig> {
 
     private ToastLoggerConfig config = new ToastLoggerConfig();
 
@@ -29,20 +28,27 @@ public class ToastLogger extends Logger {
     }
 
     /**
-     * Logger configuration
+     * {@inheritDoc}
      */
+    @NonNull
+    @Override
+    public ToastLoggerConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setConfig(@NonNull ToastLoggerConfig config) {
         this.config = config;
     }
 
-    @Nullable
-    @Override
-    protected BaseLoggerConfig getConfig() {
-        return config;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void print(Level level, String message) {
-        Toast.makeText(context, (getTag(level) + " " + message).trim(), config.getDuration()).show();
+        Toast.makeText(context, getTag(level) + PARAM_SPACE + message, config.getDuration()).show();
     }
 }

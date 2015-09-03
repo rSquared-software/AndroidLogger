@@ -1,6 +1,7 @@
 package com.rafalzajfert.androidlogger;
 
 import com.github.anrwatchdog.ANRError;
+import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
 /**
  * ANRWatchDog class<br/><br/>
@@ -11,6 +12,8 @@ import com.github.anrwatchdog.ANRError;
  */
 @SuppressWarnings("unused")
 public class ANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
+
+    private LogcatLogger logger = new LogcatLogger();
 
     private ANRListener customListener;
     private boolean preventCrash = false;
@@ -27,7 +30,7 @@ public class ANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
      * {@inheritDoc}
      */
     @Override
-    public com.github.anrwatchdog.ANRWatchDog setANRListener(final ANRListener listener) {
+    public ANRWatchDog setANRListener(final ANRListener listener) {
         customListener = listener;
         return this;
     }
@@ -69,11 +72,14 @@ public class ANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
     }
 
     /**
-     * @deprecated use {@link com.rafalzajfert.androidlogger.LoggerConfig#useANRWatchDog(ANRWatchDog)} instead
+     * @deprecated use {@link LoggerConfig#useANRWatchDog(ANRWatchDog)} instead
      */
     @Deprecated
     @Override
     public synchronized void start() {
+        logger.w("=======================================");
+        logger.w("ANRWatchDog is running. Please use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).");
+        logger.w("=======================================");
         super.setANRListener(new ANRListener() {
             @Override
             public void onAppNotResponding(ANRError error) {

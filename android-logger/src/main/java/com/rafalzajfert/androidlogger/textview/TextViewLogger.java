@@ -3,20 +3,22 @@ package com.rafalzajfert.androidlogger.textview;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
+import com.rafalzajfert.androidlogger.BaseLoggerConfig;
+import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
 
 /**
- * {@link com.rafalzajfert.androidlogger.Logger Logger} that send messages to Logcat
+ * {@link Logger Logger} that send messages to Logcat
  * console
  *
  * @author Rafal Zajfert
  * @version 1.0.1 (15/04/2015)
  */
 @SuppressWarnings("unused")
-public class TextViewLogger extends Logger {
+public class TextViewLogger extends Logger implements Configurable<TextViewLoggerConfig> {
 
-    private final TextViewLoggerConfig config = new TextViewLoggerConfig();
+    private TextViewLoggerConfig config = new TextViewLoggerConfig();
 
     private final TextView textView;
 
@@ -25,67 +27,49 @@ public class TextViewLogger extends Logger {
     }
 
     /**
-     * Returns Logger configuration
+     * {@inheritDoc}
      */
-    public TextViewLoggerConfig config() {
-        return this.config;
-    }
-
+    @NonNull
     @Override
-    protected String getTag() {
-        if (config.tag == null) {
-            return super.getTag();
-        } else {
-            return formatTag(config.getTag());
-        }
+    public TextViewLoggerConfig getConfig() {
+        return config;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected boolean isLevelAllowed(@NonNull Level level) {
-        return config.isEnabled() && config.isLevelAllowed(level);
+    public void setConfig(@NonNull TextViewLoggerConfig config) {
+        this.config = config;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected void print(Level level, String tag, String message) {
-        String type = "";
-        switch (level) {
-            case ERROR:
-                type = "E";
-                break;
-            case INFO:
-                type = "I";
-                break;
-            case DEBUG:
-                type = "D";
-                break;
-            case VERBOSE:
-                type = "V";
-                break;
-            case WARNING:
-                type = "W";
-                break;
-        }
-        append(type, tag, message);
-    }
-
-    private void append(String type, String tag, String message) {
-        String messageSeparator = getMessageSeparator();
-        switch (config.method) {
+    protected void print(Level level, String message) {
+        String tag = getTag(level);
+        switch (config.getPrintMethod()) {
             case APPEND:
-                textView.append((textView.length() > 0 ? messageSeparator : "") + type + " " + tag + " " + message);
+                textView.append(getMessageSeparator() + tag + PARAM_SPACE + message);
                 break;
             case OVERWRITE:
-                textView.setText(type + " " + tag + " " + message);
+                textView.setText(tag + PARAM_SPACE + message);
                 break;
             case PREPEND:
-                textView.setText(type + " " + tag + " " + message + (textView.length() > 0 ? messageSeparator
-                        : "") + textView.getText());
+                textView.setText(tag + PARAM_SPACE + message + getMessageSeparator() + textView.getText());
                 break;
         }
     }
 
     private String getMessageSeparator() {
-        return config.eachInNewLine ? "\n" : " ";
+        if (textView.length() <= 0){
+            return "";
+        }
+        if (config.isInNewLine()){
+            return PARAM_NEW_LINE;
+        }
+        return PARAM_SPACE;
     }
 
 }

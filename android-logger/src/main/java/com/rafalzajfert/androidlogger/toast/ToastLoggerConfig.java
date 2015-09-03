@@ -1,17 +1,15 @@
 package com.rafalzajfert.androidlogger.toast;
 
 import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
-import static android.widget.Toast.*;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
-import com.rafalzajfert.androidlogger.Level;
-import com.rafalzajfert.androidlogger.LoggerConfig;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * @author Rafal Zajfert

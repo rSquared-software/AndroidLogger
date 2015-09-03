@@ -8,11 +8,11 @@ import com.rafalzajfert.androidlogger.BaseLoggerConfig;
  */
 @SuppressWarnings("unused")
 public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig> {
-    private boolean eachInNewLine = true;
+    private boolean inNewLine = true;
     private Method printMethod = Method.APPEND;
 
     /**
-     * Set {@link com.rafalzajfert.androidlogger.textview.TextViewLoggerConfig.Method} to print messages in the TextView
+     * Set {@link TextViewLoggerConfig.Method} to print messages in the TextView
      */
     public TextViewLoggerConfig setPrintMethod(Method method) {
         this.printMethod = method;
@@ -27,18 +27,18 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
     }
 
     /**
-     * If true all messages will be logged in new line
+     * If true each message will be logged in new line
      */
-    public TextViewLoggerConfig setEachInNewLine(boolean eachInNewLine) {
-        this.eachInNewLine = eachInNewLine;
+    public TextViewLoggerConfig setInNewLine(boolean inNewLine) {
+        this.inNewLine = inNewLine;
         return this;
     }
 
     /**
-     * If true all messages will be logged in new line
+     * If true each message will be logged in new line
      */
-    public boolean isEachInNewLine() {
-        return eachInNewLine;
+    public boolean isInNewLine() {
+        return inNewLine;
     }
 
     public enum Method {

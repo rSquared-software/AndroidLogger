@@ -4,7 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * Created by Rafal on 2015-08-29.
+ * @author Rafal Zajfert
+ * @version 1.1.0 (29/04/2015)
  */
 @SuppressWarnings("unused")
 public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
@@ -13,7 +14,7 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     protected Boolean logThrowableWithStackTrace;
 
     /**
-     * Minimal {@link com.rafalzajfert.androidlogger.Level Level} of message to sent. Default it is {@link Level#VERBOSE}
+     * Minimal {@link Level Level} of message to sent. Default it is {@link Level#VERBOSE}
      */
     @NonNull
     public Level getLevel() {
@@ -21,12 +22,12 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     }
 
     /**
-     * Minimal {@link com.rafalzajfert.androidlogger.Level Level} of message to sent. Default it is {@link Level#VERBOSE}
+     * Minimal {@link Level Level} of message to sent. Default it is {@link Level#VERBOSE}
      */
     @SuppressWarnings("unchecked")
     public E setLevel(@NonNull Level level) {
         this.level = level;
-        return (E)this;
+        return (E) this;
     }
 
     /**
@@ -37,21 +38,25 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     }
 
     /**
-     * Tag, used to identify source of a log message<br>
-     * <br>
-     * You can also use auto generated values:<br>
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_SIMPLE_CLASS_NAME PARAM_SIMPLE_CLASS_NAME}<br>
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_CLASS_NAME PARAM_CLASS_NAME}<br>
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br>
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br>
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_LEVEL PARAM_LEVEL}
-     * {@link com.rafalzajfert.androidlogger.Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}
+     * Tag, used to identify source of a log message<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
      */
     @SuppressWarnings("unchecked")
     public E setTag(@Nullable String tag) {
         this.tag = tag;
-        return (E)this;
+        return (E) this;
     }
 
     /**
@@ -68,7 +73,7 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     @SuppressWarnings("unchecked")
     public E setLogThrowableWithStackTrace(@Nullable Boolean logThrowableWithStackTrace) {
         this.logThrowableWithStackTrace = logThrowableWithStackTrace;
-        return (E)this;
+        return (E) this;
     }
 
     /**

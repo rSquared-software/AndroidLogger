@@ -5,8 +5,10 @@ import android.text.TextUtils;
 
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -15,13 +17,27 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
-    private String separator = Logger.SPACE;
-    private String throwableSeparator = Logger.NEW_LINE;
+    public static final String DATE_PATTERN = "HH:MM:ss:SSS";
+    private String separator = Logger.PARAM_SPACE;
+    private String throwableSeparator = Logger.PARAM_NEW_LINE;
+    private String datePattern = DATE_PATTERN;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
     private final Map<String, Logger> loggers = new HashMap<>();
 
+    /**
+     * Tis configuration is created with default {@link LogcatLogger}, if you want you can remove it by calling {@link #removeLogger(String)} with {@link #DEFAULT_LOGGER} tag
+     */
+    public LoggerConfig() {
+    }
+
+    /**
+     * Tag of the default logger
+     */
+    public static final String DEFAULT_LOGGER = "default_logger";
+
     {
-        this.loggers.put("default_logger", new LogcatLogger());
-        this.tag = Logger.PARAM_SIMPLE_CLASS_NAME + "(" + Logger.PARAM_LINE_NUMBER + ")";
+        this.loggers.put(DEFAULT_LOGGER, new LogcatLogger());
+        this.tag = Logger.PARAM_METHOD_NAME + Logger.PARAM_CODE_LINE;
         this.logThrowableWithStackTrace = true;
     }
 
@@ -48,9 +64,6 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
 
     @Override
     public LoggerConfig setLogThrowableWithStackTrace(@SuppressWarnings("NullableProblems") @NonNull Boolean logThrowableWithStackTrace) {
-        if (logThrowableWithStackTrace == null){
-            throw new IllegalArgumentException("logThrowableWithStackTrace for all loggers cannot be null");
-        }
         this.logThrowableWithStackTrace = logThrowableWithStackTrace;
         return this;
     }
@@ -65,7 +78,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Get {@link com.rafalzajfert.androidlogger.Logger Logger} instance
+     * Get {@link Logger Logger} instance
      *
      * @param tag tag of the logger to return
      */
@@ -82,10 +95,10 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Add logger to which you want send messages<br>
+     * Add logger to which you want send messages<br/>
      *
-     * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger.Logger#debug(Object)}
-     * @return Config this config instance
+     * @param logger instance of Logger to used in global logging eg. {@link Logger#debug(Object)}
+     * @return Config this baseConfig instance
      */
     @NonNull
     public LoggerConfig addLogger(@NonNull Logger logger) {
@@ -95,11 +108,10 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Add logger to which you want send messages<br>
+     * Add logger to which you want send messages<br/>
      *
-     * @param logger instance of Logger to used in global logging eg. {@link com.rafalzajfert.androidlogger
-     *               .Logger#debug(Object)}
-     * @return Config this config instance
+     * @param logger instance of Logger to used in global logging eg. {@link Logger#debug(Object)}
+     * @return Config this baseConfig instance
      */
     @NonNull
     public LoggerConfig addLogger(@NonNull Logger logger, @NonNull String loggerTag) {
@@ -109,7 +121,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Remove {@link com.rafalzajfert.androidlogger.Logger Logger} instance
+     * Remove {@link Logger Logger} instance
      *
      * @param tag tag of the logger to remove
      */
@@ -120,7 +132,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Remove {@link com.rafalzajfert.androidlogger.Logger Logger} instance
+     * Remove {@link Logger Logger} instance
      *
      * @param logger Logger instance to remove
      */
@@ -131,7 +143,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Remove all {@link com.rafalzajfert.androidlogger.Logger Loggers}
+     * Remove all {@link Logger Loggers}
      */
     @NonNull
     public LoggerConfig removeAllLoggers() {
@@ -140,9 +152,10 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Create new {@link com.github.anrwatchdog.ANRWatchDog} thread.<br/><br/>
+     * Create new {@link ANRWatchDog} thread.<br/><br/>
      * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><br/>
-     * This should not be used in your final release
+     * <b>NOTE: </b>This should not be used in your final release<br/>
+     * <b>NOTE2: </b>Use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).
      */
     @NonNull
     public LoggerConfig useANRWatchDog(@NonNull ANRWatchDog watchDog) {
@@ -200,5 +213,32 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     @NonNull
     public  String getThrowableSeparator(){
         return this.throwableSeparator;
+    }
+
+    /** Pattern used to format date with {@link SimpleDateFormat} */
+    @NonNull
+    public String getDatePattern() {
+        return datePattern;
+    }
+
+    /** Pattern used to format date with {@link SimpleDateFormat}. <br/>Default: <code>{@value #DATE_PATTERN}</code>
+     * <br/><br/>
+     * <b>Note:</b> if you changed DateFormat with {@link #setDateFormat(SimpleDateFormat)} before call this method then it will be overwritten*/
+    public void setDatePattern(@NonNull String datePattern) {
+        this.datePattern = datePattern;
+        this.dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
+    }
+
+    /** {@link SimpleDateFormat}  used to format log time in the log tag and log message*/
+    @NonNull
+    public SimpleDateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    /** {@link SimpleDateFormat}  used to format log time in the log tag and log message
+     * <br/><br/>
+     * <b>Note:</b> If you change this parameter then {@link #datePattern} may be unused*/
+    public void setDateFormat(@NonNull SimpleDateFormat dateFormat) {
+        this.dateFormat = dateFormat;
     }
 }

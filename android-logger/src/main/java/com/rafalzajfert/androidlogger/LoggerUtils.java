@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,16 +15,19 @@ import java.util.Map;
 abstract class LoggerUtils {
 
     @SafeVarargs
-    static <T> String array2String(String separator, T... array) {
+    static <T> String array2String(@NonNull String separator, @NonNull T... array) {
         StringBuilder builder = new StringBuilder();
-        for (T t : array) {
-            builder.append(t).append(separator);
-        }
-        if (builder.length() >= separator.length()) {
-            builder.deleteCharAt(builder.length() - separator.length());
+        String str;
+        for (int i = 0; i < array.length; i++) {
+            if (i>0){
+                builder.append(separator);
+            }
+            str = array[i] + "";
+            builder.append(str);
         }
         return builder.toString();
     }
+
 
     static Map<String, String> getStackTraceFieldMap() {
         final StackTraceElement element = getStackTraceElement();
@@ -34,8 +36,8 @@ abstract class LoggerUtils {
         }
         Map<String, String> stackMap = new HashMap<>();
 
-        stackMap.put(Logger.PARAM_SIMPLE_CLASS_NAME, getField(element, StackTraceField.SIMPLE_CLASS_NAME));
-        stackMap.put(Logger.PARAM_CLASS_NAME, getField(element, StackTraceField.FULL_CLASS_NAME));
+        stackMap.put(Logger.PARAM_CLASS_NAME, getField(element, StackTraceField.SIMPLE_CLASS_NAME));
+        stackMap.put(Logger.PARAM_FULL_CLASS_NAME, getField(element, StackTraceField.FULL_CLASS_NAME));
         stackMap.put(Logger.PARAM_METHOD_NAME, getField(element, StackTraceField.METHOD_NAME));
         stackMap.put(Logger.PARAM_FILE_NAME, getField(element, StackTraceField.FILE_NAME));
         stackMap.put(Logger.PARAM_LINE_NUMBER, getField(element, StackTraceField.LINE_NUMBER));
@@ -119,6 +121,7 @@ abstract class LoggerUtils {
         }
         tag = tag.replace(Logger.PARAM_LEVEL, level.name());
         tag = tag.replace(Logger.PARAM_SHORT_LEVEL, level.name().substring(0, 1));
+        tag = tag.replace(Logger.PARAM_TIME, Logger.getTime());
         return tag;
     }
 
