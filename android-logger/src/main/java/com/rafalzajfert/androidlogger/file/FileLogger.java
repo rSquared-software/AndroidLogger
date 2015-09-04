@@ -62,7 +62,7 @@ public class FileLogger extends Logger implements Configurable<FileLoggerConfig>
             if ( file == null )
                 return;
 
-            writer = new RandomAccessFile(getLogFile(), "w");
+            writer = new RandomAccessFile(getLogFile(), "rw");
             String string = getTag(level) + PARAM_SPACE + message + PARAM_NEW_LINE;
             writer.seek(file.length());
             writer.writeChars(string);
