@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 Rafal Zajfert
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.rafalzajfert.androidlogger;
 
 import android.support.annotation.NonNull;
@@ -152,13 +168,13 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     }
 
     /**
-     * Create new {@link ANRWatchDog} thread.<br/><br/>
+     * Create new {@link LoggableANRWatchDog} thread.<br/><br/>
      * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><br/>
      * <b>NOTE: </b>This should not be used in your final release<br/>
      * <b>NOTE2: </b>Use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).
      */
     @NonNull
-    public LoggerConfig useANRWatchDog(@NonNull ANRWatchDog watchDog) {
+    public LoggerConfig useANRWatchDog(@NonNull LoggableANRWatchDog watchDog) {
         //noinspection deprecation
         watchDog.start();
         return this;

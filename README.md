@@ -6,7 +6,7 @@ Gradle Dependency (jCenter)
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.1.11'
+    compile 'com.rafalzajfert:android-logger:1.1.13'
 }
 ```
 
@@ -18,7 +18,7 @@ Maven Dependency
 <dependency>
     <groupId>com.rafalzajfert</groupId>
     <artifactId>android-logger</artifactId>
-    <version>1.1.11</version>
+    <version>1.1.13</version>
 </dependency>
 ```
 
@@ -32,6 +32,7 @@ Logger.debug("Debug log");
 Logger.info("Info log");
 Logger.warning("Warning log");
 Logger.error("Error log");
+Logger.trace();
 
 // log multi argument message
 Logger.debug("User:", user.id, user.name);
@@ -51,7 +52,8 @@ logcat.v("Verbose log");
 logcat.d("Debug log");
 logcat.i("Info log");
 logcat.w("Warning log");
-logcat.e("Error log");s
+logcat.e("Error log");
+logcat.t();
 //--------------------------------------------------------------
 
 // add logger to configuration
@@ -79,7 +81,7 @@ LoggerConfiguration is created with default LogcatLogger, if you want you can re
 LoggerConfig loggerConfig = new LoggerConfig()
         .removeLogger(LoggerConfig.DEFAULT_LOGGER)
         .setTag(Logger.PARAM_CODE_LINE)
-        .useANRWatchDog(new ANRWatchDog(2000).preventCrash(true))
+        .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
         .catchUncaughtExceptions()
         .setLevel(Level.VERBOSE)
         .setSeparator(Logger.PARAM_SPACE)

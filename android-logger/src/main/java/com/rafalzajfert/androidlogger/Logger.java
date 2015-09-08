@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 Rafal Zajfert
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.rafalzajfert.androidlogger;
 
 import android.support.annotation.NonNull;
@@ -78,13 +94,19 @@ public abstract class Logger extends BaseLogger {
         if (Logger.baseConfig.isLevelAllowed(level) && isLevelAllowed(level)) {
             String msg = getMessage(message);
             StringBuilder builder = new StringBuilder();
-            if (TextUtils.isEmpty(msg) && throwable == null){
-                return;
+
+            if (msg == null && throwable == null){
+                builder.append(msg);
+            } else if (TextUtils.isEmpty(msg) && throwable == null){
+                builder.append("[]");
+            } else if (!TextUtils.isEmpty(msg)){
+                builder.append(msg);
             }
-            if (msg != null) {
-                builder.append(msg).append(Logger.baseConfig.getThrowableSeparator());
-            }
+
             if (throwable != null) {
+                if (builder.length() > 0) {
+                    builder.append(Logger.baseConfig.getThrowableSeparator());
+                }
                 BaseLoggerConfig config = getConfigIfDefined();
                 if (config == null || config.isLogThrowableWithStackTrace() == null) {
                     builder.append(LoggerUtils.throwableToString(throwable, Logger.baseConfig));
@@ -479,5 +501,13 @@ public abstract class Logger extends BaseLogger {
      */
     public void w(Object message, Throwable th) {
         print(WARNING, message, th);
+    }
+
+
+    /**
+     * Send an {@link Level#DEBUG DEBUG} message with information where this method was called
+     */
+    public void t() {
+        d("at " + Logger.PARAM_FULL_CLASS_NAME + "." + Logger.PARAM_METHOD_NAME + Logger.PARAM_CODE_LINE);
     }
 }

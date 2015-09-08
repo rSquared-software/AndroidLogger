@@ -504,5 +504,10 @@ class BaseLogger {
         printToAll(WARNING, message, th);
     }
 
-
+    /**
+     * Send an {@link Level#DEBUG DEBUG} message with information where this method was called
+     */
+    public static void trace() {
+        debug("at " + Logger.PARAM_FULL_CLASS_NAME + "." + Logger.PARAM_METHOD_NAME + Logger.PARAM_CODE_LINE);
+    }
 }

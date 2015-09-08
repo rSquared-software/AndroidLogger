@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 Rafal Zajfert
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.rafalzajfert.logger.sample;
 
 import android.app.Activity;
@@ -8,7 +24,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.rafalzajfert.androidlogger.ANRWatchDog;
+import com.rafalzajfert.androidlogger.LoggableANRWatchDog;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
 import com.rafalzajfert.androidlogger.LoggerConfig;
@@ -40,11 +56,11 @@ public class MainActivity extends Activity {
         LogcatLoggerConfig logcatLoggerConfig = new LogcatLoggerConfig()
                 .setTag(Logger.PARAM_FULL_CLASS_NAME + " " + Logger.PARAM_METHOD_NAME);
         LoggerConfig loggerConfig = new LoggerConfig()
-                .removeLogger(LoggerConfig.DEFAULT_LOGGER)
                 .setTag(Logger.PARAM_CODE_LINE)
-                .useANRWatchDog(new ANRWatchDog(2000).preventCrash(true))
+                .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
                 .catchUncaughtExceptions()
                 .setSeparator(Logger.PARAM_SPACE)
+                .setLogThrowableWithStackTrace(true)
                 .setThrowableSeparator(Logger.PARAM_NEW_LINE)
                 .setLevel(Level.VERBOSE);
 
@@ -52,7 +68,15 @@ public class MainActivity extends Activity {
         Logger.setBaseConfig(loggerConfig);
 
         Logger.error("start");
-        logger.e("test");
+        try{
+            Integer.parseInt("a");
+        }catch (Exception e){
+            Logger.error(e);
+        }
+        Logger.getBaseConfig().removeLogger(LoggerConfig.DEFAULT_LOGGER);
+        logger.e("test","trace will be printed");
+        logger.t();
+        logger.e("test", "end");
     }
 
     public void sendToAll(View v) {
@@ -112,7 +136,6 @@ public class MainActivity extends Activity {
             Logger.getBaseConfig().addLogger(new TextViewLogger(logTextView), "textview");
             ((Button) v).setText("Remove TextViewLogger");
             logger.d("textView enabled");
-            throw new RuntimeException("asd");
         }
         isTextViewAdded = !isTextViewAdded;
     }
