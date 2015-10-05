@@ -96,9 +96,9 @@ public abstract class Logger extends BaseLogger {
             StringBuilder builder = new StringBuilder();
 
             if (msg == null && throwable == null){
-                builder.append(msg);
+                builder.append("null");
             } else if (TextUtils.isEmpty(msg) && throwable == null){
-                builder.append("[]");
+                builder.append("[empty log message]");
             } else if (!TextUtils.isEmpty(msg)){
                 builder.append(msg);
             }

@@ -19,14 +19,14 @@ package com.rafalzajfert.androidlogger.file;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
-import com.rafalzajfert.androidlogger.BaseLoggerConfig;
 import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
-import com.rafalzajfert.androidlogger.logcat.LogcatLoggerConfig;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -71,17 +71,17 @@ public class FileLogger extends Logger implements Configurable<FileLoggerConfig>
      */
     @Override
     protected void print(Level level, String message) {
-        RandomAccessFile writer = null;
+        FileWriter writer = null;
         try {
             File file = createFileIfNeeded();
 
             if ( file == null )
                 return;
 
-            writer = new RandomAccessFile(getLogFile(), "rw");
             String string = getTag(level) + PARAM_SPACE + message + PARAM_NEW_LINE;
-            writer.seek(file.length());
-            writer.writeChars(string);
+
+            writer = new FileWriter(file, true);
+            writer.write(string);
         } catch (IOException e) {
             logger.e("Cannot write log to file", e);
         } finally {
@@ -104,7 +104,7 @@ public class FileLogger extends Logger implements Configurable<FileLoggerConfig>
         }
     }
 
-    private void close(RandomAccessFile file) {
+    private void close(Closeable file) {
         try {
             if (file != null) {
                 file.close();

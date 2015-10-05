@@ -4,13 +4,13 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         minSdkVersion 1
         targetSdkVersion 23
         versionCode 2
-        versionName "1.1.13"
+        versionName "1.1.14"
     }
     buildTypes {
         release {
@@ -23,12 +23,12 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.github.anrwatchdog:anrwatchdog:1.1.1'
-    compile 'com.android.support:support-annotations:23.0.0'
+    compile 'com.android.support:support-annotations:23.0.1'
 }
 
 def siteUrl = 'https://github.com/RafalZajfert/android-logger'      // Homepage URL of the library
 def gitUrl = 'https://github.com/RafalZajfert/android-logger.git'   // Git repository URL
-version = "1.1.13"
+version = "1.1.14"
 group = "com.rafalzajfert"                      // Maven Group ID for the artifact
 
 

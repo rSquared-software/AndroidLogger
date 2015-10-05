@@ -26,7 +26,7 @@ class BaseLogger {
     /**
      * New Line: "\n"
      */
-    public static final String PARAM_NEW_LINE = "\n";
+    public static final String PARAM_NEW_LINE = "\r\n";
 
     /**
      * This parameter can be used in tag pattern or in message to log and it will be replaced with simple name of class in which the logger will be called

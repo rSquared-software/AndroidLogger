@@ -18,20 +18,25 @@ package com.rafalzajfert.logger.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.rafalzajfert.androidlogger.LoggableANRWatchDog;
 import com.rafalzajfert.androidlogger.Level;
+import com.rafalzajfert.androidlogger.LoggableANRWatchDog;
 import com.rafalzajfert.androidlogger.Logger;
 import com.rafalzajfert.androidlogger.LoggerConfig;
+import com.rafalzajfert.androidlogger.file.FileLogger;
+import com.rafalzajfert.androidlogger.file.FileLoggerConfig;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 import com.rafalzajfert.androidlogger.logcat.LogcatLoggerConfig;
 import com.rafalzajfert.androidlogger.textview.TextViewLogger;
 import com.rafalzajfert.androidlogger.toast.ToastLogger;
+
+import java.io.File;
 
 public class MainActivity extends Activity {
 
@@ -55,6 +60,7 @@ public class MainActivity extends Activity {
 
         LogcatLoggerConfig logcatLoggerConfig = new LogcatLoggerConfig()
                 .setTag(Logger.PARAM_FULL_CLASS_NAME + " " + Logger.PARAM_METHOD_NAME);
+
         LoggerConfig loggerConfig = new LoggerConfig()
                 .setTag(Logger.PARAM_CODE_LINE)
                 .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
@@ -68,11 +74,21 @@ public class MainActivity extends Activity {
         Logger.setBaseConfig(loggerConfig);
 
         Logger.error("start");
+        Logger.error("");
+        String a = null;
+        Logger.error(a);
         try{
             Integer.parseInt("a");
         }catch (Exception e){
             Logger.error(e);
         }
+
+        FileLogger fileLogger = new FileLogger();
+        FileLoggerConfig fileLoggerConfig = new FileLoggerConfig().setLogFile(new File(Environment.getExternalStorageDirectory(), "log.txt"));
+        fileLogger.setConfig(fileLoggerConfig);
+
+        fileLogger.t();
+
         Logger.getBaseConfig().removeLogger(LoggerConfig.DEFAULT_LOGGER);
         logger.e("test","trace will be printed");
         logger.t();
