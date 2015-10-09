@@ -16,9 +16,13 @@
 
 package com.rafalzajfert.logger.sample;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,6 +65,21 @@ public class MainActivity extends Activity {
         LogcatLoggerConfig logcatLoggerConfig = new LogcatLoggerConfig()
                 .setTag(Logger.PARAM_FULL_CLASS_NAME + " " + Logger.PARAM_METHOD_NAME);
 
+        LoggerConfig config = new LoggerConfig(R.raw.logger);
+        Log.e("LoggerConfig", config.toString());
+        ((TextViewLogger)config.getLogger("textView")).setTextView(logTextView);
+        Logger.setBaseConfig(config);
+        try {
+            Integer.parseInt("a");
+        } catch (Exception e) {
+            Logger.error(e);
+        }
+        Logger.verbose("verbose");
+        Logger.debug("debug");
+        Logger.info("info");
+        Logger.warning("warning");
+        Logger.error("error");
+
         LoggerConfig loggerConfig = new LoggerConfig()
                 .setTag(Logger.PARAM_CODE_LINE)
                 .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
@@ -77,15 +96,17 @@ public class MainActivity extends Activity {
         Logger.error("");
         String a = null;
         Logger.error(a);
-        try{
+        try {
             Integer.parseInt("a");
-        }catch (Exception e){
+        } catch (Exception e) {
             Logger.error(e);
         }
 
         FileLogger fileLogger = new FileLogger();
-        FileLoggerConfig fileLoggerConfig = new FileLoggerConfig().setLogFile(new File(Environment.getExternalStorageDirectory(), "log.txt"));
-        fileLogger.setConfig(fileLoggerConfig);
+        if (checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            FileLoggerConfig fileLoggerConfig = new FileLoggerConfig().setLogFile(new File(Environment.getExternalStorageDirectory(), "log.txt"));
+            fileLogger.setConfig(fileLoggerConfig);
+        }
 
         fileLogger.t();
 

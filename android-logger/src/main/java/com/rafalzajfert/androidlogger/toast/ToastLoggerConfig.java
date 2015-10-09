@@ -17,12 +17,14 @@
 package com.rafalzajfert.androidlogger.toast;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Map;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -56,5 +58,23 @@ public class ToastLoggerConfig extends BaseLoggerConfig<ToastLoggerConfig> {
     @Duration
     public int getDuration() {
         return this.duration;
+    }
+
+    @Override
+    protected void read(@NonNull Map<String, String> config) {
+        super.read(config);
+
+        if (config.containsKey("duration")) {
+            switch (config.get("duration")){
+                case "SHORT":
+                    setDuration(LENGTH_SHORT);
+                    break;
+                case "LONG":
+                    setDuration(LENGTH_SHORT);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Illegal duration length. Must be one of: SHORT, LONG");
+            }
+        }
     }
 }

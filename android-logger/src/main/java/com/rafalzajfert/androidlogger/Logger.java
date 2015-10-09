@@ -16,6 +16,7 @@
 
 package com.rafalzajfert.androidlogger;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -48,10 +49,11 @@ public abstract class Logger extends BaseLogger {
      */
     protected abstract void print(Level level, String message);
 
+
     @Nullable
     private BaseLoggerConfig getConfigIfDefined(){
         if (hasConfig){
-            return ((Configurable) this).getConfig();
+            return this.getConfig();
         }
         return null;
     }
@@ -66,6 +68,10 @@ public abstract class Logger extends BaseLogger {
         }else {
             return LoggerUtils.formatTag(config.getTag(), level);
         }
+    }
+
+    protected Context getApplicationContext(){
+       return LoggerUtils.getApplicationContext();
     }
 
     /**

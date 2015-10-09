@@ -16,8 +16,11 @@
 
 package com.rafalzajfert.androidlogger;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import java.util.Map;
 
 /**
  * @author Rafal Zajfert
@@ -98,5 +101,31 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     @Nullable
     public Boolean isLogThrowableWithStackTrace() {
         return logThrowableWithStackTrace;
+    }
+
+    @CallSuper
+    protected void read(@NonNull Map<String, String> config) {
+        if (config.containsKey("level")){
+            try{
+                setLevel(Level.valueOf(config.get("level")));
+            }catch (Exception e) {
+                throw new IllegalArgumentException("Unknown level: " + config.get("level"));
+            }
+        }
+        if (config.containsKey("tag")){
+            setTag(config.get("tag"));
+        }
+        if (config.containsKey("logThrowableWithStackTrace")){
+            setLogThrowableWithStackTrace(Boolean.parseBoolean(config.get("logThrowableWithStackTrace")));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "BaseLoggerConfig{" +
+                "level=" + level +
+                ", tag='" + tag + '\'' +
+                ", logThrowableWithStackTrace=" + logThrowableWithStackTrace +
+                '}';
     }
 }

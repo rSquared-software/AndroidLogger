@@ -16,13 +16,17 @@
 
 package com.rafalzajfert.androidlogger.textview;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
 import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
+
+import java.util.Map;
 
 /**
  * {@link Logger Logger} that send messages to Logcat
@@ -36,9 +40,18 @@ public class TextViewLogger extends Logger implements Configurable<TextViewLogge
 
     private TextViewLoggerConfig config = new TextViewLoggerConfig();
 
-    private final TextView textView;
+    @Nullable
+    private TextView textView;
 
-    public TextViewLogger(TextView textView) {
+    public TextViewLogger(){
+    }
+
+    @SuppressWarnings("NullableProblems")
+    public TextViewLogger(@NonNull TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(@Nullable TextView textView) {
         this.textView = textView;
     }
 
@@ -59,26 +72,33 @@ public class TextViewLogger extends Logger implements Configurable<TextViewLogge
         this.config = config;
     }
 
+    @Override
+    protected boolean isLevelAllowed(@NonNull Level level) {
+        return textView != null && super.isLevelAllowed(level);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     protected void print(Level level, String message) {
         String tag = getTag(level);
-        switch (config.getPrintMethod()) {
-            case APPEND:
-                textView.append(getMessageSeparator() + tag + PARAM_SPACE + message);
-                break;
-            case OVERWRITE:
-                textView.setText(tag + PARAM_SPACE + message);
-                break;
-            case PREPEND:
-                textView.setText(tag + PARAM_SPACE + message + getMessageSeparator() + textView.getText());
-                break;
+        if (textView != null) {
+            switch (config.getPrintMethod()) {
+                case APPEND:
+                    textView.append(getMessageSeparator(textView) + tag + PARAM_SPACE + message);
+                    break;
+                case OVERWRITE:
+                    textView.setText(tag + PARAM_SPACE + message);
+                    break;
+                case PREPEND:
+                    textView.setText(tag + PARAM_SPACE + message + getMessageSeparator(textView) + textView.getText());
+                    break;
+            }
         }
     }
 
-    private String getMessageSeparator() {
+    private String getMessageSeparator(@NonNull TextView textView) {
         if (textView.length() <= 0){
             return "";
         }

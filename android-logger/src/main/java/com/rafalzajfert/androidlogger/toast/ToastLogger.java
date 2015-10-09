@@ -25,6 +25,8 @@ import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
 
+import java.util.Map;
+
 /**
  * {@link Logger Logger} that send messages to Logcat
  * console
@@ -39,7 +41,15 @@ public class ToastLogger extends Logger implements Configurable<ToastLoggerConfi
 
     private Context context;
 
-    public ToastLogger(Context context) {
+    public ToastLogger(){
+        this.context = getApplicationContext();
+    }
+
+    public ToastLogger(@NonNull Context context) {
+        this.context = context;
+    }
+
+    public void setContext(@NonNull Context context) {
         this.context = context;
     }
 

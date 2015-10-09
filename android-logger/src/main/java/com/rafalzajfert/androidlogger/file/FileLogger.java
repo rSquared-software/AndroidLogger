@@ -16,8 +16,10 @@
 
 package com.rafalzajfert.androidlogger.file;
 
+import android.Manifest;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 
 import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Map;
 
 /**
  * {@link Logger Logger} that save log messages in the

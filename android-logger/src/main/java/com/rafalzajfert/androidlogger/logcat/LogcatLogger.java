@@ -24,6 +24,8 @@ import com.rafalzajfert.androidlogger.Configurable;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
 
+import java.util.Map;
+
 /**
  * {@link Logger Logger} that send messages to Logcat
  * console

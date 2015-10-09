@@ -16,6 +16,8 @@
 
 package com.rafalzajfert.androidlogger;
 
+import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -166,11 +168,19 @@ abstract class LoggerUtils {
 
     @NonNull
     static String throwableToString(@NonNull Throwable throwable, @NonNull BaseLoggerConfig config){
-        //noinspection ConstantConditions
-        if (!config.isLogThrowableWithStackTrace()) {
+        Boolean stackTrace = config.isLogThrowableWithStackTrace();
+        if (stackTrace != null && !stackTrace) {
             return throwable.getMessage();
         } else {
             return Log.getStackTraceString(throwable);
+        }
+    }
+
+    static Context getApplicationContext() {
+        try {
+            return (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot retrieve application context, please config logger programmatically");
         }
     }
 

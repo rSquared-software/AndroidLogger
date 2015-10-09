@@ -16,7 +16,12 @@
 
 package com.rafalzajfert.androidlogger.textview;
 
+import android.support.annotation.NonNull;
+
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
+import com.rafalzajfert.androidlogger.Level;
+
+import java.util.Map;
 
 /**
  * @author Rafal Zajfert
@@ -55,6 +60,22 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
      */
     public boolean isInNewLine() {
         return inNewLine;
+    }
+
+    @Override
+    protected void read(@NonNull Map<String, String> config) {
+        super.read(config);
+
+        if (config.containsKey("inNewLine")) {
+            setInNewLine(Boolean.parseBoolean(config.get("inNewLine")));
+        }
+        if (config.containsKey("printMethod")) {
+            try{
+                setPrintMethod(Method.valueOf(config.get("printMethod")));
+            }catch (Exception e){
+                throw new IllegalArgumentException("Unknown print method: " + config.get("printMethod"));
+            }
+        }
     }
 
     public enum Method {

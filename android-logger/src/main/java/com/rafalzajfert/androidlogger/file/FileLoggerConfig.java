@@ -16,9 +16,17 @@
 
 package com.rafalzajfert.androidlogger.file;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
+
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * @author Rafal Zajfert
@@ -36,14 +44,29 @@ public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig>{
     }
 
     /**
-     * Set log file to write messages<br/>
-     * <br/>
-     * <b>Note:</b> if you want save log file on external storage you have to
-     * add to your Manifest permission:<br/>
-     * <code>&lt;uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/&gt;</code>
+     * Set log file to write messages
      */
     public FileLoggerConfig setLogFile(File logFile) {
         this.logFile = logFile;
         return this;
+    }
+
+    /**
+     * Set log file to write messages, path must be relative to external storage
+     */
+    @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    public FileLoggerConfig setLogFile(String path){
+        this.logFile = new File(Environment.getExternalStorageDirectory(), path);
+        return this;
+    }
+
+    @Override
+    protected void read(@NonNull Map<String, String> config) {
+        super.read(config);
+
+        if (config.containsKey("externalFile")) {
+            //noinspection ResourceType
+            setLogFile(config.get("externalFile"));
+        }
     }
 }

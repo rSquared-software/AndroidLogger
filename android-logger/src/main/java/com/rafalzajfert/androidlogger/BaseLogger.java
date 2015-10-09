@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import static com.rafalzajfert.androidlogger.Level.DEBUG;
 import static com.rafalzajfert.androidlogger.Level.ERROR;
@@ -17,7 +18,7 @@ import static com.rafalzajfert.androidlogger.Level.WARNING;
  * @version 1.1.0 (29/04/2015)
  */
 @SuppressWarnings("unused")
-class BaseLogger {
+abstract class BaseLogger {
     /**
      * Space: " "
      */
@@ -91,10 +92,22 @@ class BaseLogger {
 
     /**
      * Configuration of all loggers
+     * @deprecated Base config can be changed with {@link #setBaseConfig(LoggerConfig)} method. This method will be removed in a future release.
      */
     @NonNull
+    @Deprecated
     public static LoggerConfig getBaseConfig() {
         return baseConfig;
+    }
+
+    /**
+     * Get config for this instance of logger
+     */
+    @NonNull
+    protected abstract BaseLoggerConfig getConfig();
+
+    protected void init(@NonNull Map<String, String> config){
+        getConfig().read(config);
     }
 
     protected static void printToAll(Level level, @Nullable Object message, @Nullable Throwable throwable){
