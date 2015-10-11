@@ -16,16 +16,14 @@
 
 package com.rafalzajfert.androidlogger.file;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -34,7 +32,11 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig>{
+    public static final String DATE_PATTERN = "dd_MM_yyyy";
     private File logFile = null;
+    private String datePattern = DATE_PATTERN;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
+    private String logFilePath;
 
     /**
      * Returns log file
@@ -48,16 +50,22 @@ public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig>{
      */
     public FileLoggerConfig setLogFile(File logFile) {
         this.logFile = logFile;
+        this.logFilePath = this.logFile.getAbsolutePath();
         return this;
+    }
+
+    /**
+     * Set log file to write messages
+     */
+    public FileLoggerConfig setLogFile(String path){
+        return setLogFile(new File(path));
     }
 
     /**
      * Set log file to write messages, path must be relative to external storage
      */
-    @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public FileLoggerConfig setLogFile(String path){
-        this.logFile = new File(Environment.getExternalStorageDirectory(), path);
-        return this;
+    public FileLoggerConfig setExternalLogFile(String path){
+        return setLogFile(new File(Environment.getExternalStorageDirectory(), path));
     }
 
     @Override
@@ -66,7 +74,51 @@ public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig>{
 
         if (config.containsKey("externalFile")) {
             //noinspection ResourceType
-            setLogFile(config.get("externalFile"));
+            setExternalLogFile(config.get("externalFile"));
         }
+
+        if (config.containsKey("datePattern")) {
+            //noinspection ResourceType
+            setDatePattern(config.get("datePattern"));
+        }
+    }
+
+    /**
+     * Pattern used to format date with {@link SimpleDateFormat}
+     */
+    @NonNull
+    public String getDatePattern() {
+        return datePattern;
+    }
+
+    /**
+     * Pattern used to format date with {@link SimpleDateFormat}. <br/>Default: <code>{@value #DATE_PATTERN}</code>
+     * <br/><br/>
+     * <b>Note:</b> if you changed DateFormat with {@link #setDateFormat(SimpleDateFormat)} before call this method then it will be overwritten
+     */
+    public FileLoggerConfig setDatePattern(@NonNull String datePattern) {
+        this.datePattern = datePattern;
+        this.dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
+        setLogFile(logFilePath);
+        return this;
+    }
+
+    /**
+     * {@link SimpleDateFormat}  used to format log time in the log tag and log message
+     */
+    @NonNull
+    public SimpleDateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    /**
+     * {@link SimpleDateFormat}  used to format log time in the log tag and log message.<br/>Default: <code>{@value #DATE_PATTERN}</code>
+     * <br/><br/>
+     * <b>Note:</b> If you change this parameter then {@link #datePattern} may be unused
+     */
+    public FileLoggerConfig setDateFormat(@NonNull SimpleDateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+        setLogFile(logFilePath);
+        return this;
     }
 }

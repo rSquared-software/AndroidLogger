@@ -42,7 +42,7 @@ public abstract class Logger extends BaseLogger {
     protected String loggerTag;
 
 
-    private boolean hasConfig = this instanceof Configurable;
+    private boolean hasConfig = this instanceof ConfigSetter;
 
     /**
      * print message, if you want print tag then call {@link #getTag(Level)} method

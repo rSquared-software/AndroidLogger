@@ -20,12 +20,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.rafalzajfert.androidlogger.BaseLoggerConfig;
-import com.rafalzajfert.androidlogger.Configurable;
+import com.rafalzajfert.androidlogger.ConfigSetter;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
-
-import java.util.Map;
 
 /**
  * {@link Logger Logger} that send messages to Logcat
@@ -35,7 +32,7 @@ import java.util.Map;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class ToastLogger extends Logger implements Configurable<ToastLoggerConfig> {
+public class ToastLogger extends Logger implements ConfigSetter<ToastLoggerConfig> {
 
     private ToastLoggerConfig config = new ToastLoggerConfig();
 

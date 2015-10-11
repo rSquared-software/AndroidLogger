@@ -19,12 +19,9 @@ package com.rafalzajfert.androidlogger.logcat;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.rafalzajfert.androidlogger.BaseLoggerConfig;
-import com.rafalzajfert.androidlogger.Configurable;
+import com.rafalzajfert.androidlogger.ConfigSetter;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
-
-import java.util.Map;
 
 /**
  * {@link Logger Logger} that send messages to Logcat
@@ -34,7 +31,7 @@ import java.util.Map;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class LogcatLogger extends Logger implements Configurable<LogcatLoggerConfig> {
+public class LogcatLogger extends Logger implements ConfigSetter<LogcatLoggerConfig> {
 
     private LogcatLoggerConfig config = new LogcatLoggerConfig();
 

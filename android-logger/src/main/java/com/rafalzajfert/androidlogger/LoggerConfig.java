@@ -52,8 +52,6 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
-    private static final String LOGGER_CONFIG_PREFIX = "logger";
-    private static final Set<String> RESERVED_PROPERTIES = new HashSet<>(Arrays.asList(LOGGER_CONFIG_PREFIX + ".level", LOGGER_CONFIG_PREFIX + ".separator", LOGGER_CONFIG_PREFIX + ".throwableSeparator", LOGGER_CONFIG_PREFIX + ".tag", LOGGER_CONFIG_PREFIX + ".logThrowableWithStackTrace", LOGGER_CONFIG_PREFIX + ".datePattern", LOGGER_CONFIG_PREFIX + ".catchUncaughtExceptions", LOGGER_CONFIG_PREFIX + ".useANRWatchDog"));
     public static final String DATE_PATTERN = "HH:mm:ss:SSS";
     private String separator = Logger.PARAM_SPACE;
     private String throwableSeparator = Logger.PARAM_NEW_LINE;
@@ -71,52 +69,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * Create configuration based on the properties file
      */
     public LoggerConfig(@RawRes int propertiesRes) {
-        loggers.clear();
-        Properties properties = new Properties();
-        loadProperties(properties, propertiesRes);
-        String value = properties.getProperty(LOGGER_CONFIG_PREFIX);
-        if (value != null) {
-            readLoggers(properties, value);
-        }
-
-        Map<String, String> config = new HashMap<>();
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".level");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".separator");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".throwableSeparator");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".tag");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".logThrowableWithStackTrace");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".datePattern");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".catchUncaughtExceptions");
-        addConfigProperty(properties, config, LOGGER_CONFIG_PREFIX + ".useANRWatchDog");
-        read(config);
-    }
-
-    private void loadProperties(Properties properties, @RawRes int propertiesRes) {
-        Context context = LoggerUtils.getApplicationContext();
-        InputStreamReader reader = null;
-        try {
-            reader = new InputStreamReader(context.getResources().openRawResource(propertiesRes), "UTF-8");
-            properties.load(reader);
-
-        } catch (IOException e) {
-            new LogcatLogger().w(e);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    new LogcatLogger().w(e);
-                }
-            }
-        }
-    }
-
-    private void addConfigProperty(Properties properties, Map<String, String> config, String property) {
-        String value;
-        value = properties.getProperty(property);
-        if (value != null) {
-            config.put(property.substring(LOGGER_CONFIG_PREFIX.length() + 1), value);
-        }
+        ConfigReader.read(this, propertiesRes);
     }
 
     @Override
@@ -138,57 +91,6 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
             if (Boolean.parseBoolean(config.get("useANRWatchDog"))) {
                 useANRWatchDog(new LoggableANRWatchDog());
             }
-        }
-    }
-
-    private void readLoggers(Properties properties, String loggerProperty) {
-        Enumeration<?> propertyKeys = properties.propertyNames();
-        String[] loggers = loggerProperty.split(",");
-        Map<String, Map<String, String>> loggersMap = new HashMap<>();
-        for (String logger : loggers) {
-            logger = logger.trim();
-            checkLoggerName(logger);
-            loggersMap.put(logger, new HashMap<String, String>());
-        }
-
-        while (propertyKeys.hasMoreElements()) {
-            final String key = (String) propertyKeys.nextElement();
-            if (!RESERVED_PROPERTIES.contains(key) && !LOGGER_CONFIG_PREFIX.equals(key)) {
-                String name = key.substring(key.indexOf(".") + 1);
-                int propertyIdx = name.indexOf(".");
-                if (propertyIdx > 0) {
-                    loggersMap.get(name.substring(0, propertyIdx)).put(name.substring(propertyIdx + 1), properties.getProperty(key));
-                } else {
-                    loggersMap.get(name).put("", properties.getProperty(key));
-                }
-
-            }
-        }
-
-        for (Map.Entry<String, Map<String, String>> entry : loggersMap.entrySet()) {
-            String clazz = entry.getValue().get("");
-            entry.getValue().remove("");
-            addLogger(clazz, entry);
-        }
-    }
-
-    private void addLogger(String loggerClass, Map.Entry<String, Map<String, String>> entry) {
-        try {
-            Class clazz = Class.forName(loggerClass);
-            Logger l = (Logger) clazz.newInstance();
-            l.init(entry.getValue());
-            addLogger(l, entry.getKey());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void checkLoggerName(String logger) {
-        if (TextUtils.isEmpty(logger)){
-            throw new IllegalArgumentException("You must specified logger name");
-        }
-        if (RESERVED_PROPERTIES.contains(LOGGER_CONFIG_PREFIX + "." + logger)) {
-            throw new IllegalArgumentException("Logger cannot be named as " + logger);
         }
     }
 

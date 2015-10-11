@@ -19,11 +19,11 @@ package com.rafalzajfert.androidlogger;
 import android.support.annotation.NonNull;
 
 /**
- * Interface that provide config methods
+ * Interface that provide set config method
  * @author Rafal Zajfert
  * @version 1.1.0 (03/09/2015)
  */
-public interface Configurable<CONFIG extends BaseLoggerConfig> {
+public interface ConfigSetter<CONFIG extends BaseLoggerConfig> {
 
     /**
      * Set config for this instance of logger

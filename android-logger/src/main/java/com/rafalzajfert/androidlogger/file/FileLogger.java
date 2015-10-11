@@ -16,12 +16,11 @@
 
 package com.rafalzajfert.androidlogger.file;
 
-import android.Manifest;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
+import android.support.annotation.Nullable;
 
-import com.rafalzajfert.androidlogger.Configurable;
+import com.rafalzajfert.androidlogger.ConfigSetter;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
@@ -31,7 +30,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Map;
 
 /**
  * {@link Logger Logger} that save log messages in the
@@ -42,7 +40,7 @@ import java.util.Map;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class FileLogger extends Logger implements Configurable<FileLoggerConfig> {
+public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig> {
 
     private static LogcatLogger logger = new LogcatLogger();
 
@@ -74,15 +72,21 @@ public class FileLogger extends Logger implements Configurable<FileLoggerConfig>
      */
     @Override
     protected void print(Level level, String message) {
+        try {
+            writeToFile(createFileIfNeeded(), getMessage(level, message));
+        } catch (IOException e) {
+            logger.e(e);
+        }
+    }
+
+    @NonNull
+    private String getMessage(Level level, String message) {
+        return getTag(level) + PARAM_SPACE + message + PARAM_NEW_LINE;
+    }
+
+    private void writeToFile(File file, String string) {
         FileWriter writer = null;
         try {
-            File file = createFileIfNeeded();
-
-            if ( file == null )
-                return;
-
-            String string = getTag(level) + PARAM_SPACE + message + PARAM_NEW_LINE;
-
             writer = new FileWriter(file, true);
             writer.write(string);
         } catch (IOException e) {
@@ -107,33 +111,19 @@ public class FileLogger extends Logger implements Configurable<FileLoggerConfig>
         }
     }
 
-    private void close(Closeable file) {
-        try {
-            if (file != null) {
-                file.close();
-            }
-        } catch (IOException e) {
-            logger.e("Failed to close file", e);
+    @NonNull
+    private File createFileIfNeeded() throws IOException {
+        File file = getLogFile();
+
+        if (!file.exists() && !file.createNewFile()) {
+            throw new IOException("Cannot create Log file");
         }
-    }
 
-    private File createFileIfNeeded() {
-        try {
-            File file = getLogFile();
-
-            if (!file.exists() && !file.createNewFile()){
-                throw new IOException("Cannot create Log file");
-            }
-
-            if (!file.canWrite()){
-                throw new IOException("File is not writable");
-            }
-
-            return file;
-        } catch (Exception e) {
-            logger.e("Cannot create Log file", e);
-            return null;
+        if (!file.canWrite()) {
+            throw new IOException("File is not writable");
         }
+
+        return file;
     }
 
     /**
@@ -146,5 +136,15 @@ public class FileLogger extends Logger implements Configurable<FileLoggerConfig>
             file = new File(Environment.getExternalStorageDirectory(), DEFAULT_FILE);
         }
         return file;
+    }
+
+    private void close(@Nullable Closeable file) {
+        if (file != null) {
+            try {
+                file.close();
+            } catch (IOException e) {
+                logger.e("Failed to close file", e);
+            }
+        }
     }
 }
