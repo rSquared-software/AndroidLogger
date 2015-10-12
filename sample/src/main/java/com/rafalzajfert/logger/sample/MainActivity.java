@@ -19,7 +19,6 @@ package com.rafalzajfert.logger.sample;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -52,6 +51,7 @@ public class MainActivity extends Activity {
     private boolean isToastAdded = false;
     private boolean isTextViewAdded = false;
     private LogcatLogger logger = new LogcatLogger();
+    private LoggerConfig loggerConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +75,17 @@ public class MainActivity extends Activity {
             Logger.error(e);
         }
         Logger.verbose("verbose");
+        Logger.verboseF("formatted %s message: %.0f", "verbose", 1.1f);
         Logger.debug("debug");
+        Logger.debugF("formatted %s message: %.0f", "debug", 1.1f);
         Logger.info("info");
+        Logger.infoF("formatted %s message: %.0f", "info", 1.1f);
         Logger.warning("warning");
+        Logger.warningF("formatted %s message: %.0f", "warning", 1.1f);
         Logger.error("error");
+        Logger.errorF("formatted %s message: %.0f", "error", 1.1f);
 
-        LoggerConfig loggerConfig = new LoggerConfig()
+        loggerConfig = new LoggerConfig()
                 .setTag(Logger.PARAM_CODE_LINE)
                 .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
                 .catchUncaughtExceptions()
@@ -93,6 +98,7 @@ public class MainActivity extends Activity {
         Logger.setBaseConfig(loggerConfig);
 
         Logger.error("start");
+        Logger.warningF("formatted message %s: %.0f", "message", 1.1f);
         Logger.error("");
         String a = null;
         Logger.error(a);
@@ -144,7 +150,7 @@ public class MainActivity extends Activity {
             ((Button) v).setText("Add LogcatLogger");
             logger.d("logcat disabled");
         } else {
-            Logger.getBaseConfig().addLogger(new LogcatLogger(), "logcat");
+            loggerConfig.addLogger(new LogcatLogger(), "logcat");
             ((Button) v).setText("Remove LogcatLogger");
             logger.d("logcat enabled");
         }
@@ -157,7 +163,7 @@ public class MainActivity extends Activity {
             ((Button) v).setText("Add ToastLogger");
             logger.d("toast disabled");
         } else {
-            Logger.getBaseConfig().addLogger(new ToastLogger(getApplicationContext()), "toast");
+            loggerConfig.addLogger(new ToastLogger(getApplicationContext()), "toast");
             ((Button) v).setText("Remove ToastLogger");
             logger.d("toast enabled");
         }
@@ -170,7 +176,7 @@ public class MainActivity extends Activity {
             ((Button) v).setText("Add TextViewLogger");
             logger.d("textView disabled");
         } else {
-            Logger.getBaseConfig().addLogger(new TextViewLogger(logTextView), "textview");
+            loggerConfig.addLogger(new TextViewLogger(logTextView), "textview");
             ((Button) v).setText("Remove TextViewLogger");
             logger.d("textView enabled");
         }

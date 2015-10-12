@@ -32,11 +32,11 @@ public class ConfigReader {
 
     private ConfigReader(LoggerConfig config, @RawRes int propertiesRes) {
         this.config = config;
-        this.config.removeAllLoggers();
         Properties properties = new Properties();
         loadProperties(properties, propertiesRes);
         String value = properties.getProperty(LOGGER_CONFIG_PREFIX);
         if (value != null) {
+            this.config.removeAllLoggers();
             readLoggers(properties, value);
         }
         readBaseConfig(properties);
@@ -149,8 +149,12 @@ public class ConfigReader {
             Logger l = (Logger) clazz.newInstance();
             l.init(configMap);
             config.addLogger(l, loggerTag);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(loggerClass + " must have no args constructor");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Logger class '"+loggerClass+"' not found");
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException(loggerClass + " must have public 0 args constructor");
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException(loggerClass+" must have public 0 args constructor");
         }
     }
 

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.rafalzajfert.androidlogger.ConfigSetter;
 import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
+import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
 /**
  * {@link Logger Logger} that send messages to Logcat
@@ -34,6 +35,7 @@ import com.rafalzajfert.androidlogger.Logger;
 @SuppressWarnings("unused")
 public class TextViewLogger extends Logger implements ConfigSetter<TextViewLoggerConfig> {
 
+    private final Logger logger = new LogcatLogger();
     private TextViewLoggerConfig config = new TextViewLoggerConfig();
 
     @Nullable
@@ -68,11 +70,6 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
         this.config = config;
     }
 
-    @Override
-    protected boolean isLevelAllowed(@NonNull Level level) {
-        return textView != null && super.isLevelAllowed(level);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -91,6 +88,8 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
                     textView.setText(tag + PARAM_SPACE + message + getMessageSeparator(textView) + textView.getText());
                     break;
             }
+        }else{
+            logger.w("Text view for the logger is not initialized (call setTextView(TextView) method)");
         }
     }
 

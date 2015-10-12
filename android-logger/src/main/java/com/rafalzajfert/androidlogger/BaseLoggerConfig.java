@@ -119,13 +119,4 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
             setLogThrowableWithStackTrace(Boolean.parseBoolean(config.get("logThrowableWithStackTrace")));
         }
     }
-
-    @Override
-    public String toString() {
-        return "BaseLoggerConfig{" +
-                "level=" + level +
-                ", tag='" + tag + '\'' +
-                ", logThrowableWithStackTrace=" + logThrowableWithStackTrace +
-                '}';
-    }
 }

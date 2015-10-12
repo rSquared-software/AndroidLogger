@@ -29,7 +29,7 @@ import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 @SuppressWarnings("unused")
 public class LoggableANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
 
-    private LogcatLogger logger = new LogcatLogger();
+    private final LogcatLogger logger = new LogcatLogger();
 
     private ANRListener customListener;
     private boolean preventCrash = false;

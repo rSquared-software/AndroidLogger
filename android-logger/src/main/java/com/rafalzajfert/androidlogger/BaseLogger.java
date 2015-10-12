@@ -76,7 +76,7 @@ abstract class BaseLogger {
      * This param allows you to jump to code line via logcat console.<br/><br/>
      * Same as: <code>"({@link #PARAM_FILE_NAME}:{@link #PARAM_LINE_NUMBER})"</code>
      */
-    public static final String PARAM_CODE_LINE = "(" + PARAM_FILE_NAME + ":" + PARAM_LINE_NUMBER + ")";
+    public static final String PARAM_CODE_LINE = "$CodeLine";
 
     /**
      * Actual configuration for all loggers
@@ -91,12 +91,10 @@ abstract class BaseLogger {
     }
 
     /**
-     * Configuration of all loggers
-     * @deprecated Base config can be changed with {@link #setBaseConfig(LoggerConfig)} method. This method will be removed in a future release.
+     * Configuration of all loggers, this method should not be used for configuring loggers
      */
     @NonNull
-    @Deprecated
-    public static LoggerConfig getBaseConfig() {
+    public static Config getBaseConfig() {
         return baseConfig;
     }
 
@@ -174,6 +172,27 @@ abstract class BaseLogger {
     }
 
     /**
+     * Send an {@link Level#INFO INFO} message formatted with args objects<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public static void infoF(String message, Object... args) {
+        printToAll(INFO, String.format(message, args), null);
+    }
+
+    /**
      * Send an {@link Level#INFO INFO} message created
      * from multiple part<br/>
      * <br/>
@@ -244,6 +263,27 @@ abstract class BaseLogger {
      */
     public static void error(Object message) {
         printToAll(ERROR, message, null);
+    }
+
+    /**
+     * Send an {@link Level#ERROR ERROR} message formatted with args objects<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public static void errorF(String message, Object... args) {
+        printToAll(ERROR, String.format(message, args), null);
     }
 
     /**
@@ -320,6 +360,27 @@ abstract class BaseLogger {
     }
 
     /**
+     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public static void debugF(String message, Object... args) {
+        printToAll(DEBUG, String.format(message, args), null);
+    }
+
+    /**
      * Send an {@link Level#DEBUG DEBUG} message created
      * from multiple part<br/>
      * <br/>
@@ -393,6 +454,27 @@ abstract class BaseLogger {
     }
 
     /**
+     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public static void verboseF(String message, Object... args) {
+        printToAll(VERBOSE, String.format(message, args), null);
+    }
+
+    /**
      * Send an {@link Level#VERBOSE VRBOSE} message
      * created from multiple part<br/>
      * <br/>
@@ -463,6 +545,27 @@ abstract class BaseLogger {
      */
     public static void warning(Object message) {
         printToAll(WARNING, message, null);
+    }
+
+    /**
+     * Send an {@link Level#WARNING WARNING} message formatted with args objects<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public static void warningF(String message, Object... args) {
+        printToAll(WARNING, String.format(message, args), null);
     }
 
     /**

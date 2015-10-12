@@ -47,7 +47,7 @@ abstract class LoggerUtils {
     }
 
 
-    static Map<String, String> getStackTraceFieldMap() {
+    private static Map<String, String> getStackTraceFieldMap() {
         final StackTraceElement element = getStackTraceElement();
         if (element == null) {
             return null;
@@ -133,6 +133,7 @@ abstract class LoggerUtils {
     static String formatTag(@NonNull String tag, @NonNull Level level) {
         Map<String, String> map = LoggerUtils.getStackTraceFieldMap();
         if (map != null) {
+            tag = tag.replace(Logger.PARAM_CODE_LINE, "(" + Logger.PARAM_FILE_NAME + ":" + Logger.PARAM_LINE_NUMBER + ")");
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 tag = tag.replace(entry.getKey(), entry.getValue());
             }

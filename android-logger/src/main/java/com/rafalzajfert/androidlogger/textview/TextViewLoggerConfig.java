@@ -19,7 +19,6 @@ package com.rafalzajfert.androidlogger.textview;
 import android.support.annotation.NonNull;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
-import com.rafalzajfert.androidlogger.Level;
 
 import java.util.Map;
 

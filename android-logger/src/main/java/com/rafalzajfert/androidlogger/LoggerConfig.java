@@ -16,42 +16,24 @@
 
 package com.rafalzajfert.androidlogger;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.res.XmlResourceParser;
 import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
-import android.support.annotation.XmlRes;
 import android.text.TextUtils;
 
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
+public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Config {
     public static final String DATE_PATTERN = "HH:mm:ss:SSS";
     private String separator = Logger.PARAM_SPACE;
     private String throwableSeparator = Logger.PARAM_NEW_LINE;
@@ -146,6 +128,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      *
      * @param tag tag of the logger to return
      */
+    @Override
     public Logger getLogger(String tag) {
         return this.loggers.get(tag);
     }
@@ -154,6 +137,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * Get all loggers that wil be added in this configuration
      */
     @NonNull
+    @Override
     public Collection<Logger> getLoggers() {
         return this.loggers.values();
     }
@@ -190,6 +174,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * @param tag tag of the logger to remove
      */
     @NonNull
+    @Override
     public LoggerConfig removeLogger(@NonNull String tag) {
         this.loggers.remove(tag);
         return this;
@@ -201,6 +186,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * @param logger Logger instance to remove
      */
     @NonNull
+    @Override
     public LoggerConfig removeLogger(@NonNull Logger logger) {
         this.loggers.remove(logger.loggerTag);
         return this;
@@ -210,6 +196,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * Remove all {@link Logger Loggers}
      */
     @NonNull
+    @Override
     public LoggerConfig removeAllLoggers() {
         this.loggers.clear();
         return this;
@@ -271,6 +258,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * String used to separate message chunks
      */
     @NonNull
+    @Override
     public String getSeparator() {
         return this.separator;
     }
@@ -288,6 +276,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * String used to separate message and {@link Throwable} log
      */
     @NonNull
+    @Override
     public String getThrowableSeparator() {
         return this.throwableSeparator;
     }
@@ -296,6 +285,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * Pattern used to format date with {@link SimpleDateFormat}
      */
     @NonNull
+    @Override
     public String getDatePattern() {
         return datePattern;
     }
@@ -315,6 +305,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
      * {@link SimpleDateFormat}  used to format log time in the log tag and log message
      */
     @NonNull
+    @Override
     public SimpleDateFormat getDateFormat() {
         return dateFormat;
     }
@@ -327,16 +318,5 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> {
     public LoggerConfig setDateFormat(@NonNull SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "LoggerConfig{" +
-                "separator='" + separator + '\'' +
-                ", throwableSeparator='" + throwableSeparator + '\'' +
-                ", datePattern='" + datePattern + '\'' +
-                ", dateFormat=" + dateFormat +
-                ", loggers=" + loggers +
-                "} " + super.toString();
     }
 }

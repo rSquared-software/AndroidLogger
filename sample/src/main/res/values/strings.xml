@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">LoggerSample</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="send_log">Send Log</string>
+    <string name="add_logcat">Add LogcatLogger</string>
+    <string name="add_toast">Add ToastLogger</string>
+    <string name="add_text_view">Add TextViewLogger</string>
     <array name="logger_types">
         <item>VERBOSE</item>
         <item>DEBUG</item>

@@ -42,7 +42,7 @@ import java.io.RandomAccessFile;
 @SuppressWarnings("unused")
 public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig> {
 
-    private static LogcatLogger logger = new LogcatLogger();
+    private static final LogcatLogger logger = new LogcatLogger();
 
     private static final String DEFAULT_FILE = "logger.log";
     private FileLoggerConfig config = new FileLoggerConfig();
@@ -79,14 +79,21 @@ public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig>
         }
     }
 
+    /**
+     * Get message to write
+     */
     @NonNull
     private String getMessage(Level level, String message) {
         return getTag(level) + PARAM_SPACE + message + PARAM_NEW_LINE;
     }
 
+    /**
+     * Append string to the end of the file
+     */
     private void writeToFile(File file, String string) {
         FileWriter writer = null;
         try {
+            logger.i("Write to file", file.getAbsolutePath(), string);
             writer = new FileWriter(file, true);
             writer.write(string);
         } catch (IOException e) {
@@ -111,9 +118,17 @@ public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig>
         }
     }
 
+
+    /**
+     * return file or create it when does not exist
+     */
     @NonNull
     private File createFileIfNeeded() throws IOException {
         File file = getLogFile();
+
+        if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()){
+            throw new IOException("Cannot create directory of the Log file");
+        }
 
         if (!file.exists() && !file.createNewFile()) {
             throw new IOException("Cannot create Log file");
@@ -138,10 +153,13 @@ public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig>
         return file;
     }
 
-    private void close(@Nullable Closeable file) {
-        if (file != null) {
+    /**
+     * Close file stream
+     */
+    private void close(@Nullable Closeable stream) {
+        if (stream != null) {
             try {
-                file.close();
+                stream.close();
             } catch (IOException e) {
                 logger.e("Failed to close file", e);
             }

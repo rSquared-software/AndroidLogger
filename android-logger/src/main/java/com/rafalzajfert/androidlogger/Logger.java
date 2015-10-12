@@ -42,7 +42,7 @@ public abstract class Logger extends BaseLogger {
     protected String loggerTag;
 
 
-    private boolean hasConfig = this instanceof ConfigSetter;
+    private final boolean hasConfig = this instanceof ConfigSetter;
 
     /**
      * print message, if you want print tag then call {@link #getTag(Level)} method
@@ -147,6 +147,28 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
+     * Send an {@link Level#INFO INFO} message formatted with args objects<br/>
+     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public void iF(String message, Object... args) {
+        print(INFO, String.format(message, args), null);
+    }
+
+    /**
      * Send an {@link Level#INFO INFO} message created
      * from multiple part<br/>
      * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object...)} method instead<br/>
@@ -221,6 +243,28 @@ public abstract class Logger extends BaseLogger {
      */
     public void e(Object message) {
         print(ERROR, message, null);
+    }
+
+    /**
+     * Send an {@link Level#ERROR ERROR} message formatted with args objects<br/>
+     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public void eF(String message, Object... args) {
+        print(ERROR, String.format(message, args), null);
     }
 
     /**
@@ -301,6 +345,28 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
+     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<br/>
+     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public void dF(String message, Object... args) {
+        print(DEBUG, String.format(message, args), null);
+    }
+
+    /**
      * Send an {@link Level#DEBUG DEBUG} message created
      * from multiple part<br/>
      * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object...)} method instead<br/>
@@ -378,6 +444,28 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
+     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<br/>
+     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public void vF(String message, Object... args) {
+        print(VERBOSE, String.format(message, args), null);
+    }
+
+    /**
      * Send an {@link Level#VERBOSE VRBOSE} message
      * created from multiple part<br/>
      * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object...)} method instead<br/>
@@ -452,6 +540,28 @@ public abstract class Logger extends BaseLogger {
      */
     public void w(Object message) {
         print(WARNING, message, null);
+    }
+
+    /**
+     * Send an {@link Level#WARNING WARNING} message formatted with args objects<br/>
+     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<br/>
+     * <br/>
+     * You can also use auto generated values:<br/>
+     * {@link Logger#PARAM_CLASS_NAME
+     * PARAM_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
+     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
+     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
+     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
+     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
+     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
+     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
+     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     *
+     * @param message message to send
+     */
+    public void wF(String message, Object... args) {
+        print(WARNING, String.format(message, args), null);
     }
 
     /**

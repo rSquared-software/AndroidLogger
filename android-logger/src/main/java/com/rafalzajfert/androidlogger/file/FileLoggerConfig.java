@@ -23,6 +23,7 @@ import com.rafalzajfert.androidlogger.BaseLoggerConfig;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,10 +32,13 @@ import java.util.Map;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig>{
+public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig> {
     public static final String DATE_PATTERN = "dd_MM_yyyy";
+    public static final String PARAM_DATE = "$Date";
     private File logFile = null;
+    @NonNull
     private String datePattern = DATE_PATTERN;
+    @NonNull
     private SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
     private String logFilePath;
 
@@ -55,17 +59,25 @@ public class FileLoggerConfig extends BaseLoggerConfig<FileLoggerConfig>{
     }
 
     /**
-     * Set log file to write messages
+     * Set log file to write messages<br><br>
+     * <b>Note:</b> If file path contains '$Date' it will be replaced with current time<br>
+     * <b>Note:</b> Current time can be formatted with {@link #setDatePattern(String)} or {@link #setDateFormat(SimpleDateFormat)} method
      */
-    public FileLoggerConfig setLogFile(String path){
-        return setLogFile(new File(path));
+    public FileLoggerConfig setLogFile(String path) {
+        return setLogFile(new File(invalidatePath(path)));
     }
 
     /**
-     * Set log file to write messages, path must be relative to external storage
+     * Set log file to write messages, path must be relative to external storage<br><br>
+     * <b>Note:</b> If file path contains '$Date' it will be replaced with current time<br>
+     * <b>Note:</b> Current time can be formatted with {@link #setDatePattern(String)} or {@link #setDateFormat(SimpleDateFormat)} method
      */
-    public FileLoggerConfig setExternalLogFile(String path){
-        return setLogFile(new File(Environment.getExternalStorageDirectory(), path));
+    public FileLoggerConfig setExternalLogFile(String path) {
+        return setLogFile(new File(Environment.getExternalStorageDirectory(), invalidatePath(path)));
+    }
+
+    private String invalidatePath(String path) {
+        return path.replace(PARAM_DATE, dateFormat.format(new Date()));
     }
 
     @Override

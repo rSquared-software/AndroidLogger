@@ -34,25 +34,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendToAll"
-        android:text="Send Log"/>
+        android:text="@string/send_log"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendToLogcat"
-        android:text="Add LogcatLogger"/>
+        android:text="@string/add_logcat"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendToToast"
-        android:text="Add ToastLogger"/>
+        android:text="@string/add_toast"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendTextView"
-        android:text="Add TextViewLogger"/>
+        android:text="@string/add_text_view"/>
 
     <ScrollView
         android:layout_width="match_parent"

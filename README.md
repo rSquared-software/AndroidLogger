@@ -80,7 +80,7 @@ Logger.getBaseConfig().removeLogger(logcatLogger);
 ###Base Configuration
 
 Global configuration sets log parameters for all loggers from this library.  
-New *LoggerConfig* is initialized with **default _LogcatLogger_**, if you want you can remove it by calling *removeLogger(String)* method with *LoggerConfig.DEFAULT_LOGGER* tag
+New *LoggerConfig* is initialized with **default _LogcatLogger_**. If you want, you can remove it by calling *removeLogger(String)* method with *LoggerConfig.DEFAULT_LOGGER* tag
 
 ```java
 LoggerConfig loggerConfig = new LoggerConfig()
