@@ -79,7 +79,7 @@ Logger.getBaseConfig().removeLogger(logcatLogger);
 ##Configuration
 ###Base Configuration
 
-Global configuration sets log parameters for all loggers from this library.
+Global configuration sets log parameters for all loggers from this library.  
 LoggerConfiguration is created with default LogcatLogger, if you want you can remove it by calling removeLogger method with LoggerConfig.DEFAULT_LOGGER tag
 
 ```java
@@ -96,26 +96,26 @@ LoggerConfig loggerConfig = new LoggerConfig()
 Logger.setBaseConfig(loggerConfig);
 ```
 `setTag()` - Tag, used to identify source of a log message, default it's class name with line number
-You can also use auto generated values:
-Logger.PARAM_SIMPLE_CLASS_NAME
-Logger.PARAM_CLASS_NAME
-Logger.PARAM_METHOD_NAME
-Logger.PARAM_FILE_NAME
-Logger.PARAM_LINE_NUMBER
-Logger.PARAM_LEVEL
-Logger.PARAM_SHORT_LEVEL
-Logger.PARAM_TIME
-Logger.PARAM_CODE_LINE
+You can also use auto generated values:  
+Logger.PARAM_SIMPLE_CLASS_NAME  
+Logger.PARAM_CLASS_NAME  
+Logger.PARAM_METHOD_NAME  
+Logger.PARAM_FILE_NAME  
+Logger.PARAM_LINE_NUMBER  
+Logger.PARAM_LEVEL  
+Logger.PARAM_SHORT_LEVEL  
+Logger.PARAM_TIME  
+Logger.PARAM_CODE_LINE  
 
-`setLevel()` - Minimal log level, all messages with level below this will be ignored.
+`setLevel()` - Minimal log level, all messages with level below this will be ignored.  
 Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
 
 `setSeparator` - String used to separate parts of message e.g. in method Logger.debug(String...)
 
 `setThrowableSeparator` - String used to separate message and Throwable stack trace
 
-`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.
-This library provide four types of logger: LogcatLogger, FileLogger, TextViewLogger, ToastLogger.
+`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.  
+This library provide four types of logger: LogcatLogger, FileLogger, TextViewLogger, ToastLogger.  
 You can create custom logger by extending StandardLogger class.
 
 ###Properties Configuration
