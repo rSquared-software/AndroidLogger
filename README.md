@@ -26,15 +26,15 @@ dependencies {
 ```java
 //Send a message to all loggers defined in LoggerConfig
 Logger.verbose("Verbose log");
-Logger.verboseF("Formatted %s message: %.0f", "verbose", 3.14f);
+Logger.verboseF("Formatted %s message: %.2f", "verbose", 3.1415f);
 Logger.debug("Debug log");
-Logger.debugF("Formatted %s message: %.0f", "debug", 3.14f);
+Logger.debugF("Formatted %s message: %.2f", "debug", 3.1415f);
 Logger.info("Info log");
-Logger.infoF("Formatted %s message: %.0f", "info", 3.14f);
+Logger.infoF("Formatted %s message: %.2f", "info", 3.1415f);
 Logger.warning("Warning log");
-Logger.warningF("Formatted %s message: %.0f", "warning", 3.14f);
+Logger.warningF("Formatted %s message: %.2f", "warning", 3.1415f);
 Logger.error("Error log");
-Logger.errorF("Formatted %s message: %.0f", "error", 3.14f);
+Logger.errorF("Formatted %s message: %.2f", "error", 3.1415f);
 Logger.trace();
 
 // log multi argument message
@@ -52,15 +52,15 @@ try {
 //Send message to the single logger
 Logger logcat = new LogcatLogger();
 logcat.v("Verbose log");
-logcat.vF("Formatted %s message: %.0f", "verbose", 3.14f);
+logcat.vF("Formatted %s message: %.2f", "verbose", 3.1415f);
 logcat.d("Debug log");
-logcat.dF("Formatted %s message: %.0f", "debug", 3.14f);
+logcat.dF("Formatted %s message: %.2f", "debug", 3.1415f);
 logcat.i("Info log");
-logcat.iF("Formatted %s message: %.0f", "info", 3.14f);
+logcat.iF("Formatted %s message: %.2f", "info", 3.1415f);
 logcat.w("Warning log");
-logcat.wF("Formatted %s message: %.0f", "warning", 3.14f);
+logcat.wF("Formatted %s message: %.2f", "warning", 3.1415f);
 logcat.e("Error log");
-logcat.eF("Formatted %s message: %.0f", "error", 3.14f);
+logcat.eF("Formatted %s message: %.2f", "error", 3.1415f);
 logcat.t();
 //--------------------------------------------------------------
 

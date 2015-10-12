@@ -27,24 +27,29 @@ public class ConfigReader {
     private static final Set<String> RESERVED_PROPERTIES = new HashSet<>(Arrays.asList(LOGGER_CONFIG_PREFIX + ".level", LOGGER_CONFIG_PREFIX + ".separator", LOGGER_CONFIG_PREFIX + ".throwableSeparator", LOGGER_CONFIG_PREFIX + ".tag", LOGGER_CONFIG_PREFIX + ".logThrowableWithStackTrace", LOGGER_CONFIG_PREFIX + ".datePattern", LOGGER_CONFIG_PREFIX + ".catchUncaughtExceptions", LOGGER_CONFIG_PREFIX + ".useANRWatchDog"));
     private final LogcatLogger logger = new LogcatLogger();
 
-    private LoggerConfig config;
+    private Map<String, Logger> loggers = new HashMap<>();
     private Map<String, String> configMap = new HashMap<>();
 
-    private ConfigReader(LoggerConfig config, @RawRes int propertiesRes) {
-        this.config = config;
+    private ConfigReader(@RawRes int propertiesRes) {
         Properties properties = new Properties();
         loadProperties(properties, propertiesRes);
         String value = properties.getProperty(LOGGER_CONFIG_PREFIX);
         if (value != null) {
-            this.config.removeAllLoggers();
             readLoggers(properties, value);
         }
         readBaseConfig(properties);
-        config.read(configMap);
     }
 
-    public static ConfigReader read(LoggerConfig config, int propertiesRes) {
-        return new ConfigReader(config, propertiesRes);
+    public static ConfigReader read(int propertiesRes) {
+        return new ConfigReader(propertiesRes);
+    }
+
+    public Map<String, Logger> getLoggers(){
+        return loggers;
+    }
+
+    public Map<String, String> getBaseConfigMap() {
+        return configMap;
     }
 
     private void readBaseConfig(Properties properties) {
@@ -144,11 +149,13 @@ public class ConfigReader {
     }
 
     private void addLogger(String loggerClass, String loggerTag, Map<String, String> configMap) {
+        //noinspection TryWithIdenticalCatches
         try {
             Class clazz = Class.forName(loggerClass);
             Logger l = (Logger) clazz.newInstance();
+            l.loggerTag = loggerTag;
             l.init(configMap);
-            config.addLogger(l, loggerTag);
+            loggers.put(loggerTag, l);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Logger class '"+loggerClass+"' not found");
         } catch (InstantiationException e) {

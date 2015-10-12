@@ -93,7 +93,6 @@ public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig>
     private void writeToFile(File file, String string) {
         FileWriter writer = null;
         try {
-            logger.i("Write to file", file.getAbsolutePath(), string);
             writer = new FileWriter(file, true);
             writer.write(string);
         } catch (IOException e) {

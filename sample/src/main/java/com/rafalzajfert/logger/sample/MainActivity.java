@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,7 +65,6 @@ public class MainActivity extends Activity {
                 .setTag(Logger.PARAM_FULL_CLASS_NAME + " " + Logger.PARAM_METHOD_NAME);
 
         LoggerConfig config = new LoggerConfig(R.raw.logger);
-        Log.e("LoggerConfig", config.toString());
         ((TextViewLogger)config.getLogger("textView")).setTextView(logTextView);
         Logger.setBaseConfig(config);
         try {
@@ -75,15 +73,15 @@ public class MainActivity extends Activity {
             Logger.error(e);
         }
         Logger.verbose("verbose");
-        Logger.verboseF("formatted %s message: %.0f", "verbose", 1.1f);
+        Logger.verboseF("formatted %s message: %.2f", "verbose", 1.1f);
         Logger.debug("debug");
-        Logger.debugF("formatted %s message: %.0f", "debug", 1.1f);
+        Logger.debugF("formatted %s message: %.2f", "debug", 1.1f);
         Logger.info("info");
-        Logger.infoF("formatted %s message: %.0f", "info", 1.1f);
+        Logger.infoF("formatted %s message: %.2f", "info", 1.1f);
         Logger.warning("warning");
-        Logger.warningF("formatted %s message: %.0f", "warning", 1.1f);
+        Logger.warningF("formatted %s message: %.2f", "warning", 1.1f);
         Logger.error("error");
-        Logger.errorF("formatted %s message: %.0f", "error", 1.1f);
+        Logger.errorF("formatted %s message: %.2f", "error", 1.1f);
 
         loggerConfig = new LoggerConfig()
                 .setTag(Logger.PARAM_CODE_LINE)

@@ -51,7 +51,10 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
      * Create configuration based on the properties file
      */
     public LoggerConfig(@RawRes int propertiesRes) {
-        ConfigReader.read(this, propertiesRes);
+        ConfigReader reader = ConfigReader.read(propertiesRes);
+        this.loggers.clear();
+        this.loggers.putAll(reader.getLoggers());
+        read(reader.getBaseConfigMap());
     }
 
     @Override
