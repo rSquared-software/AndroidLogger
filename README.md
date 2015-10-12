@@ -1,12 +1,177 @@
-Unfinished changes
+# Logger
+Simple and useful Android logger library.
 
-Developed By
-=======
+##Gradle Dependency (jCenter)
+
+```Gradle
+dependencies {
+    compile 'com.rafalzajfert:android-logger:1.1.15'
+}
+```
+
+[ ![Download](https://api.bintray.com/packages/rafalzajfert/maven/android-logger/images/download.svg) ](https://bintray.com/rafalzajfert/maven/android-logger/_latestVersion)
+
+##Maven Dependency
+
+```Maven
+<dependency>
+    <groupId>com.rafalzajfert</groupId>
+    <artifactId>android-logger</artifactId>
+    <version>1.1.15</version>
+</dependency>
+```
+
+##Sample Usage
+
+```java
+//Send a message to all loggers defined in LoggerConfig
+Logger.verbose("Verbose log");
+Logger.verboseF("Formatted %s message: %.0f", "verbose", 3.14f);
+Logger.debug("Debug log");
+Logger.debugF("Formatted %s message: %.0f", "debug", 3.14f);
+Logger.info("Info log");
+Logger.infoF("Formatted %s message: %.0f", "info", 3.14f);
+Logger.warning("Warning log");
+Logger.warningF("Formatted %s message: %.0f", "warning", 3.14f);
+Logger.error("Error log");
+Logger.errorF("Formatted %s message: %.0f", "error", 3.14f);
+Logger.trace();
+
+// log multi argument message
+Logger.debug("User:", user.id, user.name);
+
+// log throwable
+try {
+    ...
+} catch (Throwable t){
+    Logger.error("error", t);
+}
+
+//--------------------------------------------------------------
+
+//Send message to the single logger
+Logger logcat = new LogcatLogger();
+logcat.v("Verbose log");
+logcat.vF("Formatted %s message: %.0f", "verbose", 3.14f);
+logcat.d("Debug log");
+logcat.dF("Formatted %s message: %.0f", "debug", 3.14f);
+logcat.i("Info log");
+logcat.iF("Formatted %s message: %.0f", "info", 3.14f);
+logcat.w("Warning log");
+logcat.wF("Formatted %s message: %.0f", "warning", 3.14f);
+logcat.e("Error log");
+logcat.eF("Formatted %s message: %.0f", "error", 3.14f);
+logcat.t();
+//--------------------------------------------------------------
+
+// add logger to configuration
+Logger.getBaseConfig().addLogger(new LogcatLogger());
+Logger.getBaseConfig().addLogger("logcatTag", new LogcatLogger());
+
+// get logger from configuration by tag
+Logger logcatLogger = Logger.getBaseConfig().getLogger("logcatTag");
+
+// remove logger from global configuration
+Logger.getBaseConfig().removeLogger("fileLoggerTag");
+Logger.getBaseConfig().removeLogger(logcatLogger);
+```
+
+##Configuration
+###Base Configuration
+
+Global configuration sets log parameters for all loggers from this library.
+LoggerConfiguration is created with default LogcatLogger, if you want you can remove it by calling removeLogger method with LoggerConfig.DEFAULT_LOGGER tag
+
+```java
+LoggerConfig loggerConfig = new LoggerConfig()
+        .removeLogger(LoggerConfig.DEFAULT_LOGGER)
+        .setTag(Logger.PARAM_CODE_LINE)
+        .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
+        .catchUncaughtExceptions()
+        .setLevel(Level.VERBOSE)
+        .setSeparator(Logger.PARAM_SPACE)
+        .setThrowableSeparator(Logger.PARAM_NEW_LINE)
+        .addLogger(fileLogger);
+
+Logger.setBaseConfig(loggerConfig);
+```
+`setTag()` - Tag, used to identify source of a log message, default it's class name with line number
+You can also use auto generated values:
+Logger.PARAM_SIMPLE_CLASS_NAME
+Logger.PARAM_CLASS_NAME
+Logger.PARAM_METHOD_NAME
+Logger.PARAM_FILE_NAME
+Logger.PARAM_LINE_NUMBER
+Logger.PARAM_LEVEL
+Logger.PARAM_SHORT_LEVEL
+Logger.PARAM_TIME
+Logger.PARAM_CODE_LINE
+
+`setLevel()` - Minimal log level, all messages with level below this will be ignored.
+Levels order: VERBOSE < DEBUG < INFO < WARNING < ERROR < SILENT
+
+`setSeparator` - String used to separate parts of message e.g. in method Logger.debug(String...)
+
+`setThrowableSeparator` - String used to separate message and Throwable stack trace
+
+`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.
+This library provide four types of logger: LogcatLogger, FileLogger, TextViewLogger, ToastLogger.
+You can create custom logger by extending StandardLogger class.
+
+###Properties Configuration
+
+Now logger can by configured by the properties file
+
+####Initializing
+```java
+LoggerConfig config = new LoggerConfig(R.raw.logger);
+Logger.setBaseConfig(loggerConfig);
+```
+
+####Sample fully defined properties file 
+*(undefined property will be initialized with default values)*
+```properties
+logger=logcat, textView, file, toast
+logger.level=VERBOSE
+logger.tag=$CodeLine
+logger.logThrowableWithStackTrace=true
+logger.separator=\u0020
+logger.throwableSeparator=\r\n
+logger.datePattern=dd/MM/yyyy HH:mm:ss:SSS
+logger.catchUncaughtExceptions=true
+logger.useANRWatchDog=true
+
+logger.textView=com.rafalzajfert.androidlogger.textview.TextViewLogger
+logger.textView.level=INFO
+logger.textView.tag=$CodeLine
+logger.textView.logThrowableWithStackTrace=true
+logger.textView.inNewLine=true
+logger.textView.printMethod=APPEND
+
+logger.file=com.rafalzajfert.androidlogger.file.FileLogger
+logger.file.level=WARNING
+logger.file.tag=$ShortLevel $CurrentTime $CodeLine
+logger.file.logThrowableWithStackTrace=true
+logger.file.externalFile=loggerLogs/$Date/log.txt
+logger.file.datePattern=dd_MM_yyyy
+
+logger.logcat=com.rafalzajfert.androidlogger.logcat.LogcatLogger
+logger.logcat.level=VERBOSE
+logger.logcat.tag=$CodeLine
+logger.logcat.logThrowableWithStackTrace=true
+
+logger.toast=com.rafalzajfert.androidlogger.toast.ToastLogger
+logger.toast.level=ERROR
+logger.toast.tag=$CodeLine
+logger.toast.logThrowableWithStackTrace=false
+logger.toast.duration=SHORT
+```
+
+##Developed By
 
  * Rafal Zajfert - <rafal.zajfert@gmail.com>
 
-License
-=======
+##License
 
     Copyright 2015 Rafal Zajfert
 
