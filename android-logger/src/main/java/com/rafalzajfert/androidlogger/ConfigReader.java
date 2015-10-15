@@ -118,15 +118,16 @@ public class ConfigReader {
             final String key = (String) propertyKeys.nextElement();
             if (!RESERVED_PROPERTIES.contains(key) && !LOGGER_CONFIG_PREFIX.equals(key)) {
                 loggerName = key.substring(key.indexOf(".") + 1);
-                propertyName = "";
-                propertyValue = properties.getProperty(key);
-                int propertyIdx = loggerName.indexOf(".");
-                if (propertyIdx > 0) {
-                    propertyName = loggerName.substring(propertyIdx + 1);
-                    loggerName = loggerName.substring(0, propertyIdx);
+                if (loggersMap.containsKey(loggerName)) {
+                    propertyName = "";
+                    propertyValue = properties.getProperty(key);
+                    int propertyIdx = loggerName.indexOf(".");
+                    if (propertyIdx > 0) {
+                        propertyName = loggerName.substring(propertyIdx + 1);
+                        loggerName = loggerName.substring(0, propertyIdx);
+                    }
+                    loggersMap.get(loggerName).put(propertyName, propertyValue);
                 }
-                loggersMap.get(loggerName).put(propertyName, propertyValue);
-
             }
         }
     }
