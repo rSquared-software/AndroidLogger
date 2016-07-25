@@ -32,35 +32,22 @@ import java.util.Map;
  */
 abstract class LoggerUtils {
 
+    enum StackTraceField {
+        SIMPLE_CLASS_NAME, FULL_CLASS_NAME, FILE_NAME, METHOD_NAME, LINE_NUMBER
+    }
+
+    private static Context applicationContext;
+
     @SafeVarargs
     static <T> String array2String(@NonNull String separator, @NonNull T... array) {
         StringBuilder builder = new StringBuilder();
-        String str;
-        for (int i = 0; i < array.length; i++) {
-            if (i>0){
+        for (T el : array) {
+            if (builder.length() > 0){
                 builder.append(separator);
             }
-            str = array[i] + "";
-            builder.append(str);
+            builder.append(el);
         }
         return builder.toString();
-    }
-
-
-    private static Map<String, String> getStackTraceFieldMap() {
-        final StackTraceElement element = getStackTraceElement();
-        if (element == null) {
-            return null;
-        }
-        Map<String, String> stackMap = new HashMap<>();
-
-        stackMap.put(Logger.PARAM_CLASS_NAME, getField(element, StackTraceField.SIMPLE_CLASS_NAME));
-        stackMap.put(Logger.PARAM_FULL_CLASS_NAME, getField(element, StackTraceField.FULL_CLASS_NAME));
-        stackMap.put(Logger.PARAM_METHOD_NAME, getField(element, StackTraceField.METHOD_NAME));
-        stackMap.put(Logger.PARAM_FILE_NAME, getField(element, StackTraceField.FILE_NAME));
-        stackMap.put(Logger.PARAM_LINE_NUMBER, getField(element, StackTraceField.LINE_NUMBER));
-
-        return stackMap;
     }
 
     @Nullable
@@ -70,6 +57,84 @@ abstract class LoggerUtils {
             return null;
         }
         return getField(element, field);
+    }
+
+    /**
+     * @return tag with replaced constant tags
+     */
+    @NonNull
+    static String formatTag(@NonNull String tag, @NonNull Level level) {
+        return replaceFormatValues(tag, level);
+    }
+
+    /**
+     * @return message with replaced constant tags
+     */
+    @NonNull
+    static String formatMessage(@NonNull Object msg, @NonNull Level level) {
+        return replaceFormatValues(msg + "", level);
+    }
+
+    /**
+     * Converts {@link Throwable} to String, if <code>withStackTrace</code> is true it would be full stacktrace of the Throwable, otherwise only message
+     */
+    @NonNull
+    static String throwableToString(@NonNull Throwable throwable, boolean withStackTrace) {
+        return withStackTrace ? Log.getStackTraceString(throwable) : throwable.getMessage();
+    }
+
+    /**
+     * Returns application context. This method use reflection to obtain {@link Application}
+     */
+    static Context getApplicationContext() {
+        if (applicationContext == null) {
+            tryGetContext();
+        }
+        return applicationContext;
+    }
+
+    /**
+     * Replace all constant tags with values
+     */
+    @NonNull
+    private static String replaceFormatValues(@NonNull String text, @NonNull Level level) {
+        if (TextUtils.isEmpty(text)) {
+            return "";
+        }
+
+        Map<String, String> map = getStackTraceFieldMap();
+        if (map != null) {
+            text = replaceCodeLine(text);
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                text = text.replace(entry.getKey(), entry.getValue());
+            }
+        }
+        text = text.replace(Logger.LEVEL, level.name());
+        text = text.replace(Logger.SHORT_LEVEL, level.name().substring(0, 1));
+        text = text.replace(Logger.CURRENT_TIME, Logger.getTime());
+
+        return text;
+    }
+
+    public static String replaceCodeLine(@NonNull String text) {
+        return text.replace(Logger.CODE_LINE, "(" + Logger.FILE_NAME + ":" + Logger.LINE_NUMBER + ")");
+    }
+
+    @Nullable
+    private static Map<String, String> getStackTraceFieldMap() {
+        final StackTraceElement element = getStackTraceElement();
+        if (element == null) {
+            return null;
+        }
+        Map<String, String> stackMap = new HashMap<>();
+
+        stackMap.put(Logger.CLASS_NAME, getField(element, StackTraceField.SIMPLE_CLASS_NAME));
+        stackMap.put(Logger.FULL_CLASS_NAME, getField(element, StackTraceField.FULL_CLASS_NAME));
+        stackMap.put(Logger.METHOD_NAME, getField(element, StackTraceField.METHOD_NAME));
+        stackMap.put(Logger.FILE_NAME, getField(element, StackTraceField.FILE_NAME));
+        stackMap.put(Logger.LINE_NUMBER, getField(element, StackTraceField.LINE_NUMBER));
+
+        return stackMap;
     }
 
     @Nullable
@@ -85,11 +150,7 @@ abstract class LoggerUtils {
                 return elements[i];
             }
         }
-        return null;
-    }
-
-    private static boolean isLoggerClass(String className) {
-        return className.startsWith(BuildConfig.APPLICATION_ID) || classExtendLogger(className);
+        return elements[2];
     }
 
     @NonNull
@@ -98,7 +159,7 @@ abstract class LoggerUtils {
             case FULL_CLASS_NAME:
                 return element.getClassName();
             case SIMPLE_CLASS_NAME:
-                return getSimpleName(element.getClassName());
+                return element.getClass().getSimpleName();
             case FILE_NAME:
                 return element.getFileName();
             case METHOD_NAME:
@@ -110,82 +171,29 @@ abstract class LoggerUtils {
         }
     }
 
-    @NonNull
-    private static String getSimpleName(@NonNull String className) {
-        int idx = className.lastIndexOf('.');
-        boolean canSubstring = idx >= 0 && idx < className.length();
-        return canSubstring ? className.substring(idx + 1) : className;
+    private static boolean isLoggerClass(@NonNull String className) {
+        return className.equalsIgnoreCase("com.rafalzajfert.androidlogger.LoggerUtils") || classExtendLogger(className);
     }
 
+    /**
+     * Checks if class with specified name extends Logger class
+     */
     private static boolean classExtendLogger(String className) {
         try {
-            Class<?> clazz = Class.forName(className);
-            return Logger.class.isAssignableFrom(clazz);
+            return BaseLogger.class.isAssignableFrom(Class.forName(className));
         } catch (ClassNotFoundException e) {
             return false;
         }
     }
 
     /**
-     * @return tag with replaced constant tags
+     * Try find {@link Context} using reflection
      */
-    @NonNull
-    static String formatTag(@NonNull String tag, @NonNull Level level) {
-        Map<String, String> map = LoggerUtils.getStackTraceFieldMap();
-        if (map != null) {
-            tag = tag.replace(Logger.PARAM_CODE_LINE, "(" + Logger.PARAM_FILE_NAME + ":" + Logger.PARAM_LINE_NUMBER + ")");
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                tag = tag.replace(entry.getKey(), entry.getValue());
-            }
-        }
-        tag = tag.replace(Logger.PARAM_LEVEL, level.name());
-        tag = tag.replace(Logger.PARAM_SHORT_LEVEL, level.name().substring(0, 1));
-        tag = tag.replace(Logger.PARAM_TIME, Logger.getTime());
-        return tag;
-    }
-
-    /**
-     * @return message with replaced constant tags
-     */
-    @NonNull
-    static String formatMessage(@NonNull Object msg) {
-        if (!(msg instanceof String)) {
-            msg = msg + "";
-        }
-
-        String message = (String) msg;
-        if (TextUtils.isEmpty(message)) {
-            return "";
-        }
-
-        Map<String, String> map = LoggerUtils.getStackTraceFieldMap();
-        if (map != null) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                message = message.replace(entry.getKey(), entry.getValue());
-            }
-        }
-        return message;
-    }
-
-    @NonNull
-    static String throwableToString(@NonNull Throwable throwable, @NonNull BaseLoggerConfig config){
-        Boolean stackTrace = config.isLogThrowableWithStackTrace();
-        if (stackTrace != null && !stackTrace) {
-            return throwable.getMessage();
-        } else {
-            return Log.getStackTraceString(throwable);
-        }
-    }
-
-    static Context getApplicationContext() {
+    private static void tryGetContext() {
         try {
-            return (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
+            applicationContext = (Context) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
         } catch (Exception e) {
             throw new IllegalStateException("Cannot retrieve application context, please config logger programmatically");
         }
-    }
-
-    enum StackTraceField {
-        SIMPLE_CLASS_NAME, FULL_CLASS_NAME, FILE_NAME, METHOD_NAME, LINE_NUMBER
     }
 }

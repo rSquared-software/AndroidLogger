@@ -16,9 +16,13 @@
 
 package com.rafalzajfert.androidlogger.textview;
 
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.rafalzajfert.androidlogger.BaseLoggerConfig;
+import com.rafalzajfert.androidlogger.Level;
 
 import java.util.Map;
 
@@ -28,8 +32,12 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig> {
+
+
+    private static final String COLOR_REGEX = "^#((([0-7a-fA-F])?([0-7a-fA-F]){3})|(([0-7a-fA-F]{2})?([0-7a-fA-F]{2}){3}))$";
     private boolean inNewLine = true;
     private Method printMethod = Method.APPEND;
+    private ColorScheme colorScheme = ColorScheme.LIGHT;
 
     /**
      * Set {@link TextViewLoggerConfig.Method} to print messages in the TextView
@@ -55,6 +63,22 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
     }
 
     /**
+     * Color scheme for the log levels
+     */
+    @NonNull
+    public ColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
+    /**
+     * Color scheme for the log levels
+     */
+    public TextViewLoggerConfig setColorScheme(@NonNull ColorScheme colorScheme) {
+        this.colorScheme = colorScheme;
+        return this;
+    }
+
+    /**
      * If true each message will be logged in new line
      */
     public boolean isInNewLine() {
@@ -69,15 +93,120 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
             setInNewLine(Boolean.parseBoolean(config.get("inNewLine")));
         }
         if (config.containsKey("printMethod")) {
-            try{
+            try {
                 setPrintMethod(Method.valueOf(config.get("printMethod")));
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Unknown print method: " + config.get("printMethod"));
             }
+        }
+        if (config.containsKey("colorScheme")) {
+            String colorScheme = config.get("colorScheme");
+            try {
+                if (colorScheme.contains(",")) {
+                    this.colorScheme = parseColorSheme(colorScheme);
+                } else if ("dark".equalsIgnoreCase(colorScheme)) {
+                    this.colorScheme = ColorScheme.DARK;
+                } else if ("light".equalsIgnoreCase(colorScheme)) {
+                    this.colorScheme = ColorScheme.LIGHT;
+                } else {
+                    this.colorScheme = ColorScheme.NONE;
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Unknown color scheme: " + colorScheme);
+            }
+        }
+    }
+
+    private ColorScheme parseColorSheme(String colorScheme) {
+        String[] colors = colorScheme.split(",");
+        if (colors.length == 5) {
+            String colorVerbose = parseColor(colors[0], null);
+            String colorDebug = parseColor(colors[1], null);
+            String colorInfo = parseColor(colors[2], null);
+            String colorWarning = parseColor(colors[3], null);
+            String colorError = parseColor(colors[4], null);
+            return new ColorScheme(colorVerbose, colorDebug, colorInfo, colorWarning, colorError);
+        }
+        return ColorScheme.NONE;
+    }
+
+    private String parseColor(String color, String defaultValue) {
+        color = color.trim();
+        if (color.matches(COLOR_REGEX)) {
+            return color;
+        } else if (TextUtils.isEmpty(defaultValue)) {
+            return "#000000";
+        } else {
+            return defaultValue;
         }
     }
 
     public enum Method {
         APPEND, PREPEND, OVERWRITE
+    }
+
+    public static class ColorScheme {
+
+        public static final ColorScheme NONE = new ColorScheme(
+                "#000000",
+                "#000000",
+                "#000000",
+                "#000000",
+                "#000000");
+
+        public static final ColorScheme LIGHT = new ColorScheme(
+                "#000000",
+                "#00007F",
+                "#007F00",
+                "#7F7F00",
+                "#7F0000");
+
+        public static final ColorScheme DARK = new ColorScheme(
+                "#BBBBBB",
+                "#6F84DD",
+                "#68E168",
+                "#E1E168",
+                "#FF6868");
+
+        private String colorVerbose;
+
+        private String colorDebug;
+
+        private String colorInfo;
+
+        private String colorWarning;
+
+        private String colorError;
+
+        public ColorScheme(String colorVerbose, String colorDebug, String colorInfo, String colorWarning, String colorError) {
+            this.colorVerbose = colorVerbose;
+            this.colorDebug = colorDebug;
+            this.colorInfo = colorInfo;
+            this.colorWarning = colorWarning;
+            this.colorError = colorError;
+        }
+
+        public String getColorString(Level level) {
+            switch (level) {
+                case VERBOSE:
+                    return colorVerbose;
+                case DEBUG:
+                    return colorDebug;
+                case INFO:
+                    return colorInfo;
+                case WARNING:
+                    return colorWarning;
+                case ERROR:
+                    return colorError;
+                case SILENT:
+                default:
+                    return "#000000";
+            }
+        }
+
+        @ColorInt
+        public int getColor(Level level) {
+            return Color.parseColor(getColorString(level));
+        }
     }
 }

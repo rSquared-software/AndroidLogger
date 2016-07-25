@@ -18,6 +18,7 @@ package com.rafalzajfert.androidlogger.toast;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.rafalzajfert.androidlogger.ConfigSetter;
@@ -53,7 +54,7 @@ public class ToastLogger extends Logger implements ConfigSetter<ToastLoggerConfi
     /**
      * {@inheritDoc}
      */
-    @NonNull
+    @Nullable
     @Override
     public ToastLoggerConfig getConfig() {
         return config;
@@ -72,6 +73,6 @@ public class ToastLogger extends Logger implements ConfigSetter<ToastLoggerConfi
      */
     @Override
     protected void print(Level level, String message) {
-        Toast.makeText(context, getTag(level) + PARAM_SPACE + message, config.getDuration()).show();
+        Toast.makeText(context, getTag(level) + SPACE + message, config.getDuration()).show();
     }
 }

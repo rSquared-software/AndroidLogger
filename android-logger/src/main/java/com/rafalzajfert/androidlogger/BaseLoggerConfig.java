@@ -60,17 +60,17 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
      * Tag, used to identify source of a log message<br/>
      * <br/>
      * You can also use auto generated values:<br/>
-     * {@link Logger#PARAM_CLASS_NAME PARAM_CLASS_NAME}<br/>
-     * {@link Logger#PARAM_FULL_CLASS_NAME PARAM_FULL_CLASS_NAME}<br/>
-     * {@link Logger#PARAM_METHOD_NAME PARAM_METHOD_NAME}<br/>
-     * {@link Logger#PARAM_FILE_NAME PARAM_FILE_NAME}<br/>
-     * {@link Logger#PARAM_LINE_NUMBER PARAM_LINE_NUMBER}<br/>
-     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
-     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
-     * {@link Logger#PARAM_LEVEL PARAM_LEVEL}<br/>
-     * {@link Logger#PARAM_SHORT_LEVEL PARAM_SHORT_LEVEL}<br/>
-     * {@link Logger#PARAM_TIME PARAM_TIME}<br/>
-     * {@link Logger#PARAM_CODE_LINE PARAM_CODE_LINE}
+     * {@link Logger#CLASS_NAME CLASS_NAME}<br/>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
+     * {@link Logger#FILE_NAME FILE_NAME}<br/>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
+     * {@link Logger#LEVEL LEVEL}<br/>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
+     * {@link Logger#LEVEL LEVEL}<br/>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * {@link Logger#CODE_LINE CODE_LINE}
      */
     @SuppressWarnings("unchecked")
     public E setTag(@Nullable String tag) {

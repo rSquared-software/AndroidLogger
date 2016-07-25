@@ -19,6 +19,7 @@ import java.util.Set;
 
 /**
  * Config properties reader
+ *
  * @author Rafal Zajfert
  * @version 1.0.15 (10/10/2015)
  */
@@ -44,7 +45,7 @@ public class ConfigReader {
         return new ConfigReader(propertiesRes);
     }
 
-    public Map<String, Logger> getLoggers(){
+    public Map<String, Logger> getLoggers() {
         return loggers;
     }
 
@@ -118,14 +119,14 @@ public class ConfigReader {
             final String key = (String) propertyKeys.nextElement();
             if (!RESERVED_PROPERTIES.contains(key) && !LOGGER_CONFIG_PREFIX.equals(key)) {
                 loggerName = key.substring(key.indexOf(".") + 1);
+                propertyName = "";
+                propertyValue = properties.getProperty(key);
+                int propertyIdx = loggerName.indexOf(".");
+                if (propertyIdx > 0) {
+                    propertyName = loggerName.substring(propertyIdx + 1);
+                    loggerName = loggerName.substring(0, propertyIdx);
+                }
                 if (loggersMap.containsKey(loggerName)) {
-                    propertyName = "";
-                    propertyValue = properties.getProperty(key);
-                    int propertyIdx = loggerName.indexOf(".");
-                    if (propertyIdx > 0) {
-                        propertyName = loggerName.substring(propertyIdx + 1);
-                        loggerName = loggerName.substring(0, propertyIdx);
-                    }
                     loggersMap.get(loggerName).put(propertyName, propertyValue);
                 }
             }
@@ -158,11 +159,11 @@ public class ConfigReader {
             l.init(configMap);
             loggers.put(loggerTag, l);
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Logger class '"+loggerClass+"' not found");
+            throw new IllegalArgumentException("Logger class '" + loggerClass + "' not found");
         } catch (InstantiationException e) {
             throw new IllegalArgumentException(loggerClass + " must have public 0 args constructor");
         } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException(loggerClass+" must have public 0 args constructor");
+            throw new IllegalArgumentException(loggerClass + " must have public 0 args constructor");
         }
     }
 

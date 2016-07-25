@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
-              android:paddingTop="@dimen/activity_vertical_margin"
-              android:paddingBottom="@dimen/activity_vertical_margin"
-              android:orientation="vertical"
-              tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,51 +17,58 @@
             android:id="@+id/log_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/logger_types"
-            android:layout_weight="0">
-        </Spinner>
+            android:layout_weight="0"
+            android:entries="@array/logger_types"></Spinner>
 
         <EditText
             android:id="@+id/log_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
+            android:layout_weight="1"
             android:inputType="text"
-            android:layout_weight="1"/>
+            android:singleLine="true" />
     </LinearLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendToAll"
-        android:text="@string/send_log"/>
+        android:text="@string/send_log" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendToLogcat"
-        android:text="@string/add_logcat"/>
+        android:text="@string/add_logcat" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendToToast"
-        android:text="@string/add_toast"/>
+        android:text="@string/add_toast" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendTextView"
-        android:text="@string/add_text_view"/>
+        android:text="@string/add_text_view" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/log"
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </HorizontalScrollView>
     </ScrollView>
+
 
 </LinearLayout>

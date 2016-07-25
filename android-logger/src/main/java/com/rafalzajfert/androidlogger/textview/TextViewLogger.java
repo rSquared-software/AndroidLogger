@@ -18,6 +18,9 @@ package com.rafalzajfert.androidlogger.textview;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
 import com.rafalzajfert.androidlogger.ConfigSetter;
@@ -41,7 +44,7 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
     @Nullable
     private TextView textView;
 
-    public TextViewLogger(){
+    public TextViewLogger() {
     }
 
     @SuppressWarnings("NullableProblems")
@@ -56,7 +59,7 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
     /**
      * {@inheritDoc}
      */
-    @NonNull
+    @Nullable
     @Override
     public TextViewLoggerConfig getConfig() {
         return config;
@@ -75,32 +78,50 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
      */
     @Override
     protected void print(Level level, String message) {
-        String tag = getTag(level);
         if (textView != null) {
-            switch (config.getPrintMethod()) {
-                case APPEND:
-                    textView.append(getMessageSeparator(textView) + tag + PARAM_SPACE + message);
-                    break;
-                case OVERWRITE:
-                    textView.setText(tag + PARAM_SPACE + message);
-                    break;
-                case PREPEND:
-                    textView.setText(tag + PARAM_SPACE + message + getMessageSeparator(textView) + textView.getText());
-                    break;
+            Spannable spannable = convertToSpannable(textView, level, message);
+
+            if (TextViewLoggerConfig.Method.APPEND.equals(config.getPrintMethod())) {
+                textView.append(spannable);
+            } else {
+                textView.setText(spannable);
             }
-        }else{
+        } else {
             logger.w("Text view for the logger is not initialized (call setTextView(TextView) method)");
         }
     }
 
+    @NonNull
+    private Spannable convertToSpannable(@NonNull TextView textView, @NonNull Level level, String message) {
+        String tag = getTag(level);
+        String text;
+        switch (config.getPrintMethod()) {
+            case OVERWRITE:
+                text = tag + SPACE + message;
+                break;
+            case PREPEND:
+                text = tag + SPACE + message + getMessageSeparator(textView) + textView.getText();
+                break;
+            case APPEND:
+            default:
+                text = getMessageSeparator(textView) + tag + SPACE + message;
+                break;
+
+        }
+        Spannable spannable = new SpannableString(text);
+        spannable.setSpan(new ForegroundColorSpan(config.getColorScheme().getColor(level)), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
+    }
+
     private String getMessageSeparator(@NonNull TextView textView) {
-        if (textView.length() <= 0){
+        if (textView.length() <= 0) {
             return "";
         }
-        if (config.isInNewLine()){
-            return PARAM_NEW_LINE;
+        if (config.isInNewLine()) {
+            return NEW_LINE;
         }
-        return PARAM_SPACE;
+        return SPACE;
     }
+
 
 }

@@ -16,20 +16,11 @@
 
 package com.rafalzajfert.androidlogger.file;
 
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.rafalzajfert.androidlogger.ConfigSetter;
-import com.rafalzajfert.androidlogger.Level;
 import com.rafalzajfert.androidlogger.Logger;
-import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 /**
  * {@link Logger Logger} that save log messages in the
@@ -40,11 +31,8 @@ import java.io.RandomAccessFile;
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig> {
+public class FileLogger extends BaseFileLogger implements ConfigSetter<FileLoggerConfig> {
 
-    private static final LogcatLogger logger = new LogcatLogger();
-
-    private static final String DEFAULT_FILE = "logger.log";
     private FileLoggerConfig config = new FileLoggerConfig();
 
     public FileLogger() {
@@ -53,7 +41,7 @@ public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig>
     /**
      * {@inheritDoc}
      */
-    @NonNull
+    @Nullable
     @Override
     public FileLoggerConfig getConfig() {
         return config;
@@ -67,101 +55,4 @@ public class FileLogger extends Logger implements ConfigSetter<FileLoggerConfig>
         this.config = config;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void print(Level level, String message) {
-        try {
-            writeToFile(createFileIfNeeded(), getMessage(level, message));
-        } catch (IOException e) {
-            logger.e(e);
-        }
-    }
-
-    /**
-     * Get message to write
-     */
-    @NonNull
-    private String getMessage(Level level, String message) {
-        return getTag(level) + PARAM_SPACE + message + PARAM_NEW_LINE;
-    }
-
-    /**
-     * Append string to the end of the file
-     */
-    private void writeToFile(File file, String string) {
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
-            writer.write(string);
-        } catch (IOException e) {
-            logger.e("Cannot write log to file", e);
-        } finally {
-            close(writer);
-        }
-    }
-
-    /**
-     * clear log file
-     */
-    public void clearLogFile() {
-        RandomAccessFile file = null;
-        try {
-            file = new RandomAccessFile(getLogFile(), "rw");
-            file.setLength(0);
-        } catch (IOException e) {
-            logger.e("Cannot clear Log file", e);
-        } finally {
-            close(file);
-        }
-    }
-
-
-    /**
-     * return file or create it when does not exist
-     */
-    @NonNull
-    private File createFileIfNeeded() throws IOException {
-        File file = getLogFile();
-
-        if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()){
-            throw new IOException("Cannot create directory of the Log file");
-        }
-
-        if (!file.exists() && !file.createNewFile()) {
-            throw new IOException("Cannot create Log file");
-        }
-
-        if (!file.canWrite()) {
-            throw new IOException("File is not writable");
-        }
-
-        return file;
-    }
-
-    /**
-     * Get {@link File} where log messages are saved
-     */
-    @NonNull
-    public File getLogFile() {
-        File file = config.getLogFile();
-        if (file == null) {
-            file = new File(Environment.getExternalStorageDirectory(), DEFAULT_FILE);
-        }
-        return file;
-    }
-
-    /**
-     * Close file stream
-     */
-    private void close(@Nullable Closeable stream) {
-        if (stream != null) {
-            try {
-                stream.close();
-            } catch (IOException e) {
-                logger.e("Failed to close file", e);
-            }
-        }
-    }
 }

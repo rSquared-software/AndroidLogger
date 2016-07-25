@@ -16,9 +16,7 @@
 
 package com.rafalzajfert.logger.sample;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -27,14 +25,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.rafalzajfert.androidlogger.Level;
-import com.rafalzajfert.androidlogger.LoggableANRWatchDog;
 import com.rafalzajfert.androidlogger.Logger;
 import com.rafalzajfert.androidlogger.LoggerConfig;
-import com.rafalzajfert.androidlogger.file.FileLogger;
-import com.rafalzajfert.androidlogger.file.FileLoggerConfig;
+import com.rafalzajfert.androidlogger.file.RollingFileLogger;
+import com.rafalzajfert.androidlogger.file.RollingFileLoggerConfig;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
-import com.rafalzajfert.androidlogger.logcat.LogcatLoggerConfig;
 import com.rafalzajfert.androidlogger.textview.TextViewLogger;
 import com.rafalzajfert.androidlogger.toast.ToastLogger;
 
@@ -61,63 +56,101 @@ public class MainActivity extends Activity {
         typeSpinner = (Spinner) findViewById(R.id.log_type);
         logTextView = (TextView) findViewById(R.id.log);
 
-        LogcatLoggerConfig logcatLoggerConfig = new LogcatLoggerConfig()
-                .setTag(Logger.PARAM_FULL_CLASS_NAME + " " + Logger.PARAM_METHOD_NAME);
+        Logger.error(getString(R.string.lorem_ipsum));
 
-        LoggerConfig config = new LoggerConfig(R.raw.logger);
-        ((TextViewLogger)config.getLogger("textView")).setTextView(logTextView);
-        Logger.setBaseConfig(config);
-        try {
-            Integer.parseInt("a");
-        } catch (Exception e) {
-            Logger.error(e);
-        }
-        Logger.verbose("verbose");
-        Logger.verboseF("formatted %s message: %.2f", "verbose", 1.1f);
-        Logger.debug("debug");
-        Logger.debugF("formatted %s message: %.2f", "debug", 1.1f);
-        Logger.info("info");
-        Logger.infoF("formatted %s message: %.2f", "info", 1.1f);
-        Logger.warning("warning");
-        Logger.warningF("formatted %s message: %.2f", "warning", 1.1f);
-        Logger.error("error");
-        Logger.errorF("formatted %s message: %.2f", "error", 1.1f);
+//        LogcatLoggerConfig logcatLoggerConfig = new LogcatLoggerConfig()
+//                .setTag(Logger.FULL_CLASS_NAME + " " + Logger.METHOD_NAME);
+//
+//        LoggerConfig config = new LoggerConfig(R.raw.logger);
+//        ((TextViewLogger)config.getLogger("textView")).setTextView(logTextView);
+//        Logger.setBaseConfig(config);
+////        try {
+////            Integer.parseInt("a");
+////        } catch (Exception e) {
+////            Logger.error(e);
+////            return;
+////        }
+//        Logger.verbose("verbose");
+//        Logger.verboseF("formatted %s message: %.2f", "verbose", 1.1f);
+//        Logger.debug("debug");
+//        Logger.debugF("formatted %s message: %.2f", "debug", 1.1f);
+//        Logger.info("info");
+//        Logger.infoF("formatted %s message: %.2f", "info", 1.1f);
+//        Logger.warning("warning");
+//        Logger.warningF("formatted %s message: %.2f", "warning", 1.1f);
+//        Logger.error("error");
+//        Logger.errorF("formatted %s message: %.2f", "error", 1.1f);
+//
+//        loggerConfig = new LoggerConfig()
+//                .setTag(Logger.CODE_LINE)
+//                .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
+//                .catchUncaughtExceptions()
+//                .setSeparator(Logger.SPACE)
+//                .setLogThrowableWithStackTrace(true)
+//                .setThrowableSeparator(Logger.NEW_LINE)
+//                .setLevel(Level.VERBOSE);
+//
+//        logger.setConfig(logcatLoggerConfig);
+//        Logger.setBaseConfig(loggerConfig);
+//
+//        Logger.error("start");
+//        Logger.warningF("formatted message %s: %.0f", "message", 1.1f);
+//        Logger.error("");
+//        String a = null;
+//        Logger.error(a);
+//        try {
+//            Integer.parseInt("a");
+//        } catch (Exception e) {
+//            Logger.error(e);
+//        }
+//
+//        FileLogger fileLogger = new FileLogger();
+//        if (checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//            FileLoggerConfig fileLoggerConfig = new FileLoggerConfig().setLogFile(new File(Environment.getExternalStorageDirectory(), "log.txt"));
+//            fileLogger.setConfig(fileLoggerConfig);
+//        }
+//
+//        fileLogger.t();
+//
+//        Logger.getBaseConfig().removeLogger(LoggerConfig.DEFAULT_LOGGER);
+//        logger.e("test", "trace will be printed");
+//        logger.t();
+//        logger.e("test", "end");
+//
+//        testFileLogger();
+    }
 
-        loggerConfig = new LoggerConfig()
-                .setTag(Logger.PARAM_CODE_LINE)
-                .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
-                .catchUncaughtExceptions()
-                .setSeparator(Logger.PARAM_SPACE)
-                .setLogThrowableWithStackTrace(true)
-                .setThrowableSeparator(Logger.PARAM_NEW_LINE)
-                .setLevel(Level.VERBOSE);
+    private void testFileLogger() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        logger.setConfig(logcatLoggerConfig);
-        Logger.setBaseConfig(loggerConfig);
+                RollingFileLoggerConfig config = new RollingFileLoggerConfig();
+                config.setMaxFileBackupCount(3);
+                config.setMaxFileSize(20 * 1024);
+                config.setExternalLogFile("FileTest/test.txt");
 
-        Logger.error("start");
-        Logger.warningF("formatted message %s: %.0f", "message", 1.1f);
-        Logger.error("");
-        String a = null;
-        Logger.error(a);
-        try {
-            Integer.parseInt("a");
-        } catch (Exception e) {
-            Logger.error(e);
-        }
+                RollingFileLogger logger = new RollingFileLogger();
+                logger.setConfig(config);
 
-        FileLogger fileLogger = new FileLogger();
-        if (checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            FileLoggerConfig fileLoggerConfig = new FileLoggerConfig().setLogFile(new File(Environment.getExternalStorageDirectory(), "log.txt"));
-            fileLogger.setConfig(fileLoggerConfig);
-        }
+                long maxSize = 0;
+                File b2 = new File(Environment.getExternalStorageDirectory(), "FileTest/test.txt.bac2");
+                File f = new File(Environment.getExternalStorageDirectory(), "FileTest");
+                while (!b2.exists()){
+                    logger.d("loggggg",maxSize);
+                    maxSize = logger.getLogFile().length();
+                    MainActivity.this.logger.d("f", "=========================", f, f.exists(), maxSize);
+                    if (f.exists()) {
+                        for (String filename : f.list()) {
+                            MainActivity.this.logger.d("f", filename);
+                        }
+                        MainActivity.this.logger.d("f", "=========================");
+                    }
+                }
 
-        fileLogger.t();
 
-        Logger.getBaseConfig().removeLogger(LoggerConfig.DEFAULT_LOGGER);
-        logger.e("test","trace will be printed");
-        logger.t();
-        logger.e("test", "end");
+            }
+        }).start();
     }
 
     public void sendToAll(View v) {

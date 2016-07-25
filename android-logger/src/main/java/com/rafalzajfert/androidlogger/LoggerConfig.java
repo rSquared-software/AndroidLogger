@@ -35,8 +35,8 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Config {
     public static final String DATE_PATTERN = "HH:mm:ss:SSS";
-    private String separator = Logger.PARAM_SPACE;
-    private String throwableSeparator = Logger.PARAM_NEW_LINE;
+    private String separator = Logger.SPACE;
+    private String throwableSeparator = Logger.NEW_LINE;
     private String datePattern = DATE_PATTERN;
     private SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
     private final Map<String, Logger> loggers = new HashMap<>();
@@ -86,7 +86,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
 
     {
         this.loggers.put(DEFAULT_LOGGER, new LogcatLogger());
-        this.tag = Logger.PARAM_CODE_LINE;
+        this.tag = Logger.CODE_LINE;
         this.logThrowableWithStackTrace = true;
     }
 

@@ -17,6 +17,7 @@
 package com.rafalzajfert.androidlogger.logcat;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.rafalzajfert.androidlogger.ConfigSetter;
@@ -41,7 +42,7 @@ public class LogcatLogger extends Logger implements ConfigSetter<LogcatLoggerCon
     /**
      * {@inheritDoc}
      */
-    @NonNull
+    @Nullable
     @Override
     public LogcatLoggerConfig getConfig() {
         return config;
