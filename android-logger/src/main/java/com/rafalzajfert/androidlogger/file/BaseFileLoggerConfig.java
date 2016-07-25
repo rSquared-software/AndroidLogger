@@ -37,7 +37,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extends BaseLoggerConfig<E> {
     public static final String DATE_PATTERN = "dd_MM_yyyy";
-    public static final String PARAM_DATE = "$Date";
+    public static final String DATE = "$Date$";
     private File logFile = null;
     @NonNull
     private String datePattern = DATE_PATTERN;
@@ -64,7 +64,7 @@ public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extend
         }else {
             if (overwritePath) {
                 this.logFilePath = logFile.getAbsolutePath();
-                if (logFile.getAbsolutePath().contains(PARAM_DATE)) {
+                if (logFile.getAbsolutePath().contains(DATE)) {
                     logFile = new File(invalidatePath(logFile.getAbsolutePath()));
                 }
             }
@@ -84,7 +84,7 @@ public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extend
 
     /**
      * Set log file to write messages<br><br>
-     * <b>Note:</b> If file path contains '$Date' it will be replaced with current time<br>
+     * <b>Note:</b> If file path contains '$Date$' it will be replaced with current time<br>
      * <b>Note:</b> Current time can be formatted with {@link #setDatePattern(String)} or {@link #setDateFormat(DateFormat)} method
      */
     public E setLogFile(@Nullable String path) {
@@ -97,7 +97,7 @@ public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extend
 
     /**
      * Set log file to write messages, path must be relative to external storage<br><br>
-     * <b>Note:</b> If file path contains '$Date' it will be replaced with current time<br>
+     * <b>Note:</b> If file path contains '$Date$' it will be replaced with current time<br>
      * <b>Note:</b> Current time can be formatted with {@link #setDatePattern(String)} or {@link #setDateFormat(DateFormat)} method
      */
     public E setExternalLogFile(@Nullable String path) {
@@ -109,7 +109,7 @@ public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extend
     }
 
     private String invalidatePath(@NonNull String path) {
-        return path.replace(PARAM_DATE, dateFormat.format(new Date()));
+        return path.replace(DATE, dateFormat.format(new Date()));
     }
 
     @Override

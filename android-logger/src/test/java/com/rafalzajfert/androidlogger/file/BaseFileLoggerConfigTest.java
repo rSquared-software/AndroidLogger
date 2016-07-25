@@ -112,14 +112,14 @@ public class BaseFileLoggerConfigTest {
 
     @Test
     public void testSetDatePattern() throws Exception {
-        config.setLogFile("log_"+BaseFileLoggerConfig.PARAM_DATE);
+        config.setLogFile("log_"+BaseFileLoggerConfig.DATE);
         assertTrue(config.getLogFile().getName().matches("log_\\d{2}_\\d{2}_\\d{4}"));
         config.setDatePattern("HH:mm:ss.SSS");
         assertTrue(config.getLogFile().getName().matches("log_\\d{2}:\\d{2}:\\d{2}\\.\\d{3}"));
         config.setDatePattern("HH:mm:ss");
         assertTrue(config.getLogFile().getName().matches("log_\\d{2}:\\d{2}:\\d{2}"));
 
-        config.setLogFile(new File("log2_" + BaseFileLoggerConfig.PARAM_DATE));
+        config.setLogFile(new File("log2_" + BaseFileLoggerConfig.DATE));
         assertTrue(config.getLogFile().getName().matches("log2_\\d{2}:\\d{2}:\\d{2}"));
     }
 
@@ -132,7 +132,7 @@ public class BaseFileLoggerConfigTest {
     @Test
     public void testSetDateFormat() throws Exception {
         DateFormat format;
-        config.setLogFile("log_"+BaseFileLoggerConfig.PARAM_DATE);
+        config.setLogFile("log_"+BaseFileLoggerConfig.DATE);
         assertTrue(config.getLogFile().getName().matches("log_\\d{2}_\\d{2}_\\d{4}"));
         format = new SimpleDateFormat("HH:mm:ss.SSS");
         config.setDateFormat(format);
@@ -141,7 +141,7 @@ public class BaseFileLoggerConfigTest {
         config.setDateFormat(format);
         assertTrue(config.getLogFile().getName().matches("log_\\d{2}:\\d{2}:\\d{2}"));
 
-        config.setLogFile(new File("log2_" + BaseFileLoggerConfig.PARAM_DATE));
+        config.setLogFile(new File("log2_" + BaseFileLoggerConfig.DATE));
         assertTrue(config.getLogFile().getName().matches("log2_\\d{2}:\\d{2}:\\d{2}"));
 
     }

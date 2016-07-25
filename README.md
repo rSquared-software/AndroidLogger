@@ -5,7 +5,7 @@ Simple and useful Android logger library.
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.1.16'
+    compile 'com.rafalzajfert:android-logger:1.1.18'
 }
 ```
 
@@ -17,7 +17,7 @@ dependencies {
 <dependency>
     <groupId>com.rafalzajfert</groupId>
     <artifactId>android-logger</artifactId>
-    <version>1.1.16</version>
+    <version>1.1.18</version>
 </dependency>
 ```
 
@@ -85,27 +85,27 @@ New *LoggerConfig* is initialized with **default _LogcatLogger_**. If you want, 
 ```java
 LoggerConfig loggerConfig = new LoggerConfig()
         .removeLogger(LoggerConfig.DEFAULT_LOGGER)
-        .setTag(Logger.PARAM_CODE_LINE)
+        .setTag(Logger.CODE_LINE)
         .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
         .catchUncaughtExceptions()
         .setLevel(Level.VERBOSE)
-        .setSeparator(Logger.PARAM_SPACE)
-        .setThrowableSeparator(Logger.PARAM_NEW_LINE)
+        .setSeparator(Logger.SPACE)
+        .setThrowableSeparator(Logger.NEW_LINE)
         .addLogger(fileLogger);
 
 Logger.setBaseConfig(loggerConfig);
 ```
 `setTag()` - Tag, used to identify source of a log message, default it's class name with line number  
 You can also use auto generated values:  
-*Logger.PARAM_SIMPLE_CLASS_NAME  
-Logger.PARAM_CLASS_NAME  
-Logger.PARAM_METHOD_NAME  
-Logger.PARAM_FILE_NAME  
-Logger.PARAM_LINE_NUMBER  
-Logger.PARAM_LEVEL  
-Logger.PARAM_SHORT_LEVEL  
-Logger.PARAM_TIME_  
-Logger.PARAM_CODE_LINE*  
+*Logger.SIMPLE_CLASS_NAME  
+Logger.CLASS_NAME  
+Logger.METHOD_NAME  
+Logger.FILE_NAME  
+Logger.LINE_NUMBER  
+Logger.LEVEL  
+Logger.SHORT_LEVEL  
+Logger.TIME_  
+Logger.CODE_LINE*  
 
 `setLevel()` - Minimal log level, all messages with level below this will be ignored.  
 Levels order: **_VERBOSE_** < **_DEBUG_** < **_INFO_** < **_WARNING_** < **_ERROR_** < **_SILENT_**
@@ -133,7 +133,7 @@ Logger.setBaseConfig(loggerConfig);
 ```properties
 logger=logcat, textView, file, toast
 logger.level=VERBOSE
-logger.tag=$CodeLine
+logger.tag=$CodeLine$
 logger.logThrowableWithStackTrace=true
 logger.separator=\u0020
 logger.throwableSeparator=\r\n
@@ -143,26 +143,26 @@ logger.useANRWatchDog=true
 
 logger.textView=com.rafalzajfert.androidlogger.textview.TextViewLogger
 logger.textView.level=INFO
-logger.textView.tag=$CodeLine
+logger.textView.tag=$CodeLine$
 logger.textView.logThrowableWithStackTrace=true
 logger.textView.inNewLine=true
 logger.textView.printMethod=APPEND
 
 logger.file=com.rafalzajfert.androidlogger.file.FileLogger
 logger.file.level=WARNING
-logger.file.tag=$ShortLevel $CurrentTime $CodeLine
+logger.file.tag=$ShortLevel$ $CurrentTime$ $CodeLine$
 logger.file.logThrowableWithStackTrace=true
-logger.file.externalFile=loggerLogs/$Date/log.txt
+logger.file.externalFile=loggerLogs/$Date$/log.txt
 logger.file.datePattern=dd_MM_yyyy
 
 logger.logcat=com.rafalzajfert.androidlogger.logcat.LogcatLogger
 logger.logcat.level=VERBOSE
-logger.logcat.tag=$CodeLine
+logger.logcat.tag=$CodeLine$
 logger.logcat.logThrowableWithStackTrace=true
 
 logger.toast=com.rafalzajfert.androidlogger.toast.ToastLogger
 logger.toast.level=ERROR
-logger.toast.tag=$CodeLine
+logger.toast.tag=$CodeLine$
 logger.toast.logThrowableWithStackTrace=false
 logger.toast.duration=SHORT
 ```
