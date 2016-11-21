@@ -36,7 +36,6 @@ import static android.widget.Toast.LENGTH_SHORT;
 @SuppressWarnings("unused")
 public class ToastLoggerConfig extends BaseLoggerConfig<ToastLoggerConfig> {
 
-    /** @hide */
     @IntDef({LENGTH_SHORT, LENGTH_LONG})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Duration {}

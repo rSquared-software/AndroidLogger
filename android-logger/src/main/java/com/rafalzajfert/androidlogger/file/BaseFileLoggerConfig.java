@@ -136,8 +136,8 @@ public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extend
     }
 
     /**
-     * Pattern used to format date with {@link SimpleDateFormat}. <br/>Default: <code>{@value #DATE_PATTERN}</code>
-     * <br/><br/>
+     * Pattern used to format date with {@link SimpleDateFormat}. <p>Default: <code>{@value #DATE_PATTERN}</code>
+     * <p>
      * <b>Note:</b> if you changed DateFormat with {@link #setDateFormat(DateFormat)} before call this method then it will be overwritten
      */
     public E setDatePattern(@NonNull String datePattern) {
@@ -154,8 +154,8 @@ public abstract class BaseFileLoggerConfig<E extends BaseLoggerConfig<E>> extend
     }
 
     /**
-     * {@link DateFormat}  used to format log time in the log tag and log message.<br/>Default: <code>{@value #DATE_PATTERN}</code>
-     * <br/><br/>
+     * {@link DateFormat}  used to format log time in the log tag and log message.<p>Default: <code>{@value #DATE_PATTERN}</code>
+     * <p>
      * <b>Note:</b> If you change this parameter then {@link #datePattern} may be unused
      */
     public E setDateFormat(@NonNull DateFormat dateFormat) {

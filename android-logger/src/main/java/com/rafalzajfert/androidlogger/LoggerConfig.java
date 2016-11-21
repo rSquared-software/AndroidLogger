@@ -146,7 +146,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
     }
 
     /**
-     * Add logger to which you want send messages<br/>
+     * Add logger to which you want send messages<p>
      *
      * @param logger instance of Logger to used in global logging eg. {@link Logger#debug(Object)}
      * @return Config this baseConfig instance
@@ -159,7 +159,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
     }
 
     /**
-     * Add logger to which you want send messages<br/>
+     * Add logger to which you want send messages<p>
      *
      * @param logger instance of Logger to used in global logging eg. {@link Logger#debug(Object)}
      * @return Config this baseConfig instance
@@ -206,9 +206,9 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
     }
 
     /**
-     * Create new {@link LoggableANRWatchDog} thread.<br/><br/>
-     * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><br/>
-     * <b>NOTE: </b>This should not be used in your final release<br/>
+     * Create new {@link LoggableANRWatchDog} thread.<p>
+     * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><p>
+     * <b>NOTE: </b>This should not be used in your final release<p>
      * <b>NOTE2: </b>Use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).
      */
     @NonNull
@@ -219,7 +219,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
     }
 
     /**
-     * Setup Thread to catch and log all uncaught exceptions<br/>
+     * Setup Thread to catch and log all uncaught exceptions<p>
      * This method not prevent app crash and it should not be used in your final release.
      */
     @NonNull
@@ -228,7 +228,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
     }
 
     /**
-     * Setup Thread to catch and log all uncaught exceptions<br/>
+     * Setup Thread to catch and log all uncaught exceptions<p>
      * This method not prevent app crash and it should not be used in your final release.
      */
     @NonNull
@@ -294,8 +294,8 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
     }
 
     /**
-     * Pattern used to format date with {@link SimpleDateFormat}. <br/>Default: <code>{@value #DATE_PATTERN}</code>
-     * <br/><br/>
+     * Pattern used to format date with {@link SimpleDateFormat}. <p>Default: <code>{@value #DATE_PATTERN}</code>
+     * <p>
      * <b>Note:</b> if you changed DateFormat with {@link #setDateFormat(SimpleDateFormat)} before call this method then it will be overwritten
      */
     public LoggerConfig setDatePattern(@NonNull String datePattern) {
@@ -315,7 +315,7 @@ public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Conf
 
     /**
      * {@link SimpleDateFormat}  used to format log time in the log tag and log message
-     * <br/><br/>
+     * <p>
      * <b>Note:</b> If you change this parameter then {@link #datePattern} may be unused
      */
     public LoggerConfig setDateFormat(@NonNull SimpleDateFormat dateFormat) {

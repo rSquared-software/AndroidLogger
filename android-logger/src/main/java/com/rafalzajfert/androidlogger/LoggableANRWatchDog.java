@@ -20,7 +20,7 @@ import com.github.anrwatchdog.ANRError;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
 
 /**
- * LoggableANRWatchDog class<br/><br/>
+ * LoggableANRWatchDog class<p>
  * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a>
  *
  * @author Rafal Zajfert
@@ -52,7 +52,7 @@ public class LoggableANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
     }
 
     /**
-     * prevent app crash in the case that an ANR is detected.<br/><br/>
+     * prevent app crash in the case that an ANR is detected.<p>
      * <b>NOTE:</b> This is experimental future and may not working correctly
      */
     public LoggableANRWatchDog preventCrash(boolean preventCrash) {

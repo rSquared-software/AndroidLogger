@@ -57,19 +57,19 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     }
 
     /**
-     * Tag, used to identify source of a log message<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
-     * {@link Logger#CLASS_NAME CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * Tag, used to identify source of a log message<p>
+     * <p>
+     * You can also use auto generated values:<p>
+     * {@link Logger#CLASS_NAME CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      */
     @SuppressWarnings("unchecked")

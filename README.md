@@ -5,7 +5,7 @@ Simple and useful Android logger library.
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.1.18'
+    compile 'com.rafalzajfert:android-logger:1.1.19'
 }
 ```
 
@@ -17,7 +17,7 @@ dependencies {
 <dependency>
     <groupId>com.rafalzajfert</groupId>
     <artifactId>android-logger</artifactId>
-    <version>1.1.18</version>
+    <version>1.1.19</version>
 </dependency>
 ```
 

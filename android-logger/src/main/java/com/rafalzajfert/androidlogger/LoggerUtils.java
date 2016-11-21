@@ -21,8 +21,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,17 +35,13 @@ import java.util.Map;
  */
 abstract class LoggerUtils {
 
-    enum StackTraceField {
-        SIMPLE_CLASS_NAME, FULL_CLASS_NAME, FILE_NAME, METHOD_NAME, LINE_NUMBER
-    }
-
     private static Context applicationContext;
 
     @SafeVarargs
     static <T> String array2String(@NonNull String separator, @NonNull T... array) {
         StringBuilder builder = new StringBuilder();
         for (T el : array) {
-            if (builder.length() > 0){
+            if (builder.length() > 0) {
                 builder.append(separator);
             }
             builder.append(el);
@@ -80,7 +79,33 @@ abstract class LoggerUtils {
      */
     @NonNull
     static String throwableToString(@NonNull Throwable throwable, boolean withStackTrace) {
-        return withStackTrace ? Log.getStackTraceString(throwable) : throwable.getMessage();
+        if (withStackTrace) {
+            Writer writer = null;
+            PrintWriter printWriter = null;
+            try {
+                writer = new StringWriter();
+                printWriter = new PrintWriter(writer);
+                throwable.printStackTrace(printWriter);
+                return writer.toString();
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (IOException e) {
+                        //ignored
+                    }
+                }
+
+                if (printWriter != null) {
+                    try {
+                        printWriter.close();
+                    } catch (Exception e) {
+                        //ignored
+                    }
+                }
+            }
+        }
+        return throwable.getMessage();
     }
 
     /**
@@ -195,5 +220,9 @@ abstract class LoggerUtils {
         } catch (Exception e) {
             throw new IllegalStateException("Cannot retrieve application context, please config logger programmatically");
         }
+    }
+
+    enum StackTraceField {
+        SIMPLE_CLASS_NAME, FULL_CLASS_NAME, FILE_NAME, METHOD_NAME, LINE_NUMBER
     }
 }

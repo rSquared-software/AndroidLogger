@@ -71,8 +71,8 @@ abstract class BaseLogger {
     public static final String CURRENT_TIME = "$CurrentTime$";
 
     /**
-     * This parameter can be used in tag pattern or in message to log and it will be replaced with file name and line number.<br/>
-     * This param allows you to jump to code line via logcat console.<br/><br/>
+     * This parameter can be used in tag pattern or in message to log and it will be replaced with file name and line number.<p>
+     * This param allows you to jump to code line via logcat console.<p>
      * Same as: <code>"({@link #FILE_NAME}:{@link #LINE_NUMBER})"</code>
      */
     public static final String CODE_LINE = "$CodeLine$";
@@ -141,18 +141,17 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#INFO INFO} message<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * Send an {@link Level#INFO INFO} message<p>
+     * <p>
+     * You can also use auto generated values:<p>
+     * {@link Logger#CLASS_NAME CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -162,18 +161,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#INFO INFO} message formatted with args objects<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#INFO INFO} message formatted with args objects<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -184,18 +183,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#INFO INFO} message created
-     * from multiple part<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * from multiple part<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -214,18 +213,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#INFO INFO} message with
-     * {@link Throwable} log<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * {@link Throwable} log<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -235,18 +234,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#ERROR ERROR} message<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#ERROR ERROR} message<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -256,18 +255,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#ERROR ERROR} message formatted with args objects<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#ERROR ERROR} message formatted with args objects<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -278,18 +277,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#ERROR ERROR} message created
-     * from multiple part<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * from multiple part<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -308,18 +307,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#ERROR ERROR} message with
-     * {@link Throwable} log<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * {@link Throwable} log<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -329,18 +328,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#DEBUG DEBUG} message<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#DEBUG DEBUG} message<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -350,18 +349,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -372,18 +371,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#DEBUG DEBUG} message created
-     * from multiple part<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * from multiple part<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -402,18 +401,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#DEBUG DEBUG} message with
-     * {@link Throwable} log<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * {@link Throwable} log<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -423,18 +422,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#VERBOSE VERBOSE} message<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#VERBOSE VERBOSE} message<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -444,18 +443,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -466,18 +465,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#VERBOSE VRBOSE} message
-     * created from multiple part<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * created from multiple part<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -496,18 +495,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#VERBOSE VERBOSE} message
-     * with {@link Throwable} log<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * with {@link Throwable} log<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -517,18 +516,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#WARNING WARNING} message<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#WARNING WARNING} message<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -538,18 +537,18 @@ abstract class BaseLogger {
     }
 
     /**
-     * Send an {@link Level#WARNING WARNING} message formatted with args objects<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#WARNING WARNING} message formatted with args objects<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -560,18 +559,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#WARNING WARNING} message
-     * created from multiple part<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * created from multiple part<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -590,18 +589,18 @@ abstract class BaseLogger {
 
     /**
      * Send an {@link Level#WARNING WARNING} message
-     * with {@link Throwable} log<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * with {@link Throwable} log<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send

@@ -103,7 +103,7 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * This method should return true if message with specified {@link Level} can be printed.<br/>
+     * This method should return true if message with specified {@link Level} can be printed.<p>
      * If your Logger have not any additional restriction to the level then this method should return <b>true</b>.
      *
      * @param level current message {@link Level}
@@ -150,19 +150,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#INFO INFO} message<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#INFO INFO} message<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -172,19 +172,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#INFO INFO} message formatted with args objects<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#INFO INFO} message formatted with args objects<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -195,19 +195,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#INFO INFO} message created
-     * from multiple part<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object...)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * from multiple part<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object...)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -218,8 +218,8 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#INFO INFO} log of
-     * {@link Throwable}<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Throwable)} method instead
+     * {@link Throwable}<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Throwable)} method instead
      */
     public void i(Throwable th) {
         print(INFO, null, th);
@@ -227,19 +227,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#INFO INFO} message with
-     * {@link Throwable} log<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object, Throwable)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * {@link Throwable} log<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object, Throwable)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -249,19 +249,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#ERROR ERROR} message<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#ERROR ERROR} message<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -271,19 +271,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#ERROR ERROR} message formatted with args objects<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#ERROR ERROR} message formatted with args objects<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -294,19 +294,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#ERROR ERROR} message created
-     * from multiple part<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object...)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * from multiple part<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object...)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -317,8 +317,8 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#ERROR ERROR} log of
-     * {@link Throwable}<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Throwable)} method instead
+     * {@link Throwable}<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Throwable)} method instead
      */
     public void e(Throwable th) {
         print(ERROR, null, th);
@@ -326,19 +326,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#ERROR ERROR} message with
-     * {@link Throwable} log<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object, Throwable)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * {@link Throwable} log<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object, Throwable)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -348,19 +348,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#DEBUG DEBUG} message<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#DEBUG DEBUG} message<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -370,19 +370,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -393,19 +393,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#DEBUG DEBUG} message created
-     * from multiple part<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object...)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * from multiple part<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object...)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -416,8 +416,8 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#DEBUG DEBUG} log of
-     * {@link Throwable}<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Throwable)} method instead
+     * {@link Throwable}<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Throwable)} method instead
      */
     public void d(Throwable th) {
         print(DEBUG, null, th);
@@ -425,19 +425,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#DEBUG DEBUG} message with
-     * {@link Throwable} log<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object, Throwable)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * {@link Throwable} log<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object, Throwable)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -447,19 +447,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#VERBOSE VERBOSE} message<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#VERBOSE VERBOSE} message<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -469,19 +469,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -492,19 +492,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#VERBOSE VRBOSE} message
-     * created from multiple part<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object...)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * created from multiple part<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object...)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -515,8 +515,8 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#VERBOSE VERBOSE} log
-     * of {@link Throwable}<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Throwable)} method instead
+     * of {@link Throwable}<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Throwable)} method instead
      */
     public void v(Throwable th) {
         print(VERBOSE, null, th);
@@ -524,19 +524,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#VERBOSE VERBOSE} message
-     * with {@link Throwable} log<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object, Throwable)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * with {@link Throwable} log<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object, Throwable)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -546,19 +546,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#WARNING WARNING} message<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#WARNING WARNING} message<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -568,19 +568,19 @@ public abstract class Logger extends BaseLogger {
     }
 
     /**
-     * Send an {@link Level#WARNING WARNING} message formatted with args objects<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * Send an {@link Level#WARNING WARNING} message formatted with args objects<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send
@@ -591,19 +591,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#WARNING WARNING} message
-     * created from multiple part<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object...)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * created from multiple part<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object...)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message parts to send
@@ -614,8 +614,8 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#WARNING WARNING} log
-     * of {@link Throwable}<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Throwable)} method instead
+     * of {@link Throwable}<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Throwable)} method instead
      */
     public void w(Throwable th) {
         print(WARNING, null, th);
@@ -623,19 +623,19 @@ public abstract class Logger extends BaseLogger {
 
     /**
      * Send an {@link Level#WARNING WARNING} message
-     * with {@link Throwable} log<br/>
-     * <br/><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object, Throwable)} method instead<br/>
-     * <br/>
-     * You can also use auto generated values:<br/>
+     * with {@link Throwable} log<p>
+     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object, Throwable)} method instead<p>
+     * <p>
+     * You can also use auto generated values:<p>
      * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<br/>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<br/>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<br/>
-     * {@link Logger#FILE_NAME FILE_NAME}<br/>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<br/>
-     * {@link Logger#LEVEL LEVEL}<br/>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<br/>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<br/>
+     * CLASS_NAME}<p>
+     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+     * {@link Logger#FILE_NAME FILE_NAME}<p>
+     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+     * {@link Logger#LEVEL LEVEL}<p>
+     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
      * {@link Logger#CODE_LINE CODE_LINE}
      *
      * @param message message to send

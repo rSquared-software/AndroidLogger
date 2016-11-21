@@ -32,7 +32,7 @@ import java.io.RandomAccessFile;
 
 /**
  * {@link Logger Logger} that save log messages in the
- * file<br/>
+ * file<p>
  * default file is saved in root directory of the default external storage with name "logger.log"
  *
  * @author Rafal Zajfert

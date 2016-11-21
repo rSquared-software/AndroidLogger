@@ -19,15 +19,14 @@ package com.rafalzajfert.androidlogger;
 
 /**
  * Level of {@link com.rafalzajfert.androidlogger.Logger Logger} used to limit logged
- * message types<br/>
- * <br/>
+ * message types<p>
+ * <p>
  * e.g if you set <code>LogLevel</code> as {@link #WARNING} then only massages
  * sent with level {@link #WARNING} or {@link #ERROR} will be sent, other will
- * be ignored<br/>
- * <br/>
- * <p/>
- * Level order: {@link #VERBOSE} < {@link #DEBUG} < {@link #INFO} <
- * {@link #WARNING} < {@link #ERROR} < {@link #SILENT}
+ * be ignored<p>
+ * <p>
+ * Level order: {@link #VERBOSE} &lt; {@link #DEBUG} &lt; {@link #INFO} &lt;
+ * {@link #WARNING} &lt; {@link #ERROR} &lt; {@link #SILENT}
  *
  * @author Rafal Zajfert
  * @version 1.0.0 (04/02/2015)
