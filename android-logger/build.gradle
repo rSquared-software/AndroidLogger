@@ -9,7 +9,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 24
         versionCode 2
-        versionName "1.1.19"
+        versionName "1.1.20"
     }
     buildTypes {
         release {
@@ -46,7 +46,7 @@ publish {
     userOrg = 'rafalzajfert'
     groupId = 'com.rafalzajfert'
     artifactId = 'android-logger'
-    publishVersion = '1.1.19'
+    publishVersion = '1.1.20'
     desc = 'Simple Android logger library'
     website = 'https://github.com/RafalZajfert/android-logger'
     bintrayUser = properties.getProperty("bintray.oss.user")

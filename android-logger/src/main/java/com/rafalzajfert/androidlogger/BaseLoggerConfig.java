@@ -31,6 +31,7 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     protected Level level = Level.VERBOSE;
     protected String tag;
     protected Boolean logThrowableWithStackTrace;
+    protected Boolean prettyJson;
 
     /**
      * Minimal {@link Level Level} of message to sent. Default it is {@link Level#VERBOSE}
@@ -101,6 +102,16 @@ public abstract class BaseLoggerConfig<E extends BaseLoggerConfig> {
     @Nullable
     public Boolean isLogThrowableWithStackTrace() {
         return logThrowableWithStackTrace;
+    }
+
+    @SuppressWarnings("unchecked")
+    public E setPrettyJson(@Nullable Boolean prettyJson) {
+        this.prettyJson = prettyJson;
+        return (E) this;
+    }
+
+    public boolean isPrettyJson() {
+        return prettyJson == null || prettyJson;
     }
 
     @CallSuper

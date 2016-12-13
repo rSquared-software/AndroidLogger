@@ -21,6 +21,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
 
 import static com.rafalzajfert.androidlogger.Level.DEBUG;
@@ -38,17 +42,16 @@ import static com.rafalzajfert.androidlogger.Level.WARNING;
 @SuppressWarnings("unused")
 public abstract class Logger extends BaseLogger {
 
+    private static final int CHUNK_SIZE = 3000;
+    private final boolean hasConfig = this instanceof ConfigSetter;
     /**
      * Logger tag used to identify logger. This tag will not be used to write log message
      */
     protected String loggerTag;
-    private static final int CHUNK_SIZE = 3000;
 
     public String getLoggerTag() {
         return loggerTag;
     }
-
-    private final boolean hasConfig = this instanceof ConfigSetter;
 
     /**
      * print message, if you want print tag then call {@link #getTag(Level)} method
@@ -61,15 +64,15 @@ public abstract class Logger extends BaseLogger {
     @Nullable
     protected abstract BaseLoggerConfig getConfig();
 
-    protected void init(@NonNull Map<String, String> config){
+    protected void init(@NonNull Map<String, String> config) {
         if (getConfig() != null) {
             getConfig().read(config);
         }
     }
 
     @Nullable
-    private BaseLoggerConfig getConfigIfDefined(){
-        if (this.getConfig()!=null){
+    private BaseLoggerConfig getConfigIfDefined() {
+        if (this.getConfig() != null) {
             return this.getConfig();
         }
         return null;
@@ -82,22 +85,22 @@ public abstract class Logger extends BaseLogger {
         BaseLoggerConfig config = getConfigIfDefined();
         if (config == null || config.getTag() == null) {
             return LoggerUtils.formatTag(Logger.baseConfig.getTag(), level);
-        }else {
+        } else {
             return LoggerUtils.formatTag(config.getTag(), level);
         }
     }
 
-    protected Context getApplicationContext(){
-       return LoggerUtils.getApplicationContext();
+    protected Context getApplicationContext() {
+        return LoggerUtils.getApplicationContext();
     }
 
     /**
      * @return formatted message
      */
     protected String getMessage(Object msg, Level level) {
-        if (msg == null){
+        if (msg == null) {
             return null;
-        }else{
+        } else {
             return LoggerUtils.formatMessage(msg, level);
         }
     }
@@ -113,17 +116,37 @@ public abstract class Logger extends BaseLogger {
         return config == null || config.isLevelAllowed(level);
     }
 
+    protected boolean isPrettyJsonEnabled() {
+        BaseLoggerConfig config = getConfigIfDefined();
+        return config == null || config.isPrettyJson();
+    }
+
     void print(Level level, Object message, Throwable throwable) {
         if (Logger.baseConfig.isLevelAllowed(level) && isLevelAllowed(level)) {
             String msg = getMessage(message, level);
             StringBuilder builder = new StringBuilder();
 
-            if (msg == null && throwable == null){
+            if (msg == null && throwable == null) {
                 builder.append("null");
-            } else if (TextUtils.isEmpty(msg) && throwable == null){
+            } else if (TextUtils.isEmpty(msg) && throwable == null) {
                 builder.append("[empty log message]");
-            } else if (!TextUtils.isEmpty(msg)){
-                builder.append(msg);
+            } else if (!TextUtils.isEmpty(msg)) {
+                if (Logger.baseConfig.isPrettyJson() && isPrettyJsonEnabled()){
+                    boolean json = false;
+                    JSONObject jsonObject = toJsonObject(msg);
+                    if (jsonObject != null) {
+                        printJson(level, jsonObject);
+                    } else {
+                        JSONArray jsonArray = toJsonArray(msg);
+                        if (jsonArray != null) {
+                            printJson(level, jsonArray);
+                        } else {
+                            builder.append(msg);
+                        }
+                    }
+                }else{
+                    builder.append(msg);
+                }
             }
 
             if (throwable != null) {
@@ -132,12 +155,54 @@ public abstract class Logger extends BaseLogger {
                 }
                 builder.append(LoggerUtils.throwableToString(throwable, logWithStackTrace()));
             }
-            String text = builder.toString();
-            for (int i = 0; i < text.length(); i+= CHUNK_SIZE) {
-                print(level, text.substring(i, Math.min(text.length(), i + CHUNK_SIZE)));
+            if (builder.length() > 0) {
+                String text = builder.toString();
+                for (int i = 0; i < text.length(); i += CHUNK_SIZE) {
+                    print(level, text.substring(i, Math.min(text.length(), i + CHUNK_SIZE)));
+                }
             }
         }
     }
+
+    private void printJson(Level level, JSONObject jsonObject) {
+        try {
+            printJson(level, jsonObject.toString(3));
+        } catch (JSONException ignore) {
+        }
+    }
+
+    private void printJson(Level level, JSONArray jsonArray) {
+        try {
+            printJson(level, jsonArray.toString(3));
+        } catch (JSONException ignore) {
+        }
+    }
+
+    private void printJson(Level level, String json) {
+        String[] lines = json.split("\\r?\\n");
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            print(level, line);
+        }
+
+    }
+
+    private JSONObject toJsonObject(String value) {
+        try {
+            return new JSONObject(value);
+        } catch (JSONException ex) {
+            return null;
+        }
+    }
+
+    private JSONArray toJsonArray(String value) {
+        try {
+            return new JSONArray(value);
+        } catch (JSONException ex1) {
+            return null;
+        }
+    }
+
 
     private boolean logWithStackTrace() {
         BaseLoggerConfig config = getConfigIfDefined();

@@ -30,6 +30,7 @@ import com.rafalzajfert.androidlogger.LoggerConfig;
 import com.rafalzajfert.androidlogger.file.RollingFileLogger;
 import com.rafalzajfert.androidlogger.file.RollingFileLoggerConfig;
 import com.rafalzajfert.androidlogger.logcat.LogcatLogger;
+import com.rafalzajfert.androidlogger.logcat.LogcatLoggerConfig;
 import com.rafalzajfert.androidlogger.textview.TextViewLogger;
 import com.rafalzajfert.androidlogger.toast.ToastLogger;
 
@@ -57,6 +58,8 @@ public class MainActivity extends Activity {
         logTextView = (TextView) findViewById(R.id.log);
 
         Logger.error(getString(R.string.lorem_ipsum));
+
+        Logger.error("[{ \"title\": \"Example Schema\", \"type\": \"object\", \"properties\": { \"firstName\": { \"type\": \"string\" }, \"lastName\": { \"type\": \"string\" }, \"age\": { \"description\": \"Age in years\", \"type\": \"integer\", \"minimum\": 0 } }, \"required\": [\"firstName\", \"lastName\"] },{ \"title\": \"Example Schema\", \"type\": \"object\", \"properties\": { \"firstName\": { \"type\": \"string\" }, \"lastName\": { \"type\": \"string\" }, \"age\": { \"description\": \"Age in years\", \"type\": \"integer\", \"minimum\": 0 } }, \"required\": [\"firstName\", \"lastName\"] }]");
 
 //        LogcatLoggerConfig logcatLoggerConfig = new LogcatLoggerConfig()
 //                .setTag(Logger.FULL_CLASS_NAME + " " + Logger.METHOD_NAME);
