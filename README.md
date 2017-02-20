@@ -5,19 +5,19 @@ Simple and useful Android logger library.
 
 ```Gradle
 dependencies {
-    compile 'com.rafalzajfert:android-logger:1.1.20'
+    compile 'software.rsquared:android-logger:1.2.0'
 }
 ```
 
-[ ![Download](https://api.bintray.com/packages/rafalzajfert/maven/android-logger/images/download.svg) ](https://bintray.com/rafalzajfert/maven/android-logger/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/rsquared/maven/android-logger/images/download.svg) ](https://bintray.com/rsquared/maven/android-logger/_latestVersion)
 
 ##Maven Dependency
 
 ```Maven
 <dependency>
-    <groupId>com.rafalzajfert</groupId>
+    <groupId>software.rsquared</groupId>
     <artifactId>android-logger</artifactId>
-    <version>1.1.20</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
@@ -141,26 +141,26 @@ logger.datePattern=dd/MM/yyyy HH:mm:ss:SSS
 logger.catchUncaughtExceptions=true
 logger.useANRWatchDog=true
 
-logger.textView=com.rafalzajfert.androidlogger.textview.TextViewLogger
+logger.textView=software.rsquared.androidlogger.textview.TextViewLogger
 logger.textView.level=INFO
 logger.textView.tag=$CodeLine$
 logger.textView.logThrowableWithStackTrace=true
 logger.textView.inNewLine=true
 logger.textView.printMethod=APPEND
 
-logger.file=com.rafalzajfert.androidlogger.file.FileLogger
+logger.file=software.rsquared.androidlogger.file.FileLogger
 logger.file.level=WARNING
 logger.file.tag=$ShortLevel$ $CurrentTime$ $CodeLine$
 logger.file.logThrowableWithStackTrace=true
 logger.file.externalFile=loggerLogs/$Date$/log.txt
 logger.file.datePattern=dd_MM_yyyy
 
-logger.logcat=com.rafalzajfert.androidlogger.logcat.LogcatLogger
+logger.logcat=software.rsquared.androidlogger.logcat.LogcatLogger
 logger.logcat.level=VERBOSE
 logger.logcat.tag=$CodeLine$
 logger.logcat.logThrowableWithStackTrace=true
 
-logger.toast=com.rafalzajfert.androidlogger.toast.ToastLogger
+logger.toast=software.rsquared.androidlogger.toast.ToastLogger
 logger.toast.level=ERROR
 logger.toast.tag=$CodeLine$
 logger.toast.logThrowableWithStackTrace=false
@@ -169,11 +169,11 @@ logger.toast.duration=SHORT
 
 ##Developed By
 
- * Rafal Zajfert - <rafal.zajfert@gmail.com>
+ * Rafal Zajfert - <rz@rsquared.software>
 
 ##License
 
-    Copyright 2015 Rafal Zajfert
+    Copyright 2015 rSquared s.c. R. Orlik, R. Zajfert
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
