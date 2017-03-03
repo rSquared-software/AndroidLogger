@@ -11,16 +11,6 @@ dependencies {
 
 [ ![Download](https://api.bintray.com/packages/rsquared/maven/android-logger/images/download.svg) ](https://bintray.com/rsquared/maven/android-logger/_latestVersion)
 
-##Maven Dependency
-
-```Maven
-<dependency>
-    <groupId>software.rsquared</groupId>
-    <artifactId>android-logger</artifactId>
-    <version>1.2.0</version>
-</dependency>
-```
-
 ##Sample Usage
 
 ```java
