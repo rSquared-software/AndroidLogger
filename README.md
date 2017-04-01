@@ -1,7 +1,7 @@
 # Logger
 Simple and useful Android logger library.
 
-##Gradle Dependency (jCenter)
+## Gradle Dependency (jCenter)
 
 ```Gradle
 dependencies {
@@ -11,7 +11,7 @@ dependencies {
 
 [ ![Download](https://api.bintray.com/packages/rsquared/maven/android-logger/images/download.svg) ](https://bintray.com/rsquared/maven/android-logger/_latestVersion)
 
-##Sample Usage
+## Sample Usage
 
 ```java
 //Send a message to all loggers defined in LoggerConfig
@@ -66,8 +66,8 @@ Logger.getBaseConfig().removeLogger("fileLoggerTag");
 Logger.getBaseConfig().removeLogger(logcatLogger);
 ```
 
-##Configuration
-###Base Configuration
+## Configuration
+### Base Configuration
 
 Global configuration sets log parameters for all loggers from this library.  
 New *LoggerConfig* is initialized with **default _LogcatLogger_**. If you want, you can remove it by calling *removeLogger(String)* method with *LoggerConfig.DEFAULT_LOGGER* tag
@@ -112,13 +112,13 @@ You can create custom logger by extending StandardLogger class.
 
 Now logger can by configured by the properties file
 
-####Initializing
+#### Initializing
 ```java
 LoggerConfig config = new LoggerConfig(R.raw.logger);
 Logger.setBaseConfig(loggerConfig);
 ```
 
-####Sample fully defined properties file 
+#### Sample fully defined properties file 
 *(undefined property will be initialized with default values)*
 ```properties
 logger=logcat, textView, file, toast
@@ -157,11 +157,11 @@ logger.toast.logThrowableWithStackTrace=false
 logger.toast.duration=SHORT
 ```
 
-##Developed By
+## Developed By
 
  * Rafal Zajfert - <rz@rsquared.software>
 
-##License
+## License
 
     Copyright 2017 rSquared s.c. R. Orlik, R. Zajfert
 
