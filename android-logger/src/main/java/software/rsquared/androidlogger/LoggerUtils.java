@@ -131,12 +131,22 @@ abstract class LoggerUtils {
         if (map != null) {
             text = replaceCodeLine(text);
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                text = text.replace(entry.getKey(), entry.getValue());
+                String target = entry.getKey();
+                String replacement = entry.getValue();
+                if (target != null && replacement != null) {
+                    text = text.replace(target, replacement);
+                }
             }
         }
-        text = text.replace(Logger.LEVEL, level.name());
-        text = text.replace(Logger.SHORT_LEVEL, level.name().substring(0, 1));
-        text = text.replace(Logger.CURRENT_TIME, Logger.getTime());
+        String levelName = level.name();
+        if (levelName != null) {
+            text = text.replace(Logger.LEVEL, levelName);
+            text = text.replace(Logger.SHORT_LEVEL, levelName.substring(0, 1));
+        }
+        String time = Logger.getTime();
+        if (time != null) {
+            text = text.replace(Logger.CURRENT_TIME, time);
+        }
 
         return text;
     }

@@ -5,7 +5,7 @@ Simple and useful Android logger library.
 
 ```Gradle
 dependencies {
-    compile 'software.rsquared:android-logger:1.2.0'
+    compile 'software.rsquared:android-logger:1.2.1'
 }
 ```
 
