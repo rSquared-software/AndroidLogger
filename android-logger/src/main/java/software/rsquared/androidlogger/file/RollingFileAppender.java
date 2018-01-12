@@ -16,14 +16,10 @@
 
 package software.rsquared.androidlogger.file;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import software.rsquared.androidlogger.ConfigSetter;
-import software.rsquared.androidlogger.Logger;
-
 import java.io.File;
 import java.io.IOException;
+
+import software.rsquared.androidlogger.Logger;
 
 /**
  * {@link Logger Logger} that save log messages in the
@@ -31,32 +27,26 @@ import java.io.IOException;
  * default file is saved in root directory of the default external storage with name "logger.log"
  *
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class RollingFileLogger extends BaseFileLogger implements ConfigSetter<RollingFileLoggerConfig> {
+public class RollingFileAppender extends BaseFileAppender  {
 
-    protected RollingFileLoggerConfig config = new RollingFileLoggerConfig();
+    protected RollingFileAppenderConfig config;
 
-    public RollingFileLogger() {
+    public RollingFileAppender() {
     }
 
     /**
      * {@inheritDoc}
      */
-    @Nullable
     @Override
-    public RollingFileLoggerConfig getConfig() {
+    public RollingFileAppenderConfig getConfig() {
+        if (config == null) {
+            config =  new RollingFileAppenderConfig();
+        }
         return config;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setConfig(@NonNull RollingFileLoggerConfig config) {
-        this.config = config;
-    }
 
     @Override
     protected synchronized void writeToFile(File file, String string) {
@@ -66,7 +56,7 @@ public class RollingFileLogger extends BaseFileLogger implements ConfigSetter<Ro
         }
     }
 
-    private void rollOver(File file) {
+    private boolean rollOver(File file) {
         int backupsCount = config.getMaxFileBackupCount();
         File f = new File(file.getAbsolutePath() + ".bac" + backupsCount);
         boolean success = true;
@@ -93,5 +83,6 @@ public class RollingFileLogger extends BaseFileLogger implements ConfigSetter<Ro
                 success = false;
             }
         }
+        return success;
     }
 }

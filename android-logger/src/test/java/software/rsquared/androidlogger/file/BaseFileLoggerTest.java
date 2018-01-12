@@ -5,7 +5,7 @@
 //import android.support.annotation.NonNull;
 //import android.support.annotation.Nullable;
 //
-//import com.rafalzajfert.androidlogger.BaseLoggerConfig;
+//import com.rafalzajfert.androidlogger._LoggerConfig;
 //import com.rafalzajfert.androidlogger.BuildConfig;
 //import com.rafalzajfert.androidlogger.Level;
 //import com.rafalzajfert.androidlogger.Logger;
@@ -30,15 +30,15 @@
 ///**
 // * Created by Rafał on 2015-12-14.
 // */
-//@org.robolectric.annotation.Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
+//@org.robolectric.annotation._Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 //@RunWith(RobolectricGradleTestRunner.class)
 //public class BaseFileLoggerTest {
 //
 //    private File logFileDir;
 //    private File testLogFileDir;
 //    private File logFile;
-//    private BaseFileLogger logger;
-//    private BaseFileLoggerConfig loggerConfig;
+//    private BaseFileAppender logger;
+//    private BaseFileAppenderConfig loggerConfig;
 //
 //    @Before
 //    @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -48,13 +48,13 @@
 //        logFile = new File(logFileDir, "log.txt");
 //        testLogFileDir.mkdirs();
 //
-//        loggerConfig = new BaseFileLoggerConfig() {
+//        loggerConfig = new BaseFileAppenderConfig() {
 //        };
 //
-//        logger = new BaseFileLogger() {
+//        logger = new BaseFileAppender() {
 //            @Nullable
 //            @Override
-//            protected BaseLoggerConfig getConfig() {
+//            protected _LoggerConfig getConfig() {
 //                return loggerConfig;
 //            }
 //        };
@@ -156,7 +156,7 @@
 //    public void testGetLogFile() throws Exception {
 //        File file = logger.getLogFile();
 //        assertNotNull(file);
-//        assertEquals(new File(Environment.getExternalStorageDirectory(), BaseFileLogger.DEFAULT_LOG_FILE), file);
+//        assertEquals(new File(Environment.getExternalStorageDirectory(), BaseFileAppender.DEFAULT_LOG_FILE), file);
 //        assertNotSame(logFile, file);
 //    }
 //
@@ -166,7 +166,7 @@
 //        File file = logger.getLogFile();
 //        assertNotNull(file);
 //        assertEquals(logFile, file);
-//        assertNotSame(new File(Environment.getExternalStorageDirectory(), BaseFileLogger.DEFAULT_LOG_FILE), file);
+//        assertNotSame(new File(Environment.getExternalStorageDirectory(), BaseFileAppender.DEFAULT_LOG_FILE), file);
 //    }
 //
 //

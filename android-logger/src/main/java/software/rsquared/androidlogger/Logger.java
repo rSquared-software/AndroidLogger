@@ -16,12 +16,7 @@
 
 package software.rsquared.androidlogger;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-
-import java.util.Map;
 
 import static software.rsquared.androidlogger.Level.DEBUG;
 import static software.rsquared.androidlogger.Level.ERROR;
@@ -35,628 +30,575 @@ import static software.rsquared.androidlogger.Level.WARNING;
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class Logger extends BaseLogger {
 
-    private static final int CHUNK_SIZE = 3000;
-    private final boolean hasConfig = this instanceof ConfigSetter;
-    /**
-     * Logger tag used to identify logger. This tag will not be used to write log message
-     */
-    protected String loggerTag;
+	/**
+	 * Space: " "
+	 */
+	public static final String SPACE = " ";
 
-    public String getLoggerTag() {
-        return loggerTag;
-    }
+	/**
+	 * New Line: "\n"
+	 */
+	public static final String NEW_LINE = "\n";
 
-    /**
-     * print message, if you want print tag then call {@link #getTag(Level)} method
-     */
-    protected abstract void print(Level level, String message);
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with simple name of class in which the logger will be called
+	 */
+	public static final String CLASS_NAME = "$ClassName$";
 
-    /**
-     * Get config for this instance of logger
-     */
-    @Nullable
-    protected abstract BaseLoggerConfig getConfig();
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with full name of class (with package) in which the logger will be called
+	 */
+	public static final String FULL_CLASS_NAME = "$FullClassName$";
 
-    protected void init(@NonNull Map<String, String> config) {
-        if (getConfig() != null) {
-            getConfig().read(config);
-        }
-    }
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with name of method in which the logger will be called
+	 */
+	public static final String METHOD_NAME = "$MethodName$";
 
-    @Nullable
-    private BaseLoggerConfig getConfigIfDefined() {
-        if (this.getConfig() != null) {
-            return this.getConfig();
-        }
-        return null;
-    }
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with name of file in which the logger will be called
+	 */
+	public static final String FILE_NAME = "$FileName$";
 
-    /**
-     * @return formatted tag
-     */
-    protected String getTag(Level level) {
-        BaseLoggerConfig config = getConfigIfDefined();
-        if (config == null || config.getTag() == null) {
-            return LoggerUtils.formatTag(baseConfig.getTag(), level);
-        } else {
-            return LoggerUtils.formatTag(config.getTag(), level);
-        }
-    }
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with line number in which the logger will be called
+	 */
+	public static final String LINE_NUMBER = "$LineNumber$";
 
-    protected Context getApplicationContext() {
-        return LoggerUtils.getApplicationContext();
-    }
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with level of the message
+	 */
+	public static final String LEVEL = "$Level$";
 
-    /**
-     * @return formatted message
-     */
-    protected String getMessage(Object msg, Level level) {
-        if (msg == null) {
-            return null;
-        } else {
-            return LoggerUtils.formatMessage(msg, level);
-        }
-    }
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with short version of the level (e.g. D for the {@link Level#DEBUG DEBUG}) of the message
+	 */
+	public static final String SHORT_LEVEL = "$ShortLevel$";
 
-    /**
-     * This method should return true if message with specified {@link Level} can be printed.<p>
-     * If your Logger have not any additional restriction to the level then this method should return <b>true</b>.
-     *
-     * @param level current message {@link Level}
-     */
-    protected boolean isLevelAllowed(@NonNull Level level) {
-        BaseLoggerConfig config = getConfigIfDefined();
-        return config == null || config.isLevelAllowed(level);
-    }
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with current time
+	 *
+	 * @see LoggerConfig#setTimePattern(String)
+	 */
+	public static final String CURRENT_TIME = "$CurrentTime$";
 
-    void print(Level level, Object message, Throwable throwable) {
-        if (baseConfig.overwrittenLevels.containsKey(level)) {
-            level = baseConfig.overwrittenLevels.get(level);
-        }
-        if (baseConfig.isLevelAllowed(level) && isLevelAllowed(level)) {
-            String msg = getMessage(message, level);
-            StringBuilder builder = new StringBuilder();
+	/**
+	 * This parameter can be used in appenderId pattern or in message to log and it will be replaced with file name and line number.<p>
+	 * This param allows you to jump to code line via logcat console.<p>
+	 * Same as: <code>"({@link #FILE_NAME}:{@link #LINE_NUMBER})"</code>
+	 */
+	public static final String CODE_LINE = "$CodeLine$";
 
-            if (msg == null && throwable == null) {
-                builder.append("null");
-            } else if (TextUtils.isEmpty(msg) && throwable == null) {
-                builder.append("[empty log message]");
-            } else if (!TextUtils.isEmpty(msg)) {
-                builder.append(msg);
-            }
+	Logger() {
+	}
 
-            if (throwable != null) {
-                if (builder.length() > 0) {
-                    builder.append(baseConfig.getThrowableSeparator());
-                }
-                builder.append(LoggerUtils.throwableToString(throwable, logWithStackTrace()));
-            }
-            if (builder.length() > 0) {
-                String text = builder.toString();
-                if (text.length() > CHUNK_SIZE) {
-                    for (String line : WordUtils.wrap(text, CHUNK_SIZE)) {
-                        print(level, line);
-                    }
-                } else {
-                    print(level, text);
-                }
-            }
-        }
-    }
+	/**
+	 * Global configuration for all logger appenders
+	 */
+	public static LoggerConfig getLoggerConfig() {
+		return LoggerConfig.getInstance();
+	}
 
-    private boolean logWithStackTrace() {
-        BaseLoggerConfig config = getConfigIfDefined();
-        Boolean logThrowableWithStackTrace = config == null ? null : config.isLogThrowableWithStackTrace();
-        if (config != null && logThrowableWithStackTrace != null) {
-            return logThrowableWithStackTrace;
-        } else {
-            return baseConfig.isLogThrowableWithStackTrace();
-        }
-    }
+	/**
+	 * Logger for appender with given tag
+	 */
+	public static Logger getLogger(String appenderId) {
+		return getLoggerConfig().getLoggerMap().get(appenderId);
+	}
 
-    /**
-     * Send an {@link Level#INFO INFO} message<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void i(Object message) {
-        print(INFO, message, null);
-    }
+	public static Logger createWith(Appender appender){
+		return new AppenderLogger(appender);
+	}
 
-    /**
-     * Send an {@link Level#INFO INFO} message formatted with args objects<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void iF(String message, Object... args) {
-        print(INFO, String.format(message, args), null);
-    }
+	/**
+	 * Send an {@link Level#INFO INFO} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void info(Object message) {
+		appendToAll(INFO, message, null);
+	}
 
-    /**
-     * Send an {@link Level#INFO INFO} message created
-     * from multiple part<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object...)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message parts to send
-     */
-    public void i(Object... message) {
-        print(INFO, LoggerUtils.array2String(baseConfig.getSeparator(), message), null);
-    }
+	/**
+	 * Send an {@link Level#INFO INFO} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void infoF(String message, Object... args) {
+		appendToAll(INFO, String.format(message, args), null);
+	}
 
-    /**
-     * Send an {@link Level#INFO INFO} log of
-     * {@link Throwable}<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Throwable)} method instead
-     */
-    public void i(Throwable th) {
-        print(INFO, null, th);
-    }
+	/**
+	 * Send an {@link Level#INFO INFO} message created
+	 * with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message parts to send
+	 */
+	public static void info(Object... message) {
+		appendToAll(INFO, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
 
-    /**
-     * Send an {@link Level#INFO INFO} message with
-     * {@link Throwable} log<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#info(Object, Throwable)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void i(Object message, Throwable th) {
-        print(INFO, message, th);
-    }
+	/**
+	 * Send an {@link Level#INFO INFO} log of
+	 * {@link Throwable}
+	 */
+	public static void info(Throwable th) {
+		appendToAll(INFO, null, th);
+	}
 
-    /**
-     * Send an {@link Level#ERROR ERROR} message<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void e(Object message) {
-        print(ERROR, message, null);
-    }
+	/**
+	 * Send an {@link Level#INFO INFO} message with
+	 * {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void info(Object message, Throwable th) {
+		appendToAll(INFO, message, th);
+	}
 
-    /**
-     * Send an {@link Level#ERROR ERROR} message formatted with args objects<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void eF(String message, Object... args) {
-        print(ERROR, String.format(message, args), null);
-    }
+	/**
+	 * Send an {@link Level#ERROR ERROR} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void error(Object message) {
+		appendToAll(ERROR, message, null);
+	}
 
-    /**
-     * Send an {@link Level#ERROR ERROR} message created
-     * from multiple part<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object...)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message parts to send
-     */
-    public void e(Object... message) {
-        print(ERROR, LoggerUtils.array2String(baseConfig.getSeparator(), message), null);
-    }
+	/**
+	 * Send an {@link Level#ERROR ERROR} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void errorF(String message, Object... args) {
+		appendToAll(ERROR, String.format(message, args), null);
+	}
 
-    /**
-     * Send an {@link Level#ERROR ERROR} log of
-     * {@link Throwable}<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Throwable)} method instead
-     */
-    public void e(Throwable th) {
-        print(ERROR, null, th);
-    }
+	/**
+	 * Send an {@link Level#ERROR ERROR} message created
+	 * with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message parts to send
+	 */
+	public static void error(Object... message) {
+		appendToAll(ERROR, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
 
-    /**
-     * Send an {@link Level#ERROR ERROR} message with
-     * {@link Throwable} log<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#error(Object, Throwable)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void e(Object message, Throwable th) {
-        print(ERROR, message, th);
-    }
+	/**
+	 * Send an {@link Level#ERROR ERROR} log of
+	 * {@link Throwable}
+	 */
+	public static void error(Throwable th) {
+		appendToAll(ERROR, null, th);
+	}
 
-    /**
-     * Send an {@link Level#DEBUG DEBUG} message<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void d(Object message) {
-        print(DEBUG, message, null);
-    }
+	/**
+	 * Send an {@link Level#ERROR ERROR} message with
+	 * {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void error(Object message, Throwable th) {
+		appendToAll(ERROR, message, th);
+	}
 
-    /**
-     * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void dF(String message, Object... args) {
-        print(DEBUG, String.format(message, args), null);
-    }
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void debug(Object message) {
+		appendToAll(DEBUG, message, null);
+	}
 
-    /**
-     * Send an {@link Level#DEBUG DEBUG} message created
-     * from multiple part<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object...)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message parts to send
-     */
-    public void d(Object... message) {
-        print(DEBUG, LoggerUtils.array2String(baseConfig.getSeparator(), message), null);
-    }
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void debugF(String message, Object... args) {
+		appendToAll(DEBUG, String.format(message, args), null);
+	}
 
-    /**
-     * Send an {@link Level#DEBUG DEBUG} log of
-     * {@link Throwable}<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Throwable)} method instead
-     */
-    public void d(Throwable th) {
-        print(DEBUG, null, th);
-    }
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message created
+	 * with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message parts to send
+	 */
+	public static void debug(Object... message) {
+		appendToAll(DEBUG, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
 
-    /**
-     * Send an {@link Level#DEBUG DEBUG} message with
-     * {@link Throwable} log<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#debug(Object, Throwable)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void d(Object message, Throwable th) {
-        print(DEBUG, message, th);
-    }
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} log of
+	 * {@link Throwable}
+	 */
+	public static void debug(Throwable th) {
+		appendToAll(DEBUG, null, th);
+	}
 
-    /**
-     * Send an {@link Level#VERBOSE VERBOSE} message<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void v(Object message) {
-        print(VERBOSE, message, null);
-    }
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message with
+	 * {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void debug(Object message, Throwable th) {
+		appendToAll(DEBUG, message, th);
+	}
 
-    /**
-     * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void vF(String message, Object... args) {
-        print(VERBOSE, String.format(message, args), null);
-    }
+	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void verbose(Object message) {
+		appendToAll(VERBOSE, message, null);
+	}
 
-    /**
-     * Send an {@link Level#VERBOSE VRBOSE} message
-     * created from multiple part<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object...)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message parts to send
-     */
-    public void v(Object... message) {
-        print(VERBOSE, LoggerUtils.array2String(baseConfig.getSeparator(), message), null);
-    }
+	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void verboseF(String message, Object... args) {
+		appendToAll(VERBOSE, String.format(message, args), null);
+	}
 
-    /**
-     * Send an {@link Level#VERBOSE VERBOSE} log
-     * of {@link Throwable}<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Throwable)} method instead
-     */
-    public void v(Throwable th) {
-        print(VERBOSE, null, th);
-    }
+	/**
+	 * Send an {@link Level#VERBOSE VRBOSE} message
+	 * created with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message parts to send
+	 */
+	public static void verbose(Object... message) {
+		appendToAll(VERBOSE, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
 
-    /**
-     * Send an {@link Level#VERBOSE VERBOSE} message
-     * with {@link Throwable} log<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#verbose(Object, Throwable)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void v(Object message, Throwable th) {
-        print(VERBOSE, message, th);
-    }
+	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} log
+	 * of {@link Throwable}
+	 */
+	public static void verbose(Throwable th) {
+		appendToAll(VERBOSE, null, th);
+	}
 
-    /**
-     * Send an {@link Level#WARNING WARNING} message<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void w(Object message) {
-        print(WARNING, message, null);
-    }
+	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} message
+	 * with {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void verbose(Object message, Throwable th) {
+		appendToAll(VERBOSE, message, th);
+	}
 
-    /**
-     * Send an {@link Level#WARNING WARNING} message formatted with args objects<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void wF(String message, Object... args) {
-        print(WARNING, String.format(message, args), null);
-    }
+	/**
+	 * Send an {@link Level#WARNING WARNING} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void warning(Object message) {
+		appendToAll(WARNING, message, null);
+	}
 
-    /**
-     * Send an {@link Level#WARNING WARNING} message
-     * created from multiple part<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object...)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message parts to send
-     */
-    public void w(Object... message) {
-        print(WARNING, LoggerUtils.array2String(baseConfig.getSeparator(), message), null);
-    }
+	/**
+	 * Send an {@link Level#WARNING WARNING} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void warningF(String message, Object... args) {
+		appendToAll(WARNING, String.format(message, args), null);
+	}
 
-    /**
-     * Send an {@link Level#WARNING WARNING} log
-     * of {@link Throwable}<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Throwable)} method instead
-     */
-    public void w(Throwable th) {
-        print(WARNING, null, th);
-    }
+	/**
+	 * Send an {@link Level#WARNING WARNING} message
+	 * created with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message parts to send
+	 */
+	public static void warning(Object... message) {
+		appendToAll(WARNING, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
 
-    /**
-     * Send an {@link Level#WARNING WARNING} message
-     * with {@link Throwable} log<p>
-     * <p><b>Note </b> this method will print log only with this instance of logger. If you want print log with all the loggers please use {@link Logger#warning(Object, Throwable)} method instead<p>
-     * <p>
-     * You can also use auto generated values:<p>
-     * {@link Logger#CLASS_NAME
-     * CLASS_NAME}<p>
-     * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
-     * {@link Logger#METHOD_NAME METHOD_NAME}<p>
-     * {@link Logger#FILE_NAME FILE_NAME}<p>
-     * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
-     * {@link Logger#LEVEL LEVEL}<p>
-     * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
-     * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
-     * {@link Logger#CODE_LINE CODE_LINE}
-     *
-     * @param message message to send
-     */
-    public void w(Object message, Throwable th) {
-        print(WARNING, message, th);
-    }
+	/**
+	 * Send an {@link Level#WARNING WARNING} log
+	 * of {@link Throwable}
+	 */
+	public static void warning(Throwable th) {
+		appendToAll(WARNING, null, th);
+	}
 
+	/**
+	 * Send an {@link Level#WARNING WARNING} message
+	 * with {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param message message to send
+	 */
+	public static void warning(Object message, Throwable th) {
+		appendToAll(WARNING, message, th);
+	}
 
-    /**
-     * Send an {@link Level#DEBUG DEBUG} message with information where this method was called
-     */
-    public void t() {
-        d("At " + FULL_CLASS_NAME + "." + METHOD_NAME + CODE_LINE);
-    }
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message with information where this method was called
+	 */
+	public static void trace() {
+		debug("at " + Logger.FULL_CLASS_NAME + "." + Logger.METHOD_NAME + Logger.CODE_LINE);
+	}
+
+	private static void appendToAll(Level level, @Nullable Object message, @Nullable Throwable throwable) {
+		LoggerConfig loggerConfig = getLoggerConfig();
+		if (loggerConfig.getOverwrittenLevels().containsKey(level)) {
+			level = loggerConfig.getOverwrittenLevels().get(level);
+		}
+		if (loggerConfig.isLevelAllowed(level)) {
+			for (Logger logger : loggerConfig.getLoggerMap().values()) {
+				logger.append(level, message, throwable);
+			}
+		}
+	}
+
 }

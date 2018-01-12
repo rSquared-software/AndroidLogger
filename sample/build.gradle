@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 25
-	buildToolsVersion "26.0.0"
+	compileSdkVersion 27
 
 	defaultConfig {
 		applicationId "software.rsquared.logger.sample"
 		minSdkVersion 14
-		targetSdkVersion 22
+		targetSdkVersion 27
 		versionCode 1
 		versionName "1.0"
 	}
@@ -17,12 +16,15 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
+	compileOptions {
+		targetCompatibility JavaVersion.VERSION_1_8
+		sourceCompatibility JavaVersion.VERSION_1_8
+	}
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile 'com.android.support:appcompat-v7:25.3.1'
-	compile project(':android-logger')
+	implementation 'com.android.support:appcompat-v7:27.0.2'
+	implementation project(':android-logger')
 
-	testCompile 'org.robolectric:robolectric:3.0'
+	testImplementation 'org.robolectric:robolectric:3.0'
 }

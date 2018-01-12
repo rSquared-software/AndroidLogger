@@ -21,17 +21,16 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import software.rsquared.androidlogger.BaseLoggerConfig;
-import software.rsquared.androidlogger.Level;
-
 import java.util.Map;
+
+import software.rsquared.androidlogger.AppenderConfig;
+import software.rsquared.androidlogger.Level;
 
 /**
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig> {
+public class TextViewAppenderConfig extends AppenderConfig<TextViewAppenderConfig> {
 
 
     private static final String COLOR_REGEX = "^#((([0-7a-fA-F])?([0-7a-fA-F]){3})|(([0-7a-fA-F]{2})?([0-7a-fA-F]{2}){3}))$";
@@ -39,10 +38,13 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
     private Method printMethod = Method.APPEND;
     private ColorScheme colorScheme = ColorScheme.LIGHT;
 
+    TextViewAppenderConfig() {
+    }
+
     /**
-     * Set {@link TextViewLoggerConfig.Method} to print messages in the TextView
+     * Set {@link TextViewAppenderConfig.Method} to print messages in the TextView
      */
-    public TextViewLoggerConfig setPrintMethod(Method method) {
+    public TextViewAppenderConfig setPrintMethod(Method method) {
         this.printMethod = method;
         return this;
     }
@@ -57,7 +59,7 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
     /**
      * If true each message will be logged in new line
      */
-    public TextViewLoggerConfig setInNewLine(boolean inNewLine) {
+    public TextViewAppenderConfig setInNewLine(boolean inNewLine) {
         this.inNewLine = inNewLine;
         return this;
     }
@@ -73,7 +75,7 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
     /**
      * Color scheme for the log levels
      */
-    public TextViewLoggerConfig setColorScheme(@NonNull ColorScheme colorScheme) {
+    public TextViewAppenderConfig setColorScheme(@NonNull ColorScheme colorScheme) {
         this.colorScheme = colorScheme;
         return this;
     }
@@ -103,7 +105,7 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
             String colorScheme = config.get("colorScheme");
             try {
                 if (colorScheme.contains(",")) {
-                    this.colorScheme = parseColorSheme(colorScheme);
+                    this.colorScheme = parseColorScheme(colorScheme);
                 } else if ("dark".equalsIgnoreCase(colorScheme)) {
                     this.colorScheme = ColorScheme.DARK;
                 } else if ("light".equalsIgnoreCase(colorScheme)) {
@@ -117,7 +119,7 @@ public class TextViewLoggerConfig extends BaseLoggerConfig<TextViewLoggerConfig>
         }
     }
 
-    private ColorScheme parseColorSheme(String colorScheme) {
+    private ColorScheme parseColorScheme(String colorScheme) {
         String[] colors = colorScheme.split(",");
         if (colors.length == 5) {
             String colorVerbose = parseColor(colors[0], null);

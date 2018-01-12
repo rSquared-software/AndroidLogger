@@ -20,21 +20,20 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import software.rsquared.androidlogger.BaseLoggerConfig;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Map;
+
+import software.rsquared.androidlogger.AppenderConfig;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class ToastLoggerConfig extends BaseLoggerConfig<ToastLoggerConfig> {
+public class ToastAppenderConfig extends AppenderConfig<ToastAppenderConfig> {
 
     @IntDef({LENGTH_SHORT, LENGTH_LONG})
     @Retention(RetentionPolicy.SOURCE)
@@ -43,10 +42,13 @@ public class ToastLoggerConfig extends BaseLoggerConfig<ToastLoggerConfig> {
     @Duration
     private int duration = Toast.LENGTH_SHORT;
 
+    ToastAppenderConfig() {
+    }
+
     /**
      * How long to display the message.  Either {@link Toast#LENGTH_SHORT} or {@link Toast#LENGTH_LONG}
      */
-    public ToastLoggerConfig setDuration(@Duration int duration) {
+    public ToastAppenderConfig setDuration(@Duration int duration) {
         this.duration = duration;
         return this;
     }
@@ -65,11 +67,11 @@ public class ToastLoggerConfig extends BaseLoggerConfig<ToastLoggerConfig> {
 
         if (config.containsKey("duration")) {
             switch (config.get("duration")){
-                case "SHORT":
+                case "LENGTH_SHORT":
                     setDuration(LENGTH_SHORT);
                     break;
-                case "LONG":
-                    setDuration(LENGTH_SHORT);
+                case "LENGTH_LONG":
+                    setDuration(LENGTH_LONG);
                     break;
                 default:
                     throw new IllegalArgumentException("Illegal duration length. Must be one of: SHORT, LONG");

@@ -1,60 +1,80 @@
-/*
- * Copyright 2017 rSquared s.c. R. Orlik, R. Zajfert
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package software.rsquared.androidlogger;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
-import java.text.SimpleDateFormat;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
- * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
+ * @author Rafał Zajfert
  */
-@SuppressWarnings("unused")
-public interface Config {
+abstract class Config {
 
-    boolean isLevelAllowed(@NonNull Level level);
-    
-    Level getLevel();
-    
-    String getTag();
+	/**
+	 * Map of the {@link Level levels} that should be logged as other {@link Level}.
+	 * This is useful on devices that blocked specified levels, e.g. Sony block {@link Level#VERBOSE} and {@link Level#DEBUG}
+	 */
+	@Getter(AccessLevel.PROTECTED)
+	final Map<Level, Level> overwrittenLevels = new HashMap<>();
 
-    Boolean isLogThrowableWithStackTrace();
-    
-    Logger getLogger(String tag);
-    
-    Collection<Logger> getLoggers();
+	/**
+	 * Minimal level of the message that should be logged
+	 */
+	@Getter(AccessLevel.PROTECTED)
+	@NonNull
+	Level level = Level.VERBOSE;
 
-    Config removeLogger(@NonNull String tag);
+	/**
+	 * if true then all stack trace with throwable will be logged
+	 */
+	@Getter(AccessLevel.PROTECTED)
+	boolean logThrowableWithStackTrace = true;
 
-    Config removeLogger(@NonNull Logger logger);
+	/**
+	 * Separator between message parts
+	 */
+	@Getter(AccessLevel.PROTECTED)
+	@NonNull
+	String separator = Logger.SPACE;
 
-    Config removeAllLoggers();
+	/**
+	 * Separator between message and throwable
+	 */
+	@Getter(AccessLevel.PROTECTED)
+	@NonNull
+	String throwableSeparator = Logger.NEW_LINE;
 
-    Config addLogger(@NonNull Logger logger);
+	/**
+	 * Chack if current configuration allows to append log
+	 */
+	public boolean isLevelAllowed(Level level) {
+		return level.ordinal() >= this.level.ordinal();
+	}
 
-    Config addLogger(@NonNull Logger logger, @NonNull String loggerTag);
-    
-    String getSeparator();
-
-    String getThrowableSeparator();
-
-    String getDatePattern();
-
-    SimpleDateFormat getDateFormat();
+	/**
+	 * Read values with config map
+	 */
+	@CallSuper
+	protected void read(@NonNull Map<String, String> config) {
+		if (config.containsKey("separator")) {
+			separator = config.get("separator");
+		}
+		if (config.containsKey("throwableSeparator")) {
+			throwableSeparator = config.get("throwableSeparator");
+		}
+		if (config.containsKey("level")) {
+			try {
+				level = Level.valueOf(config.get("level"));
+			} catch (Exception e) {
+				throw new IllegalArgumentException("Unknown level: " + config.get("level"));
+			}
+		}
+		if (config.containsKey("logThrowableWithStackTrace")) {
+			logThrowableWithStackTrace = Boolean.parseBoolean(config.get("logThrowableWithStackTrace"));
+		}
+	}
 }

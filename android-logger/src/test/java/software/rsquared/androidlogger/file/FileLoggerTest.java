@@ -11,17 +11,17 @@
 // */
 //public class FileLoggerTest {
 //    private File logFile;
-//    private FileLogger logger;
-//    private FileLoggerConfig loggerConfig;
+//    private FileAppender logger;
+//    private FileAppenderConfig loggerConfig;
 //
 //    @Before
 //    public void setUp() throws Exception {
 //        logFile = new File("dir/log.txt");
 //        logFile.mkdirs();
 //
-//        loggerConfig = new FileLoggerConfig();
+//        loggerConfig = new FileAppenderConfig();
 //
-//        logger = new FileLogger();
+//        logger = new FileAppender();
 //
 //    }
 //

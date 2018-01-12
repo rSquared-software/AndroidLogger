@@ -25,19 +25,19 @@
 ///**
 // * Created by Rafał on 2015-12-15.
 // */
-//@org.robolectric.annotation.Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
+//@org.robolectric.annotation._Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 //@RunWith(RobolectricGradleTestRunner.class)
 //public class BaseFileLoggerConfigTest {
-//    private BaseFileLoggerConfig config;
-//    private BaseFileLoggerConfig config2;
+//    private BaseFileAppenderConfig config;
+//    private BaseFileAppenderConfig config2;
 //    private File logFile;
 //
 //    @Before
 //    public void setUp() throws Exception {
 //        logFile = new File("log.txt");
-//        config = new BaseFileLoggerConfig() {
+//        config = new BaseFileAppenderConfig() {
 //        };
-//        config2 = new BaseFileLoggerConfig() {
+//        config2 = new BaseFileAppenderConfig() {
 //            @Override
 //            public File getLogFile() {
 //                return logFile;
@@ -92,7 +92,7 @@
 //        Map<String, String> map = new HashMap<>();
 //        config.read(map);
 //        assertNull(config.getLogFile());
-//        assertEquals(BaseFileLoggerConfig.DATE_PATTERN, config.getDatePattern());
+//        assertEquals(BaseFileAppenderConfig.DATE_PATTERN, config.getDatePattern());
 //
 //        map.put("externalFile", "test2");
 //        map.put("datePattern", "yyyy");
@@ -105,34 +105,34 @@
 //
 //    @Test
 //    public void testGetSetDatePattern() throws Exception {
-//        assertEquals(BaseFileLoggerConfig.DATE_PATTERN, config.getDatePattern());
+//        assertEquals(BaseFileAppenderConfig.DATE_PATTERN, config.getDatePattern());
 //        config.setDatePattern("yyyy");
 //        assertEquals("yyyy", config.getDatePattern());
 //    }
 //
 //    @Test
 //    public void testSetDatePattern() throws Exception {
-//        config.setLogFile("log_"+BaseFileLoggerConfig.DATE);
+//        config.setLogFile("log_"+BaseFileAppenderConfig.DATE);
 //        assertTrue(config.getLogFile().getName().matches("log_\\d{2}_\\d{2}_\\d{4}"));
 //        config.setDatePattern("HH:mm:ss.SSS");
 //        assertTrue(config.getLogFile().getName().matches("log_\\d{2}:\\d{2}:\\d{2}\\.\\d{3}"));
 //        config.setDatePattern("HH:mm:ss");
 //        assertTrue(config.getLogFile().getName().matches("log_\\d{2}:\\d{2}:\\d{2}"));
 //
-//        config.setLogFile(new File("log2_" + BaseFileLoggerConfig.DATE));
+//        config.setLogFile(new File("log2_" + BaseFileAppenderConfig.DATE));
 //        assertTrue(config.getLogFile().getName().matches("log2_\\d{2}:\\d{2}:\\d{2}"));
 //    }
 //
 //    @Test
 //    public void testGetSetDateFormat() throws Exception {
-//        DateFormat format= new SimpleDateFormat(BaseFileLoggerConfig.DATE_PATTERN);
+//        DateFormat format= new SimpleDateFormat(BaseFileAppenderConfig.DATE_PATTERN);
 //        assertEquals(format, config.getDateFormat());
 //    }
 //
 //    @Test
 //    public void testSetDateFormat() throws Exception {
 //        DateFormat format;
-//        config.setLogFile("log_"+BaseFileLoggerConfig.DATE);
+//        config.setLogFile("log_"+BaseFileAppenderConfig.DATE);
 //        assertTrue(config.getLogFile().getName().matches("log_\\d{2}_\\d{2}_\\d{4}"));
 //        format = new SimpleDateFormat("HH:mm:ss.SSS");
 //        config.setDateFormat(format);
@@ -141,7 +141,7 @@
 //        config.setDateFormat(format);
 //        assertTrue(config.getLogFile().getName().matches("log_\\d{2}:\\d{2}:\\d{2}"));
 //
-//        config.setLogFile(new File("log2_" + BaseFileLoggerConfig.DATE));
+//        config.setLogFile(new File("log2_" + BaseFileAppenderConfig.DATE));
 //        assertTrue(config.getLogFile().getName().matches("log2_\\d{2}:\\d{2}:\\d{2}"));
 //
 //    }

@@ -14,19 +14,37 @@
  * limitations under the License.
  */
 
-package software.rsquared.androidlogger;
+package software.rsquared.androidlogger.file;
 
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import software.rsquared.androidlogger.Logger;
 
 /**
- * Interface that provide set config method
+ * {@link Logger Logger} that save log messages in the
+ * file<p>
+ * default file is saved in root directory of the default external storage with name "logger.log"
+ *
  * @author Rafal Zajfert
- * @version 1.1.0 (03/09/2015)
  */
-public interface ConfigSetter<CONFIG extends BaseLoggerConfig> {
+@SuppressWarnings("unused")
+public class FileAppender extends BaseFileAppender {
+
+    private FileAppenderConfig config;
+
+    public FileAppender() {
+    }
 
     /**
-     * Set config for this instance of logger
+     * {@inheritDoc}
      */
-    void setConfig(@NonNull CONFIG config);
+    @Nullable
+    @Override
+    public FileAppenderConfig getConfig() {
+        if (config == null) {
+            config = new FileAppenderConfig();
+        }
+        return config;
+    }
+
 }

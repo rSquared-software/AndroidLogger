@@ -5,7 +5,7 @@ Simple and useful Android logger library.
 
 ```Gradle
 dependencies {
-    compile 'software.rsquared:android-logger:1.2.1'
+    compile 'software.rsquared:android-logger:1.3.0'
 }
 ```
 
@@ -40,7 +40,7 @@ try {
 //--------------------------------------------------------------
 
 //Send message to the single logger
-Logger logcat = new LogcatLogger();
+Logger logcat = Logger.createWith(new LogcatAppender());
 logcat.v("Verbose log");
 logcat.vF("Formatted %s message: %.2f", "verbose", 3.1415f);
 logcat.d("Debug log");
@@ -54,36 +54,42 @@ logcat.eF("Formatted %s message: %.2f", "error", 3.1415f);
 logcat.t();
 //--------------------------------------------------------------
 
-// add logger to configuration
-Logger.getBaseConfig().addLogger(new LogcatLogger());
-Logger.getBaseConfig().addLogger("logcatTag", new LogcatLogger());
+LogcatAppender logcatAppender = new LogcatAppender();
 
-// get logger from configuration by tag
-Logger logcatLogger = Logger.getBaseConfig().getLogger("logcatTag");
+// add appender to configuration
+Logger.getLoggerConfig().addAppender(logcatAppender);
+Logger.getLoggerConfig().addAppender("logcatAppenderId", new LogcatAppender());
 
-// remove logger from global configuration
-Logger.getBaseConfig().removeLogger("fileLoggerTag");
-Logger.getBaseConfig().removeLogger(logcatLogger);
+// get logger by appenderId
+Logger logcatLogger = Logger.getLogger("logcatAppenderId");
+
+// remove appender from global configuration
+Logger.getLoggerConfig().removeAppender("logcatAppenderId");
+Logger.getLoggerConfig().removeAppender(logcatLogger);
+Logger.getLoggerConfig().removeAppender(logcatAppender);
 ```
 
 ## Configuration
 ### Base Configuration
 
 Global configuration sets log parameters for all loggers from this library.  
-New *LoggerConfig* is initialized with **default _LogcatLogger_**. If you want, you can remove it by calling *removeLogger(String)* method with *LoggerConfig.DEFAULT_LOGGER* tag
+New *LoggerConfig* is initialized with **default _LogcatAppender_**. If you want, you can remove it in configuration
 
 ```java
-LoggerConfig loggerConfig = new LoggerConfig()
-        .removeLogger(LoggerConfig.DEFAULT_LOGGER)
-        .setTag(Logger.CODE_LINE)
-        .useANRWatchDog(new LoggableANRWatchDog(2000).preventCrash(true))
+Logger.getLoggerConfig()
+        .removeAppender(fileAppender)
+        .addAppender(toastAppender)
+        .enableDefaultAppender(false)
+        .overwriteLevel(Level.DEBUG, Level.INFO)
+        .removeLevelOverwriting(Level.VERBOSE)
         .catchUncaughtExceptions()
-        .setLevel(Level.VERBOSE)
-        .setSeparator(Logger.SPACE)
+        .runANRWatchDog(new LoggableANRWatchDog(2000))
+        .setDefaultTag(Logger.CODE_LINE)
+        .setLevel(Level.DEBUG)
+        .setLogThrowableWithStackTrace(true)
+        .setSeparator(" | ")
         .setThrowableSeparator(Logger.NEW_LINE)
-        .addLogger(fileLogger);
-
-Logger.setBaseConfig(loggerConfig);
+        .setTimePattern("%1$tH:%1$tM");
 ```
 `setTag()` - Tag, used to identify source of a log message, default it's class name with line number  
 You can also use auto generated values:  
@@ -104,18 +110,17 @@ Levels order: **_VERBOSE_** < **_DEBUG_** < **_INFO_** < **_WARNING_** < **_ERRO
 
 `setThrowableSeparator` - String used to separate message and Throwable stack trace
 
-`addLogger` - You can add more then one logger. For better management you can also set tag for each logger.  
-This library provide four types of logger: **_LogcatLogger_**, **_FileLogger_**, **_TextViewLogger_**, **_ToastLogger_**.  
-You can create custom logger by extending StandardLogger class.
+`addLogger` - You can add more then one appender. For better management you can also set appenderId for each logger.
+This library provide five types of appender: **_LogcatAppender_**, **_FileAppender_**, **_RollingFileAppender_**, **_TextViewAppender_**, **_ToastAppender_**.  
+You can create custom appender by extending Appender class.
 
 ###Properties Configuration
 
-Now logger can by configured by the properties file
+Logger can by also configured by the properties file
 
 #### Initializing
 ```java
-LoggerConfig config = new LoggerConfig(R.raw.logger);
-Logger.setBaseConfig(loggerConfig);
+Logger.getLoggerConfig().fromProperties(context, R.raw.logger);
 ```
 
 #### Sample fully defined properties file 
@@ -131,26 +136,26 @@ logger.datePattern=dd/MM/yyyy HH:mm:ss:SSS
 logger.catchUncaughtExceptions=true
 logger.useANRWatchDog=true
 
-logger.textView=software.rsquared.androidlogger.textview.TextViewLogger
+logger.textView=software.rsquared.androidlogger.textview.TextViewAppender
 logger.textView.level=INFO
 logger.textView.tag=$CodeLine$
 logger.textView.logThrowableWithStackTrace=true
 logger.textView.inNewLine=true
 logger.textView.printMethod=APPEND
 
-logger.file=software.rsquared.androidlogger.file.FileLogger
+logger.file=software.rsquared.androidlogger.file.FileAppender
 logger.file.level=WARNING
 logger.file.tag=$ShortLevel$ $CurrentTime$ $CodeLine$
 logger.file.logThrowableWithStackTrace=true
 logger.file.externalFile=loggerLogs/$Date$/log.txt
 logger.file.datePattern=dd_MM_yyyy
 
-logger.logcat=software.rsquared.androidlogger.logcat.LogcatLogger
+logger.logcat=software.rsquared.androidlogger.logcat.LogcatAppender
 logger.logcat.level=VERBOSE
 logger.logcat.tag=$CodeLine$
 logger.logcat.logThrowableWithStackTrace=true
 
-logger.toast=software.rsquared.androidlogger.toast.ToastLogger
+logger.toast=software.rsquared.androidlogger.toast.ToastAppender
 logger.toast.level=ERROR
 logger.toast.tag=$CodeLine$
 logger.toast.logThrowableWithStackTrace=false

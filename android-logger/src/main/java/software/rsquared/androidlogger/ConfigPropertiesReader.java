@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
 import android.text.TextUtils;
 
-import software.rsquared.androidlogger.logcat.LogcatLogger;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -17,23 +15,23 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import software.rsquared.androidlogger.logcat.LogcatAppender;
+
 /**
- * Config properties reader
  *
  * @author Rafal Zajfert
- * @version 1.0.15 (10/10/2015)
  */
-public class ConfigReader {
+public class ConfigPropertiesReader {
     private static final String LOGGER_CONFIG_PREFIX = "logger";
-    private static final Set<String> RESERVED_PROPERTIES = new HashSet<>(Arrays.asList(LOGGER_CONFIG_PREFIX + ".level", LOGGER_CONFIG_PREFIX + ".separator", LOGGER_CONFIG_PREFIX + ".throwableSeparator", LOGGER_CONFIG_PREFIX + ".tag", LOGGER_CONFIG_PREFIX + ".logThrowableWithStackTrace", LOGGER_CONFIG_PREFIX + ".datePattern", LOGGER_CONFIG_PREFIX + ".catchUncaughtExceptions", LOGGER_CONFIG_PREFIX + ".useANRWatchDog"));
-    private final LogcatLogger logger = new LogcatLogger();
+    private static final Set<String> RESERVED_PROPERTIES = new HashSet<>(Arrays.asList(LOGGER_CONFIG_PREFIX + ".level", LOGGER_CONFIG_PREFIX + ".separator", LOGGER_CONFIG_PREFIX + ".throwableSeparator", LOGGER_CONFIG_PREFIX + ".appenderId", LOGGER_CONFIG_PREFIX + ".logThrowableWithStackTrace", LOGGER_CONFIG_PREFIX + ".timePattern", LOGGER_CONFIG_PREFIX + ".catchUncaughtExceptions", LOGGER_CONFIG_PREFIX + ".useANRWatchDog"));
+    private final Logger logger = Logger.createWith(new LogcatAppender());
 
-    private Map<String, Logger> loggers = new HashMap<>();
+    private Map<String, Logger> loggerMap = new HashMap<>();
     private Map<String, String> configMap = new HashMap<>();
 
-    private ConfigReader(@RawRes int propertiesRes) {
+    private ConfigPropertiesReader(Context context, @RawRes int propertiesRes) {
         Properties properties = new Properties();
-        loadProperties(properties, propertiesRes);
+        loadProperties(context, properties, propertiesRes);
         String value = properties.getProperty(LOGGER_CONFIG_PREFIX);
         if (value != null) {
             readLoggers(properties, value);
@@ -41,12 +39,12 @@ public class ConfigReader {
         readBaseConfig(properties);
     }
 
-    public static ConfigReader read(int propertiesRes) {
-        return new ConfigReader(propertiesRes);
+    public static ConfigPropertiesReader read(Context context, int propertiesRes) {
+        return new ConfigPropertiesReader(context, propertiesRes);
     }
 
-    public Map<String, Logger> getLoggers() {
-        return loggers;
+    public Map<String, Logger> getLoggerMap() {
+        return loggerMap;
     }
 
     public Map<String, String> getBaseConfigMap() {
@@ -57,37 +55,26 @@ public class ConfigReader {
         addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".level");
         addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".separator");
         addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".throwableSeparator");
-        addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".tag");
+        addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".appenderId");
         addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".logThrowableWithStackTrace");
-        addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".datePattern");
+        addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".timePattern");
         addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".catchUncaughtExceptions");
         addConfigProperty(properties, LOGGER_CONFIG_PREFIX + ".useANRWatchDog");
     }
 
-    private void loadProperties(Properties properties, @RawRes int propertiesRes) {
-        Context context = LoggerUtils.getApplicationContext();
-        InputStreamReader reader = null;
-        try {
-            reader = new InputStreamReader(context.getResources().openRawResource(propertiesRes), "UTF-8");
+    private void loadProperties(Context context, Properties properties, @RawRes int propertiesRes) {
+        try (InputStreamReader reader = new InputStreamReader(context.getResources().openRawResource(propertiesRes), "UTF-8")) {
             properties.load(reader);
         } catch (IOException e) {
             logger.w(e);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    logger.w(e);
-                }
-            }
         }
     }
 
     private void readLoggers(Properties properties, String loggerProperty) {
-        String[] loggers = loggerProperty.split(",");
-        Map<String, Map<String, String>> loggersMap = createLoggersMap(loggers);
-        readProperties(properties, loggersMap);
-        createLoggers(loggersMap);
+        String[] appenders = loggerProperty.split(",");
+        Map<String, Map<String, String>> appenderMap = createAppenderMap(appenders);
+        readProperties(properties, appenderMap);
+        createLoggers(appenderMap);
     }
 
     private void addConfigProperty(Properties properties, String property) {
@@ -99,14 +86,14 @@ public class ConfigReader {
     }
 
     @NonNull
-    private Map<String, Map<String, String>> createLoggersMap(String[] loggers) {
-        Map<String, Map<String, String>> loggersMap = new HashMap<>();
-        for (String logger : loggers) {
-            logger = logger.trim();
-            checkLoggerName(logger);
-            loggersMap.put(logger, new HashMap<String, String>());
+    private Map<String, Map<String, String>> createAppenderMap(String[] appenders) {
+        Map<String, Map<String, String>> appenderMap = new HashMap<>();
+        for (String appender : appenders) {
+            appender = appender.trim();
+            checkLoggerName(appender);
+            appenderMap.put(appender, new HashMap<>());
         }
-        return loggersMap;
+        return appenderMap;
     }
 
     private void readProperties(Properties properties, Map<String, Map<String, String>> loggersMap) {
@@ -133,37 +120,39 @@ public class ConfigReader {
         }
     }
 
-    private void checkLoggerName(String logger) {
-        if (TextUtils.isEmpty(logger)) {
-            throw new IllegalArgumentException("You must specified logger name");
+    private void checkLoggerName(String appenderId) {
+        if (TextUtils.isEmpty(appenderId)) {
+            throw new IllegalArgumentException("You must specified appender name");
         }
-        if (RESERVED_PROPERTIES.contains(LOGGER_CONFIG_PREFIX + "." + logger)) {
-            throw new IllegalArgumentException("Logger cannot be named as " + logger);
+        if (RESERVED_PROPERTIES.contains(LOGGER_CONFIG_PREFIX + "." + appenderId)) {
+            throw new IllegalArgumentException("Appender cannot be named as " + appenderId);
         }
     }
 
-    private void createLoggers(Map<String, Map<String, String>> loggersMap) {
-        for (Map.Entry<String, Map<String, String>> entry : loggersMap.entrySet()) {
+    private void createLoggers(Map<String, Map<String, String>> appenderMap) {
+        for (Map.Entry<String, Map<String, String>> entry : appenderMap.entrySet()) {
             String clazz = entry.getValue().get("");
             entry.getValue().remove("");
             addLogger(clazz, entry.getKey(), entry.getValue());
         }
     }
 
-    private void addLogger(String loggerClass, String loggerTag, Map<String, String> configMap) {
+    private void addLogger(String appenderClass, String appenderId, Map<String, String> configMap) {
         //noinspection TryWithIdenticalCatches
         try {
-            Class clazz = Class.forName(loggerClass);
-            Logger l = (Logger) clazz.newInstance();
-            l.loggerTag = loggerTag;
-            l.init(configMap);
-            loggers.put(loggerTag, l);
+            Class clazz = Class.forName(appenderClass);
+            Appender appender = (Appender) clazz.newInstance();
+            appender.setAppenderId(appenderId);
+            if (appender instanceof ConfigurableAppender){
+                ((ConfigurableAppender) appender).getConfig().read(configMap);
+            }
+            loggerMap.put(appenderId, Logger.createWith(appender));
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Logger class '" + loggerClass + "' not found");
+            throw new IllegalArgumentException("Appender class '" + appenderClass + "' not found");
         } catch (InstantiationException e) {
-            throw new IllegalArgumentException(loggerClass + " must have public 0 args constructor");
+            throw new IllegalArgumentException(appenderClass + " must have public 0 args constructor");
         } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException(loggerClass + " must have public 0 args constructor");
+            throw new IllegalArgumentException(appenderClass + " must have public 0 args constructor");
         }
     }
 

@@ -18,17 +18,17 @@ package software.rsquared.androidlogger.file;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import software.rsquared.androidlogger.Level;
-import software.rsquared.androidlogger.Logger;
-import software.rsquared.androidlogger.logcat.LogcatLogger;
-
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+
+import software.rsquared.androidlogger.Appender;
+import software.rsquared.androidlogger.ConfigurableAppender;
+import software.rsquared.androidlogger.Level;
+import software.rsquared.androidlogger.Logger;
+import software.rsquared.androidlogger.logcat.LogcatAppender;
 
 /**
  * {@link Logger Logger} that save log messages in the
@@ -36,50 +36,34 @@ import java.io.RandomAccessFile;
  * default file is saved in root directory of the default external storage with name "logger.log"
  *
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public abstract class BaseFileLogger extends Logger{
+public abstract class BaseFileAppender<E extends BaseFileAppenderConfig> extends Appender implements ConfigurableAppender<E>{
 
-    protected static final LogcatLogger logger = new LogcatLogger();
+    protected static final Logger logger = Logger.createWith(new LogcatAppender());
 
     protected static final String DEFAULT_LOG_FILE = "logger.log";
 
-    public BaseFileLogger() {
+    public BaseFileAppender() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void print(Level level, String message) {
+    protected void append(Level level, String tag, String message) {
         try {
-            writeToFile(createFileIfNeeded(), getMessage(level, message));
+            writeToFile(createFileIfNeeded(), tag + Logger.SPACE + message + Logger.NEW_LINE);
         } catch (IOException e) {
             logger.e(e);
         }
     }
 
     /**
-     * Get message to write
-     */
-    @NonNull
-    protected String getMessage(Level level, String message) {
-        return getTag(level) + SPACE + message + NEW_LINE;
-    }
-
-    /**
      * Append string to the end of the file
      */
     protected synchronized void writeToFile(File file, String string) {
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
+        try (FileWriter writer = new FileWriter(file, true)){
             writer.write(string);
         } catch (IOException e) {
             logger.e("Cannot write log to file", e);
-        } finally {
-            close(writer);
         }
     }
 
@@ -87,14 +71,10 @@ public abstract class BaseFileLogger extends Logger{
      * clear log file
      */
     public synchronized void clearLogFile() {
-        RandomAccessFile file = null;
-        try {
-            file = new RandomAccessFile(getLogFile(), "rw");
+        try (RandomAccessFile file = new RandomAccessFile(getLogFile(), "rw");){
             file.setLength(0);
         } catch (IOException e) {
             logger.e("Cannot clear Log file", e);
-        } finally {
-            close(file);
         }
     }
 
@@ -111,11 +91,11 @@ public abstract class BaseFileLogger extends Logger{
         }
 
         if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()){
-            throw new IOException("Cannot create directory of the Log file");
+            throw new IOException("Cannot with directory of the Log file");
         }
 
         if (!file.exists() && !file.createNewFile()) {
-            throw new IOException("Cannot create Log file");
+            throw new IOException("Cannot with Log file");
         }
 
         if (!file.canWrite()) {
@@ -126,11 +106,11 @@ public abstract class BaseFileLogger extends Logger{
     }
 
     /**
-     * Get {@link File} where log messages are saved
+     * Get {@link File} where log messages should be saved
      */
     @NonNull
     public File getLogFile() {
-        BaseFileLoggerConfig config = (BaseFileLoggerConfig) getConfig();
+        BaseFileAppenderConfig config = getConfig();
         File file = null;
         if (config != null){
             file = config.getLogFile();
@@ -139,18 +119,5 @@ public abstract class BaseFileLogger extends Logger{
             file = new File(Environment.getExternalStorageDirectory(), DEFAULT_LOG_FILE);
         }
         return file;
-    }
-
-    /**
-     * Close file stream
-     */
-    protected void close(@Nullable Closeable stream) {
-        if (stream != null) {
-            try {
-                stream.close();
-            } catch (IOException e) {
-                logger.e("Failed to close file", e);
-            }
-        }
     }
 }

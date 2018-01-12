@@ -1,325 +1,291 @@
-/*
- * Copyright 2017 rSquared s.c. R. Orlik, R. Zajfert
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package software.rsquared.androidlogger;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.text.TextUtils;
 
-import software.rsquared.androidlogger.logcat.LogcatLogger;
-
-import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import software.rsquared.androidlogger.logcat.LogcatAppender;
+
 /**
- * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
+ * @author Rafał Zajfert
  */
-@SuppressWarnings("unused")
-public class LoggerConfig extends BaseLoggerConfig<LoggerConfig> implements Config {
-    public static final String DATE_PATTERN = "HH:mm:ss:SSS";
-    private String separator = Logger.SPACE;
-    private String throwableSeparator = Logger.NEW_LINE;
-    private String datePattern = DATE_PATTERN;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
-    private final Map<String, Logger> loggers = new HashMap<>();
+@SuppressWarnings({"WeakerAccess", "unused", "UnusedReturnValue", "SameParameterValue", "MismatchedQueryAndUpdateOfCollection"})
+public class LoggerConfig extends Config  {
 
-    /**
-     * Tis configuration is created with default {@link LogcatLogger}, if you want you can remove it by calling {@link #removeLogger(String)} with {@link #DEFAULT_LOGGER} tag
-     */
-    public LoggerConfig() {
-    }
+	private static LoggerConfig instance;
 
-    /**
-     * Create configuration based on the properties file
-     */
-    public LoggerConfig(@RawRes int propertiesRes) {
-        ConfigReader reader = ConfigReader.read(propertiesRes);
-        this.loggers.clear();
-        this.loggers.putAll(reader.getLoggers());
-        read(reader.getBaseConfigMap());
-    }
+	private static final String DEFAULT_APPENDER = "__$default_logger$";
 
-    @Override
-    protected void read(@NonNull Map<String, String> config) {
-        super.read(config);
-        if (config.containsKey("separator")) {
-            setSeparator(config.get("separator"));
-        }
-        if (config.containsKey("throwableSeparator")) {
-            setThrowableSeparator(config.get("throwableSeparator"));
-        }
-        if (config.containsKey("datePattern")) {
-            setDatePattern(config.get("datePattern"));
-        }
-        if (config.containsKey("catchUncaughtExceptions")) {
-            catchUncaughtExceptions(Boolean.parseBoolean(config.get("catchUncaughtExceptions")));
-        }
-        if (config.containsKey("useANRWatchDog")) {
-            if (Boolean.parseBoolean(config.get("useANRWatchDog"))) {
-                useANRWatchDog(new LoggableANRWatchDog());
-            }
-        }
-    }
+	/**
+	 * Default pattern to display time.
+	 */
+	private static final String DEFAULT_TIME_PATTERN = "%1$tH:%1$tM:%1$tS.%1$tL";
 
-    /**
-     * Tag of the default logger
-     */
-    public static final String DEFAULT_LOGGER = "default_logger";
+	/**
+	 * Map of all global appenders, key is identifier of the logger in value
+	 */
+	@Getter(AccessLevel.PACKAGE)
+	private final Map<String, Logger> loggerMap = new HashMap<>();
 
-    {
-        this.loggers.put(DEFAULT_LOGGER, new LogcatLogger());
-        this.tag = Logger.CODE_LINE;
-        this.logThrowableWithStackTrace = true;
-    }
+	/**
+	 * default log tag that will be used when custom appenderId is not defined
+	 */
+	@Getter(AccessLevel.PACKAGE)
+	@NonNull
+	private String defaultTag = Logger.CODE_LINE;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LoggerConfig setTag(@SuppressWarnings("NullableProblems") @NonNull String tag) {
-        if (TextUtils.isEmpty(tag)) {
-            throw new IllegalArgumentException("Tag for all loggers cannot be empty");
-        }
-        this.tag = tag;
-        return this;
-    }
+	/**
+	 * Pattern of the displayed time
+	 */
+	@Getter(AccessLevel.PACKAGE)
+	@NonNull
+	private String timePattern = DEFAULT_TIME_PATTERN;
 
-    @NonNull
-    @Override
-    public String getTag() {
-        if (TextUtils.isEmpty(tag)) {
-            throw new IllegalArgumentException("Tag for all loggers cannot be empty");
-        }
-        return tag;
-    }
+	private LoggerConfig() {
+		enableDefaultAppender(true);
+	}
 
-    @Override
-    public LoggerConfig setLogThrowableWithStackTrace(@SuppressWarnings("NullableProblems") @NonNull Boolean logThrowableWithStackTrace) {
-        this.logThrowableWithStackTrace = logThrowableWithStackTrace;
-        return this;
-    }
+	public static LoggerConfig getInstance() {
+		if (instance == null) {
+			instance = new LoggerConfig();
+		}
+		return instance;
+	}
 
-    @NonNull
-    @Override
-    public Boolean isLogThrowableWithStackTrace() {
-        if (this.logThrowableWithStackTrace == null) {
-            throw new IllegalArgumentException("logThrowableWithStackTrace for all loggers cannot be null");
-        }
-        return this.logThrowableWithStackTrace;
-    }
+	public void fromProperties(Context context, @RawRes int propertiesRes) {
+		ConfigPropertiesReader reader = ConfigPropertiesReader.read(context, propertiesRes);
+		this.loggerMap.clear();
+		this.loggerMap.putAll(reader.getLoggerMap());
+		read(reader.getBaseConfigMap());
+	}
 
-    /**
-     * Get {@link Logger Logger} instance
-     *
-     * @param tag tag of the logger to return
-     */
-    @Override
-    public Logger getLogger(String tag) {
-        return this.loggers.get(tag);
-    }
+	/**
+	 * Add global appender, key is identifier of the logger in value
+	 */
+	public LoggerConfig addAppender(@NonNull Appender appender) {
+		return addAppender(null, appender);
+	}
 
-    /**
-     * Get all loggers that wil be added in this configuration
-     */
-    @NonNull
-    @Override
-    public Collection<Logger> getLoggers() {
-        return this.loggers.values();
-    }
+	/**
+	 * Add global appender, key is identifier of the logger in value
+	 */
+	public LoggerConfig addAppender(String appenderId, @NonNull Appender appender) {
+		if (TextUtils.isEmpty(appenderId)) {
+			appenderId = appender.getClass().getSimpleName() + "_" + System.currentTimeMillis();
+		}
+		appender.setAppenderId(appenderId);
+		this.loggerMap.put(appenderId, Logger.createWith(appender));
+		return this;
+	}
 
-    /**
-     * Add logger to which you want send messages<p>
-     *
-     * @param logger instance of Logger to used in global logging eg. {@link Logger#debug(Object)}
-     * @return Config this baseConfig instance
-     */
-    @NonNull
-    public LoggerConfig addLogger(@NonNull Logger logger) {
-        String loggerTag = logger.getClass().getSimpleName() + "_" + System.currentTimeMillis();
-        addLogger(logger, loggerTag);
-        return this;
-    }
+	/**
+	 * Remove global appender
+	 */
+	public LoggerConfig removeAppender(@NonNull String appenderId) {
+		if (!TextUtils.isEmpty(appenderId)) {
+			this.loggerMap.remove(appenderId);
+		}
+		return this;
+	}
 
-    /**
-     * Add logger to which you want send messages<p>
-     *
-     * @param logger instance of Logger to used in global logging eg. {@link Logger#debug(Object)}
-     * @return Config this baseConfig instance
-     */
-    @NonNull
-    public LoggerConfig addLogger(@NonNull Logger logger, @NonNull String loggerTag) {
-        logger.loggerTag = loggerTag;
-        this.loggers.put(loggerTag, logger);
-        return this;
-    }
+	/**
+	 * Remove global appender
+	 */
+	public LoggerConfig removeAppender(@NonNull Logger logger) {
+		if (logger instanceof AppenderLogger && !TextUtils.isEmpty(((AppenderLogger) logger).getAppender().getAppenderId())) {
+			this.loggerMap.remove(((AppenderLogger) logger).getAppender().getAppenderId());
+		}
+		return this;
+	}
 
-    /**
-     * Remove {@link Logger Logger} instance
-     *
-     * @param tag tag of the logger to remove
-     */
-    @NonNull
-    @Override
-    public LoggerConfig removeLogger(@NonNull String tag) {
-        this.loggers.remove(tag);
-        return this;
-    }
+	/**
+	 * Remove global appender
+	 */
+	public LoggerConfig removeAppender(@NonNull Appender appender) {
+		return removeAppender(appender.getAppenderId());
+	}
 
-    /**
-     * Remove {@link Logger Logger} instance
-     *
-     * @param logger Logger instance to remove
-     */
-    @NonNull
-    @Override
-    public LoggerConfig removeLogger(@NonNull Logger logger) {
-        this.loggers.remove(logger.loggerTag);
-        return this;
-    }
+	/**
+	 * Remove all appenders
+	 */
+	public LoggerConfig removeAllAppenders() {
+		this.loggerMap.clear();
+		return this;
+	}
 
-    /**
-     * Remove all {@link Logger Loggers}
-     */
-    @NonNull
-    @Override
-    public LoggerConfig removeAllLoggers() {
-        this.loggers.clear();
-        return this;
-    }
+	/**
+	 * {@link Level Level} that should be logged as other {@link Level}.
+	 * This is useful on devices that blocked specified levels, e.g. Sony block {@link Level#VERBOSE} and {@link Level#DEBUG}
+	 */
+	public LoggerConfig overwriteLevel(@NonNull Level oldLevel, @NonNull Level newLevel) {
+		this.overwrittenLevels.put(oldLevel, newLevel);
+		return this;
+	}
 
-    /**
-     * Create new {@link LoggableANRWatchDog} thread.<p>
-     * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><p>
-     * <b>NOTE: </b>This should not be used in your final release<p>
-     * <b>NOTE2: </b>Use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).
-     */
-    @NonNull
-    public LoggerConfig useANRWatchDog(@NonNull LoggableANRWatchDog watchDog) {
-        //noinspection deprecation
-        watchDog.start();
-        return this;
-    }
+	/**
+	 * Remove {@link Level Level} overwriting
+	 */
+	public LoggerConfig removeLevelOverwriting(@NonNull Level level) {
+		this.overwrittenLevels.remove(level);
+		return this;
+	}
 
-    /**
-     * Setup Thread to catch and log all uncaught exceptions<p>
-     * This method not prevent app crash and it should not be used in your final release.
-     */
-    @NonNull
-    public LoggerConfig catchUncaughtExceptions() {
-        return catchUncaughtExceptions(true);
-    }
+	/**
+	 * Remove all {@link Level Level} overwrites
+	 */
+	public LoggerConfig removeAllLevelOverwrites() {
+		this.overwrittenLevels.clear();
+		return this;
+	}
 
-    /**
-     * Setup Thread to catch and log all uncaught exceptions<p>
-     * This method not prevent app crash and it should not be used in your final release.
-     */
-    @NonNull
-    public LoggerConfig catchUncaughtExceptions(boolean catchExceptions) {
-        if (catchExceptions) {
-            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                @Override
-                public void uncaughtException(Thread thread, Throwable ex) {
-                    Logger.error(ex);
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                    System.exit(10);
-                }
-            });
-        } else {
-            Thread.setDefaultUncaughtExceptionHandler(null);
-        }
-        return this;
-    }
+	/**
+	 * Minimal level of the message that should be logged
+	 */
+	public LoggerConfig setLevel(@NonNull Level level) {
+		this.level = level;
+		return this;
+	}
 
-    /**
-     * String used to separate message chunks
-     */
-    @NonNull
-    public LoggerConfig setSeparator(@NonNull String separator) {
-        this.separator = separator;
-        return this;
-    }
+	/**
+	 * default log tag that will be used when custom appenderId is not defined
+	 */
+	public LoggerConfig setDefaultTag(@NonNull String defaultTag) {
+		this.defaultTag = defaultTag;
+		return this;
+	}
 
-    /**
-     * String used to separate message chunks
-     */
-    @NonNull
-    @Override
-    public String getSeparator() {
-        return this.separator;
-    }
+	/**
+	 * if true then all stack trace with throwable will be logged
+	 */
+	public LoggerConfig setLogThrowableWithStackTrace(boolean logThrowableWithStackTrace) {
+		this.logThrowableWithStackTrace = logThrowableWithStackTrace;
+		return this;
+	}
 
-    /**
-     * String used to separate message and {@link Throwable} log
-     */
-    @NonNull
-    public LoggerConfig setThrowableSeparator(@NonNull String throwableSeparator) {
-        this.throwableSeparator = throwableSeparator;
-        return this;
-    }
+	/**
+	 * Separator between message parts
+	 */
+	public LoggerConfig setSeparator(@NonNull String separator) {
+		this.separator = separator;
+		return this;
+	}
 
-    /**
-     * String used to separate message and {@link Throwable} log
-     */
-    @NonNull
-    @Override
-    public String getThrowableSeparator() {
-        return this.throwableSeparator;
-    }
+	/**
+	 * Separator between message and throwable
+	 */
+	public LoggerConfig setThrowableSeparator(@NonNull String throwableSeparator) {
+		this.throwableSeparator = throwableSeparator;
+		return this;
+	}
 
-    /**
-     * Pattern used to format date with {@link SimpleDateFormat}
-     */
-    @NonNull
-    @Override
-    public String getDatePattern() {
-        return datePattern;
-    }
+	/**
+	 * Pattern of the displayed time
+	 */
+	public LoggerConfig setTimePattern(@NonNull String timePattern) {
+		this.timePattern = timePattern;
+		return this;
+	}
 
-    /**
-     * Pattern used to format date with {@link SimpleDateFormat}. <p>Default: <code>{@value #DATE_PATTERN}</code>
-     * <p>
-     * <b>Note:</b> if you changed DateFormat with {@link #setDateFormat(SimpleDateFormat)} before call this method then it will be overwritten
-     */
-    public LoggerConfig setDatePattern(@NonNull String datePattern) {
-        this.datePattern = datePattern;
-        this.dateFormat = new SimpleDateFormat(datePattern, Locale.getDefault());
-        return this;
-    }
+	/**
+	 * Enable or disable default logcat appender
+	 */
+	public LoggerConfig enableDefaultAppender(boolean enable) {
+		if (enable) {
+			if (!this.loggerMap.containsKey(DEFAULT_APPENDER)) {
+				this.loggerMap.put(DEFAULT_APPENDER, new AppenderLogger(new LogcatAppender()));
+			}
+		} else {
+			this.loggerMap.remove(DEFAULT_APPENDER);
+		}
+		return this;
+	}
 
-    /**
-     * {@link SimpleDateFormat}  used to format log time in the log tag and log message
-     */
-    @NonNull
-    @Override
-    public SimpleDateFormat getDateFormat() {
-        return dateFormat;
-    }
+	/**
+	 * Setup Thread to catch and log all uncaught exceptions<p>
+	 * This method doesn't prevent app crash and it should not be used in your final release.
+	 */
+	@NonNull
+	public LoggerConfig catchUncaughtExceptions() {
+		return catchUncaughtExceptions(true, null);
+	}
 
-    /**
-     * {@link SimpleDateFormat}  used to format log time in the log tag and log message
-     * <p>
-     * <b>Note:</b> If you change this parameter then {@link #datePattern} may be unused
-     */
-    public LoggerConfig setDateFormat(@NonNull SimpleDateFormat dateFormat) {
-        this.dateFormat = dateFormat;
-        return this;
-    }
+	/**
+	 * Setup Thread to catch and log all uncaught exceptions<p>
+	 * This method doesn't prevent app crash and it should not be used in your final release.
+	 */
+	@NonNull
+	public LoggerConfig catchUncaughtExceptions(boolean catchUncaughtExceptions) {
+		return catchUncaughtExceptions(catchUncaughtExceptions, null);
+	}
+
+	/**
+	 * Setup Thread to catch and log all uncaught exceptions<p>
+	 * This method doesn't prevent app crash and it should not be used in your final release.
+	 */
+	@NonNull
+	public LoggerConfig catchUncaughtExceptions(boolean catchUncaughtExceptions, @Nullable LoggerUncaughtExceptionHandler handler) {
+		if (catchUncaughtExceptions) {
+			Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
+				Logger.error(ex);
+				if (handler == null || !handler.uncaughtException(thread, ex)) {
+					android.os.Process.killProcess(android.os.Process.myPid());
+					System.exit(10);
+				}
+			});
+		} else {
+			Thread.setDefaultUncaughtExceptionHandler(null);
+		}
+		return this;
+	}
+
+	/**
+	 * Create new {@link LoggableANRWatchDog} thread.<p>
+	 * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a><p>
+	 * <b>NOTE: </b>This should not be used in your final release<p>
+	 * <b>NOTE2: </b>Use this carefully because the watchdog will prevent the debugger with hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).
+	 */
+	@NonNull
+	public LoggerConfig runANRWatchDog(@NonNull LoggableANRWatchDog watchDog) {
+		watchDog.start();
+		return this;
+	}
+
+	/**
+	 * Read values with config map
+	 */
+	@Override
+	protected void read(@NonNull Map<String, String> config) {
+		super.read(config);
+		if (config.containsKey("timePattern")) {
+			setTimePattern(config.get("timePattern"));
+		}
+		if (config.containsKey("catchUncaughtExceptions")) {
+			catchUncaughtExceptions(Boolean.parseBoolean(config.get("catchUncaughtExceptions")));
+		}
+		if (config.containsKey("runANRWatchDog")) {
+			if (Boolean.parseBoolean(config.get("runANRWatchDog"))) {
+				runANRWatchDog(new LoggableANRWatchDog());
+			}
+		}
+		if (config.containsKey("defaultTag")) {
+			setDefaultTag(config.get("defaultTag"));
+		}
+	}
+
+	public interface LoggerUncaughtExceptionHandler {
+
+		/**
+		 * Return true if the handler consumed the exception, false otherwise
+		 *
+		 * @see java.lang.Thread.UncaughtExceptionHandler#uncaughtException(Thread, Throwable)
+		 */
+		boolean uncaughtException(Thread thread, Throwable ex);
+	}
 }

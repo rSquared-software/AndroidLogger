@@ -11,7 +11,7 @@
 ///**
 // * Created by Rafał on 2015-12-14.
 // */
-//@org.robolectric.annotation.Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
+//@org.robolectric.annotation._Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 //@RunWith(RobolectricGradleTestRunner.class)
 //public class LoggerUtilsTest {
 //

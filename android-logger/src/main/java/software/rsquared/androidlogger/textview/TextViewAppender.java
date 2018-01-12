@@ -23,73 +23,59 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
-import software.rsquared.androidlogger.ConfigSetter;
+import software.rsquared.androidlogger.Appender;
+import software.rsquared.androidlogger.ConfigurableAppender;
 import software.rsquared.androidlogger.Level;
 import software.rsquared.androidlogger.Logger;
-import software.rsquared.androidlogger.logcat.LogcatLogger;
+import software.rsquared.androidlogger.logcat.LogcatAppender;
 
 /**
- * {@link Logger Logger} that send messages to Logcat
- * console
- *
  * @author Rafal Zajfert
- * @version 1.0.1 (15/04/2015)
  */
 @SuppressWarnings("unused")
-public class TextViewLogger extends Logger implements ConfigSetter<TextViewLoggerConfig> {
+public class TextViewAppender extends Appender implements ConfigurableAppender<TextViewAppenderConfig> {
+	private final Logger logger = Logger.createWith(new LogcatAppender());
 
-    private final Logger logger = new LogcatLogger();
-    private TextViewLoggerConfig config = new TextViewLoggerConfig();
+	private TextViewAppenderConfig config;
 
-    @Nullable
-    private TextView textView;
+	@Nullable
+	private TextView textView;
 
-    public TextViewLogger() {
-    }
+	public TextViewAppender() {
+	}
 
-    @SuppressWarnings("NullableProblems")
-    public TextViewLogger(@NonNull TextView textView) {
-        this.textView = textView;
-    }
+	public TextViewAppender(@Nullable TextView textView) {
+		this.textView = textView;
+	}
 
-    public void setTextView(@Nullable TextView textView) {
-        this.textView = textView;
-    }
+	@Override
+	public TextViewAppenderConfig getConfig() {
+		if (config == null) {
+			config = new TextViewAppenderConfig();
+		}
+		return config;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    public TextViewLoggerConfig getConfig() {
-        return config;
-    }
+	public TextViewAppender setTextView(@Nullable TextView textView) {
+		this.textView = textView;
+		return this;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setConfig(@NonNull TextViewLoggerConfig config) {
-        this.config = config;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void print(Level level, String message) {
+	@Override
+	protected void append(Level level, String tag, String message) {
         if (textView != null) {
             Spannable spannable = convertToSpannable(textView, level, message);
 
-            if (TextViewLoggerConfig.Method.APPEND.equals(config.getPrintMethod())) {
+            if (TextViewAppenderConfig.Method.APPEND.equals(config.getPrintMethod())) {
                 textView.append(spannable);
             } else {
                 textView.setText(spannable);
             }
         } else {
-            logger.w("Text view for the logger is not initialized (call setTextView(TextView) method)");
+            logger.w("Text view in " + TextViewAppender.class.getSimpleName() + " is not initialized (call setTextView(TextView) method)");
         }
-    }
+
+	}
 
     @NonNull
     private Spannable convertToSpannable(@NonNull TextView textView, @NonNull Level level, String message) {
@@ -97,14 +83,14 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
         String text;
         switch (config.getPrintMethod()) {
             case OVERWRITE:
-                text = tag + SPACE + message;
+                text = tag + Logger.SPACE + message;
                 break;
             case PREPEND:
-                text = tag + SPACE + message + getMessageSeparator(textView) + textView.getText();
+                text = tag + Logger.SPACE + message + getMessageSeparator(textView) + textView.getText();
                 break;
             case APPEND:
             default:
-                text = getMessageSeparator(textView) + tag + SPACE + message;
+                text = getMessageSeparator(textView) + tag + Logger.SPACE + message;
                 break;
 
         }
@@ -118,9 +104,9 @@ public class TextViewLogger extends Logger implements ConfigSetter<TextViewLogge
             return "";
         }
         if (config.isInNewLine()) {
-            return NEW_LINE;
+            return Logger.NEW_LINE;
         }
-        return SPACE;
+        return Logger.SPACE;
     }
 
 

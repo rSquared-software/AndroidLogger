@@ -17,16 +17,14 @@
 package software.rsquared.androidlogger.file;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 
 import java.util.Map;
 
 /**
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class RollingFileLoggerConfig extends BaseFileLoggerConfig<RollingFileLoggerConfig> {
+public class RollingFileAppenderConfig extends BaseFileAppenderConfig<RollingFileAppenderConfig> {
     private static int B = 1;
     private static int KB = 1024 * B;
     private static int MB = 1024 * KB;
@@ -35,12 +33,14 @@ public class RollingFileLoggerConfig extends BaseFileLoggerConfig<RollingFileLog
     private long maxFileSize = -1;
     private int maxFileBackupCount = 0;
 
+    RollingFileAppenderConfig() {
+    }
+
     public long getMaxFileSize() {
         return maxFileSize;
     }
 
-    @VisibleForTesting
-    public BaseFileLoggerConfig setMaxFileSize(long maxFileSize) {
+    public RollingFileAppenderConfig setMaxFileSize(long maxFileSize) {
         this.maxFileSize = maxFileSize;
         return this;
     }
@@ -49,7 +49,7 @@ public class RollingFileLoggerConfig extends BaseFileLoggerConfig<RollingFileLog
         return maxFileBackupCount;
     }
 
-    public BaseFileLoggerConfig setMaxFileBackupCount(int maxFileBackupCount) {
+    public RollingFileAppenderConfig setMaxFileBackupCount(int maxFileBackupCount) {
         this.maxFileBackupCount = maxFileBackupCount;
         return this;
     }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package software.rsquared.androidlogger.logcat;
-
-import software.rsquared.androidlogger.BaseLoggerConfig;
+package software.rsquared.androidlogger.file;
 
 /**
  * @author Rafal Zajfert
  * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class LogcatLoggerConfig extends BaseLoggerConfig<LogcatLoggerConfig> {
+public class FileAppenderConfig extends BaseFileAppenderConfig<FileAppenderConfig> {
 
+    FileAppenderConfig() {
+    }
 }

@@ -16,52 +16,33 @@
 
 package software.rsquared.androidlogger.logcat;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import software.rsquared.androidlogger.ConfigSetter;
+import software.rsquared.androidlogger.Appender;
+import software.rsquared.androidlogger.ConfigurableAppender;
 import software.rsquared.androidlogger.Level;
-import software.rsquared.androidlogger.Logger;
 
 /**
- * {@link Logger Logger} that send messages to Logcat
- * console
- *
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class LogcatLogger extends Logger implements ConfigSetter<LogcatLoggerConfig> {
+public class LogcatAppender extends Appender implements ConfigurableAppender<LogcatAppenderConfig> {
 
-    private LogcatLoggerConfig config = new LogcatLoggerConfig();
+    private LogcatAppenderConfig config;
 
-    public LogcatLogger() {
+    public LogcatAppender() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
     @Override
-    public LogcatLoggerConfig getConfig() {
+    public LogcatAppenderConfig getConfig() {
+        if (config == null) {
+            config = new LogcatAppenderConfig();
+        }
         return config;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void setConfig(@NonNull LogcatLoggerConfig config) {
-        this.config = config;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void print(Level level, String message) {
-        String tag = getTag(level);
+    protected void append(Level level, String tag, String message) {
         switch (level) {
             case ERROR:
                 Log.e(tag, message);

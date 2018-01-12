@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package software.rsquared.androidlogger.file;
+package software.rsquared.androidlogger.logcat;
 
-import android.support.annotation.NonNull;
-
-import java.util.Map;
+import software.rsquared.androidlogger.AppenderConfig;
 
 /**
  * @author Rafal Zajfert
- * @version 1.0.5 (26/04/2015)
  */
 @SuppressWarnings("unused")
-public class FileLoggerConfig extends BaseFileLoggerConfig<FileLoggerConfig> {
-    @Override
-    protected void read(@NonNull Map<String, String> config) {
-        super.read(config);
-    }
+public class LogcatAppenderConfig extends AppenderConfig<LogcatAppenderConfig> {
+
+	LogcatAppenderConfig() {
+	}
 }

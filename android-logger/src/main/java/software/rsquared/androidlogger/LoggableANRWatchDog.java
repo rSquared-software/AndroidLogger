@@ -16,20 +16,18 @@
 
 package software.rsquared.androidlogger;
 
-import com.github.anrwatchdog.ANRError;
-import software.rsquared.androidlogger.logcat.LogcatLogger;
+import software.rsquared.androidlogger.logcat.LogcatAppender;
 
 /**
  * LoggableANRWatchDog class<p>
  * For more information about usage see: <a href="https://github.com/SalomonBrys/ANR-WatchDog" >https://github.com/SalomonBrys/ANR-WatchDog</a>
  *
  * @author Rafal Zajfert
- * @version 1.0.7 (16/05/2015)
  */
 @SuppressWarnings("unused")
 public class LoggableANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
 
-    private final LogcatLogger logger = new LogcatLogger();
+    private final AppenderLogger logger = new AppenderLogger(new LogcatAppender());
 
     private ANRListener customListener;
     private boolean preventCrash = false;
@@ -88,33 +86,29 @@ public class LoggableANRWatchDog extends com.github.anrwatchdog.ANRWatchDog {
     }
 
     /**
-     * @deprecated use {@link LoggerConfig#useANRWatchDog(LoggableANRWatchDog)} instead
+     * use {@link LoggerConfig#runANRWatchDog(LoggableANRWatchDog)} instead
      */
-    @Deprecated
     @Override
     public synchronized void start() {
         logger.w("=======================================");
-        logger.w("LoggableANRWatchDog is running. Please use this carefully because the watchdog will prevent the debugger from hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).");
+        logger.w("LoggableANRWatchDog is running. Please use this carefully because the watchdog will prevent the debugger with hanging execution at breakpoints or exceptions (it will detect the debugging pause as an ANR).");
         logger.w("=======================================");
-        super.setANRListener(new ANRListener() {
-            @Override
-            public void onAppNotResponding(ANRError error) {
-                Logger.error(error);
-                if (customListener != null) {
-                    try {
-                        customListener.onAppNotResponding(error);
-                    } catch (Error e) {
-                        if (!preventCrash) {
-                            throw e;
-                        }
-                    }
-                } else {
-                    if (!preventCrash) {
-                        throw error;
-                    }
-                }
-            }
-        });
+        super.setANRListener(error -> {
+			Logger.error(error);
+			if (customListener != null) {
+				try {
+					customListener.onAppNotResponding(error);
+				} catch (Error e) {
+					if (!preventCrash) {
+						throw e;
+					}
+				}
+			} else {
+				if (!preventCrash) {
+					throw error;
+				}
+			}
+		});
 
         super.start();
     }
