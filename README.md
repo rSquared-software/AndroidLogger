@@ -114,7 +114,7 @@ Levels order: **_VERBOSE_** < **_DEBUG_** < **_INFO_** < **_WARNING_** < **_ERRO
 This library provide five types of appender: **_LogcatAppender_**, **_FileAppender_**, **_RollingFileAppender_**, **_TextViewAppender_**, **_ToastAppender_**.  
 You can create custom appender by extending Appender class.
 
-###Properties Configuration
+### Properties Configuration
 
 Logger can by also configured by the properties file
 
