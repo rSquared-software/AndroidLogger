@@ -19,7 +19,6 @@ package software.rsquared.androidlogger;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,7 +94,6 @@ abstract class LoggerUtils {
 	 */
 	@NonNull
 	private static String replaceFormatValues(@NonNull String text, @NonNull Level level) {
-		Log.e("test", "replaceFormatValues() " +  text + ", " + level);
 		if (TextUtils.isEmpty(text)) {
 			return "";
 		}
@@ -106,7 +104,6 @@ abstract class LoggerUtils {
 			for (Map.Entry<String, String> entry : map.entrySet()) {
 				String target = entry.getKey();
 				String replacement = entry.getValue();
-				Log.e("test", target + ": " + replacement);
 				if (target != null && replacement != null) {
 					text = text.replace(target, replacement);
 				}

@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class Appender {
-    private static final int CHUNK_SIZE = 3000;
+	private static final int CHUNK_SIZE = 3000;
 
 	@Getter(AccessLevel.PACKAGE)
 	@Setter(AccessLevel.PACKAGE)
@@ -65,7 +65,7 @@ public abstract class Appender {
 	 */
 	protected abstract void append(Level level, String tag, String message);
 
-	protected void append(Level level, Object message, Throwable throwable) {
+	protected void append(Level level, Tag tag, Object message, Throwable throwable) {
 		String msg = getMessage(message, level);
 
 		StringBuilder builder = new StringBuilder();
@@ -80,7 +80,7 @@ public abstract class Appender {
 			builder.append(LoggerUtils.throwableToString(throwable, logWithStackTrace()));
 		}
 
-		if (builder.length() == 0){
+		if (builder.length() == 0) {
 			if (msg == null && throwable == null) {
 				builder.append("null");
 			} else {
@@ -89,39 +89,39 @@ public abstract class Appender {
 		}
 		if (builder.length() > 0) {
 			String text = builder.toString();
-			String tag = getTag(level);
+			String formattedTag = getTag(level, tag);
 			if (text.length() > CHUNK_SIZE) {
 				for (String line : WordUtils.wrap(text, CHUNK_SIZE)) {
-					append(level, tag, line);
+					append(level, formattedTag, line);
 				}
 			} else {
-				append(level, tag, text);
+				append(level, formattedTag, text);
 			}
 		}
 	}
 
 	@Nullable
-	protected String getTag(Level level) {
-		String tag = null;
-		if (this instanceof ConfigurableAppender) {
+	protected String getTag(Level level, @Nullable Tag tag) {
+		String result = tag == null ? null : tag.value;
+		if (TextUtils.isEmpty(result) && this instanceof ConfigurableAppender) {
 			AppenderConfig appenderConfig = ((ConfigurableAppender) this).getConfig();
 			if (appenderConfig != null) {
-				tag = appenderConfig.getTag();
+				result = appenderConfig.getTag();
 			}
 		}
-		if (TextUtils.isEmpty(tag)){
-			tag = LoggerConfig.getInstance().getDefaultTag();
+		if (TextUtils.isEmpty(result)) {
+			result = LoggerConfig.getInstance().getDefaultTag();
 		}
-		if (TextUtils.isEmpty(tag)){
+		if (TextUtils.isEmpty(result)) {
 			return null;
 		}
-		return LoggerUtils.formatTag(tag, level);
+		return LoggerUtils.formatTag(result, level);
 	}
 
 	protected boolean logWithStackTrace() {
 		Config config = LoggerConfig.getInstance();
 		Config appenderConfig = null;
-		if (this instanceof ConfigurableAppender){
+		if (this instanceof ConfigurableAppender) {
 			appenderConfig = ((ConfigurableAppender) this).getConfig();
 		}
 
@@ -147,7 +147,7 @@ public abstract class Appender {
 				separator = appenderConfig.getThrowableSeparator();
 			}
 		}
-		if (separator == null){
+		if (separator == null) {
 			separator = LoggerConfig.getInstance().getThrowableSeparator();
 		}
 

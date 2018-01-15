@@ -128,7 +128,7 @@ Logger.getLoggerConfig().fromProperties(context, R.raw.logger);
 ```properties
 logger=logcat, textView, file, toast
 logger.level=VERBOSE
-logger.tag=$CodeLine$
+logger.value=$CodeLine$
 logger.logThrowableWithStackTrace=true
 logger.separator=\u0020
 logger.throwableSeparator=\r\n
@@ -138,26 +138,26 @@ logger.useANRWatchDog=true
 
 logger.textView=software.rsquared.androidlogger.textview.TextViewAppender
 logger.textView.level=INFO
-logger.textView.tag=$CodeLine$
+logger.textView.value=$CodeLine$
 logger.textView.logThrowableWithStackTrace=true
 logger.textView.inNewLine=true
 logger.textView.printMethod=APPEND
 
 logger.file=software.rsquared.androidlogger.file.FileAppender
 logger.file.level=WARNING
-logger.file.tag=$ShortLevel$ $CurrentTime$ $CodeLine$
+logger.file.value=$ShortLevel$ $CurrentTime$ $CodeLine$
 logger.file.logThrowableWithStackTrace=true
 logger.file.externalFile=loggerLogs/$Date$/log.txt
 logger.file.datePattern=dd_MM_yyyy
 
 logger.logcat=software.rsquared.androidlogger.logcat.LogcatAppender
 logger.logcat.level=VERBOSE
-logger.logcat.tag=$CodeLine$
+logger.logcat.value=$CodeLine$
 logger.logcat.logThrowableWithStackTrace=true
 
 logger.toast=software.rsquared.androidlogger.toast.ToastAppender
 logger.toast.level=ERROR
-logger.toast.tag=$CodeLine$
+logger.toast.value=$CodeLine$
 logger.toast.logThrowableWithStackTrace=false
 logger.toast.duration=SHORT
 ```

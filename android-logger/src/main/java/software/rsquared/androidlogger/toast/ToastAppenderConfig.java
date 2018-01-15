@@ -74,7 +74,7 @@ public class ToastAppenderConfig extends AppenderConfig<ToastAppenderConfig> {
                     setDuration(LENGTH_LONG);
                     break;
                 default:
-                    throw new IllegalArgumentException("Illegal duration length. Must be one of: SHORT, LONG");
+                    throw new IllegalArgumentException("Illegal duration length. Must be one of: LENGTH_SHORT, LENGTH_LONG");
             }
         }
     }

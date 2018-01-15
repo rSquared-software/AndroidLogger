@@ -33,7 +33,14 @@ public class ToastAppender extends Appender implements ConfigurableAppender<Toas
 	private ToastAppenderConfig config;
 	private Context context;
 
+	public ToastAppender() {
+	}
+
 	public ToastAppender(Context context) {
+		this.context = context;
+	}
+
+	public void setContext(Context context) {
 		this.context = context;
 	}
 
@@ -47,6 +54,9 @@ public class ToastAppender extends Appender implements ConfigurableAppender<Toas
 
 	@Override
 	protected void append(Level level, String tag, String message) {
+		if (context == null) {
+			throw new IllegalStateException("Context = null, pleas set context in " + getClass().getSimpleName());
+		}
 		Toast.makeText(context, tag + Logger.SPACE + message, config.getDuration()).show();
 	}
 }

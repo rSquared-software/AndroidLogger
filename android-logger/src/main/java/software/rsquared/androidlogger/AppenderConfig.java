@@ -16,7 +16,7 @@ public abstract class AppenderConfig<T extends AppenderConfig>  extends Config {
 
 
 	/**
-	 *  log tag
+	 *  log value
 	 */
 	@Getter(AccessLevel.PROTECTED)
 	@NonNull
@@ -26,7 +26,7 @@ public abstract class AppenderConfig<T extends AppenderConfig>  extends Config {
 	}
 
 	/**
-	 * log tag
+	 * log value
 	 */
 	public T setTag(@NonNull String tag){
 		this.tag = tag;
@@ -95,8 +95,8 @@ public abstract class AppenderConfig<T extends AppenderConfig>  extends Config {
 	@CallSuper
 	protected void read(@NonNull Map<String, String> config) {
 		super.read(config);
-		if (config.containsKey("tag")) {
-			tag = config.get("tag");
+		if (config.containsKey("value")) {
+			tag = config.get("value");
 		}
 	}
 }

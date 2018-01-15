@@ -1,11 +1,5 @@
 package software.rsquared.androidlogger;
 
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-
-import java.util.Calendar;
-import java.util.Date;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -29,9 +23,9 @@ public class AppenderLogger extends Logger {
 	}
 
 	@Override
-	protected void append(Level level, Object message, Throwable throwable) {
+	protected void append(Level level, Tag tag, Object message, Throwable throwable) {
 		if (isLevelAllowed(level)) {
-			appender.append(level, message, throwable);
+			appender.append(level, tag, message, throwable);
 		}
 	}
 
@@ -69,7 +63,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void i(Object message) {
-		append(INFO, message, null);
+		append(INFO, null, message, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void i(Tag tag, Object message) {
+		append(INFO, tag, message, null);
 	}
 
 	/**
@@ -77,7 +79,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void iF(String message, Object... args) {
-		append(INFO, String.format(message, args), null);
+		append(INFO, null, String.format(message, args), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void iF(Tag tag, String message, Object... args) {
+		append(INFO, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -85,7 +95,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void i(Object... message) {
-		append(INFO, LoggerUtils.array2String(getSeparator(), message), null);
+		append(INFO, null, LoggerUtils.array2String(getSeparator(), message), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void i(Tag tag, Object... message) {
+		append(INFO, tag, LoggerUtils.array2String(getSeparator(), message), null);
 	}
 
 	/**
@@ -93,7 +111,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void i(Throwable th) {
-		append(INFO, null, th);
+		append(INFO, null, null, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void i(Tag tag, Throwable th) {
+		append(INFO, tag, null, th);
 	}
 
 	/**
@@ -101,7 +127,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void i(Object message, Throwable th) {
-		append(INFO, message, th);
+		append(INFO, null, message, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void i(Tag tag, Object message, Throwable th) {
+		append(INFO, tag, message, th);
 	}
 
 	/**
@@ -109,7 +143,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void e(Object message) {
-		append(ERROR, message, null);
+		append(ERROR, null, message, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void e(Tag tag, Object message) {
+		append(ERROR, tag, message, null);
 	}
 
 	/**
@@ -117,7 +159,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void eF(String message, Object... args) {
-		append(ERROR, String.format(message, args), null);
+		append(ERROR, null, String.format(message, args), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void eF(Tag tag, String message, Object... args) {
+		append(ERROR, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -125,7 +175,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void e(Object... message) {
-		append(ERROR, LoggerUtils.array2String(getSeparator(), message), null);
+		append(ERROR, null, LoggerUtils.array2String(getSeparator(), message), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void e(Tag tag, Object... message) {
+		append(ERROR, tag, LoggerUtils.array2String(getSeparator(), message), null);
 	}
 
 	/**
@@ -133,7 +191,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void e(Throwable th) {
-		append(ERROR, null, th);
+		append(ERROR, null, null, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void e(Tag tag, Throwable th) {
+		append(ERROR, tag, null, th);
 	}
 
 	/**
@@ -141,7 +207,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void e(Object message, Throwable th) {
-		append(ERROR, message, th);
+		append(ERROR, null, message, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void e(Tag tag, Object message, Throwable th) {
+		append(ERROR, tag, message, th);
 	}
 
 	/**
@@ -149,7 +223,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void d(Object message) {
-		append(DEBUG, message, null);
+		append(DEBUG, null, message, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void d(Tag tag, Object message) {
+		append(DEBUG, tag, message, null);
 	}
 
 	/**
@@ -157,7 +239,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void dF(String message, Object... args) {
-		append(DEBUG, String.format(message, args), null);
+		append(DEBUG, null, String.format(message, args), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void dF(Tag tag, String message, Object... args) {
+		append(DEBUG, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -165,7 +255,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void d(Object... message) {
-		append(DEBUG, LoggerUtils.array2String(getSeparator(), message), null);
+		append(DEBUG, null, LoggerUtils.array2String(getSeparator(), message), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void d(Tag tag, Object... message) {
+		append(DEBUG, tag, LoggerUtils.array2String(getSeparator(), message), null);
 	}
 
 	/**
@@ -173,7 +271,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void d(Throwable th) {
-		append(DEBUG, null, th);
+		append(DEBUG, null, null, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void d(Tag tag, Throwable th) {
+		append(DEBUG, tag, null, th);
 	}
 
 	/**
@@ -181,7 +287,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void d(Object message, Throwable th) {
-		append(DEBUG, message, th);
+		append(DEBUG, null, message, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void d(Tag tag, Object message, Throwable th) {
+		append(DEBUG, tag, message, th);
 	}
 
 	/**
@@ -189,7 +303,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void v(Object message) {
-		append(VERBOSE, message, null);
+		append(VERBOSE, null, message, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void v(Tag tag, Object message) {
+		append(VERBOSE, tag, message, null);
 	}
 
 	/**
@@ -197,7 +319,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void vF(String message, Object... args) {
-		append(VERBOSE, String.format(message, args), null);
+		append(VERBOSE, null, String.format(message, args), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void vF(Tag tag, String message, Object... args) {
+		append(VERBOSE, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -205,7 +335,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void v(Object... message) {
-		append(VERBOSE, LoggerUtils.array2String(getSeparator(), message), null);
+		append(VERBOSE, null, LoggerUtils.array2String(getSeparator(), message), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void v(Tag tag, Object... message) {
+		append(VERBOSE, tag, LoggerUtils.array2String(getSeparator(), message), null);
 	}
 
 	/**
@@ -213,7 +351,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void v(Throwable th) {
-		append(VERBOSE, null, th);
+		append(VERBOSE, null, null, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void v(Tag tag, Throwable th) {
+		append(VERBOSE, tag, null, th);
 	}
 
 	/**
@@ -221,7 +367,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void v(Object message, Throwable th) {
-		append(VERBOSE, message, th);
+		append(VERBOSE, null, message, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void v(Tag tag, Object message, Throwable th) {
+		append(VERBOSE, tag, message, th);
 	}
 
 	/**
@@ -229,7 +383,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void w(Object message) {
-		append(WARNING, message, null);
+		append(WARNING, null, message, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void w(Tag tag, Object message) {
+		append(WARNING, tag, message, null);
 	}
 
 	/**
@@ -237,7 +399,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void wF(String message, Object... args) {
-		append(WARNING, String.format(message, args), null);
+		append(WARNING, null, String.format(message, args), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void wF(Tag tag, String message, Object... args) {
+		append(WARNING, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -245,7 +415,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void w(Object... message) {
-		append(WARNING, LoggerUtils.array2String(getSeparator(), message), null);
+		append(WARNING, null, LoggerUtils.array2String(getSeparator(), message), null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void w(Tag tag, Object... message) {
+		append(WARNING, tag, LoggerUtils.array2String(getSeparator(), message), null);
 	}
 
 	/**
@@ -253,7 +431,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void w(Throwable th) {
-		append(WARNING, null, th);
+		append(WARNING, null, null, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void w(Tag tag, Throwable th) {
+		append(WARNING, tag, null, th);
 	}
 
 	/**
@@ -261,7 +447,15 @@ public class AppenderLogger extends Logger {
 	 */
 	@Override
 	public void w(Object message, Throwable th) {
-		append(WARNING, message, th);
+		append(WARNING, null, message, th);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void w(Tag tag, Object message, Throwable th) {
+		append(WARNING, tag, message, th);
 	}
 
 
@@ -271,5 +465,13 @@ public class AppenderLogger extends Logger {
 	@Override
 	public void t() {
 		d("At " + Logger.FULL_CLASS_NAME + "." + Logger.METHOD_NAME + Logger.CODE_LINE);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void t(Tag tag) {
+		d(tag, "At " + Logger.FULL_CLASS_NAME + "." + Logger.METHOD_NAME + Logger.CODE_LINE);
 	}
 }

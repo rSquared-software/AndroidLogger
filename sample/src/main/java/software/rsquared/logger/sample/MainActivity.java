@@ -32,6 +32,7 @@ import java.io.File;
 import software.rsquared.androidlogger.Level;
 import software.rsquared.androidlogger.LoggableANRWatchDog;
 import software.rsquared.androidlogger.Logger;
+import software.rsquared.androidlogger.Tag;
 import software.rsquared.androidlogger.file.RollingFileAppender;
 import software.rsquared.androidlogger.logcat.LogcatAppender;
 import software.rsquared.androidlogger.textview.TextViewAppender;
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
 		Logger.error("");
 
 
+		Logger.error(new Tag("test"),"asd");
 		MainActivity context = this;
 		Logger.getLoggerConfig().fromProperties(context, R.raw.logger);
 

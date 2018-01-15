@@ -35,7 +35,7 @@ public class LoggerConfig extends Config  {
 	private final Map<String, Logger> loggerMap = new HashMap<>();
 
 	/**
-	 * default log tag that will be used when custom appenderId is not defined
+	 * default log value that will be used when custom appenderId is not defined
 	 */
 	@Getter(AccessLevel.PACKAGE)
 	@NonNull
@@ -154,7 +154,7 @@ public class LoggerConfig extends Config  {
 	}
 
 	/**
-	 * default log tag that will be used when custom appenderId is not defined
+	 * default log value that will be used when custom appenderId is not defined
 	 */
 	public LoggerConfig setDefaultTag(@NonNull String defaultTag) {
 		this.defaultTag = defaultTag;

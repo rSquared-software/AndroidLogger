@@ -64,7 +64,7 @@ public class TextViewAppender extends Appender implements ConfigurableAppender<T
 	@Override
 	protected void append(Level level, String tag, String message) {
         if (textView != null) {
-            Spannable spannable = convertToSpannable(textView, level, message);
+            Spannable spannable = convertToSpannable(textView, level, tag, message);
 
             if (TextViewAppenderConfig.Method.APPEND.equals(config.getPrintMethod())) {
                 textView.append(spannable);
@@ -78,8 +78,7 @@ public class TextViewAppender extends Appender implements ConfigurableAppender<T
 	}
 
     @NonNull
-    private Spannable convertToSpannable(@NonNull TextView textView, @NonNull Level level, String message) {
-        String tag = getTag(level);
+    private Spannable convertToSpannable(@NonNull TextView textView, @NonNull Level level, String tag, String message) {
         String text;
         switch (config.getPrintMethod()) {
             case OVERWRITE:

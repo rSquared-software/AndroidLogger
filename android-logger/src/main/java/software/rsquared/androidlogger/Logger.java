@@ -103,13 +103,13 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
-	 * Logger for appender with given tag
+	 * Logger for appender with given value
 	 */
 	public static Logger getLogger(String appenderId) {
 		return getLoggerConfig().getLoggerMap().get(appenderId);
 	}
 
-	public static Logger createWith(Appender appender){
+	public static Logger createWith(Appender appender) {
 		return new AppenderLogger(appender);
 	}
 
@@ -134,6 +134,27 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#INFO INFO} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void info(Tag tag, Object message) {
+		appendToAll(INFO, tag, message, null);
+	}
+
+	/**
 	 * Send an {@link Level#INFO INFO} message formatted with args objects<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -152,6 +173,28 @@ public abstract class Logger extends BaseLogger {
 	 */
 	public static void infoF(String message, Object... args) {
 		appendToAll(INFO, String.format(message, args), null);
+	}
+
+	/**
+	 * Send an {@link Level#INFO INFO} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void infoF(Tag tag, String message, Object... args) {
+		appendToAll(INFO, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -177,11 +220,44 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#INFO INFO} message created
+	 * with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message parts to send
+	 */
+	public static void info(Tag tag, Object... message) {
+		appendToAll(INFO, tag, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
+
+	/**
 	 * Send an {@link Level#INFO INFO} log of
 	 * {@link Throwable}
 	 */
 	public static void info(Throwable th) {
 		appendToAll(INFO, null, th);
+	}
+
+	/**
+	 * Send an {@link Level#INFO INFO} log of
+	 * {@link Throwable}
+	 *
+	 * @param tag custom value of the log
+	 */
+	public static void info(Tag tag, Throwable th) {
+		appendToAll(INFO, tag, null, th);
 	}
 
 	/**
@@ -207,6 +283,29 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#INFO INFO} message with
+	 * {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void info(Tag tag, Object message, Throwable th) {
+		appendToAll(INFO, tag, message, th);
+	}
+
+	/**
 	 * Send an {@link Level#ERROR ERROR} message<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -228,6 +327,28 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#ERROR ERROR} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void error(Tag tag, Object message) {
+		appendToAll(ERROR, tag, message, null);
+	}
+
+	/**
 	 * Send an {@link Level#ERROR ERROR} message formatted with args objects<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -246,6 +367,28 @@ public abstract class Logger extends BaseLogger {
 	 */
 	public static void errorF(String message, Object... args) {
 		appendToAll(ERROR, String.format(message, args), null);
+	}
+
+	/**
+	 * Send an {@link Level#ERROR ERROR} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void errorF(Tag tag, String message, Object... args) {
+		appendToAll(ERROR, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -271,11 +414,44 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#ERROR ERROR} message created
+	 * with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message parts to send
+	 */
+	public static void error(Tag tag, Object... message) {
+		appendToAll(ERROR, tag, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
+
+	/**
 	 * Send an {@link Level#ERROR ERROR} log of
 	 * {@link Throwable}
 	 */
 	public static void error(Throwable th) {
 		appendToAll(ERROR, null, th);
+	}
+
+	/**
+	 * Send an {@link Level#ERROR ERROR} log of
+	 * {@link Throwable}
+	 *
+	 * @param tag custom value of the log
+	 */
+	public static void error(Tag tag, Throwable th) {
+		appendToAll(ERROR, tag, null, th);
 	}
 
 	/**
@@ -301,6 +477,29 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#ERROR ERROR} message with
+	 * {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void error(Tag tag, Object message, Throwable th) {
+		appendToAll(ERROR, tag, message, th);
+	}
+
+	/**
 	 * Send an {@link Level#DEBUG DEBUG} message<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -322,6 +521,28 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#DEBUG DEBUG} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void debug(Tag tag, Object message) {
+		appendToAll(DEBUG, tag, message, null);
+	}
+
+	/**
 	 * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -340,6 +561,28 @@ public abstract class Logger extends BaseLogger {
 	 */
 	public static void debugF(String message, Object... args) {
 		appendToAll(DEBUG, String.format(message, args), null);
+	}
+
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void debugF(Tag tag, String message, Object... args) {
+		appendToAll(DEBUG, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -365,11 +608,44 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#DEBUG DEBUG} message created
+	 * with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message parts to send
+	 */
+	public static void debug(Tag tag, Object... message) {
+		appendToAll(DEBUG, tag, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
+
+	/**
 	 * Send an {@link Level#DEBUG DEBUG} log of
 	 * {@link Throwable}
 	 */
 	public static void debug(Throwable th) {
 		appendToAll(DEBUG, null, th);
+	}
+
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} log of
+	 * {@link Throwable}
+	 *
+	 * @param tag custom value of the log
+	 */
+	public static void debug(Tag tag, Throwable th) {
+		appendToAll(DEBUG, tag, null, th);
 	}
 
 	/**
@@ -395,6 +671,29 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#DEBUG DEBUG} message with
+	 * {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void debug(Tag tag, Object message, Throwable th) {
+		appendToAll(DEBUG, tag, message, th);
+	}
+
+	/**
 	 * Send an {@link Level#VERBOSE VERBOSE} message<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -416,6 +715,28 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void verbose(Tag tag, Object message) {
+		appendToAll(VERBOSE, tag, message, null);
+	}
+
+	/**
 	 * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -434,6 +755,28 @@ public abstract class Logger extends BaseLogger {
 	 */
 	public static void verboseF(String message, Object... args) {
 		appendToAll(VERBOSE, String.format(message, args), null);
+	}
+
+	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void verboseF(Tag tag, String message, Object... args) {
+		appendToAll(VERBOSE, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -459,11 +802,44 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#VERBOSE VRBOSE} message
+	 * created with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message parts to send
+	 */
+	public static void verbose(Tag tag, Object... message) {
+		appendToAll(VERBOSE, tag, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
+
+	/**
 	 * Send an {@link Level#VERBOSE VERBOSE} log
 	 * of {@link Throwable}
 	 */
 	public static void verbose(Throwable th) {
 		appendToAll(VERBOSE, null, th);
+	}
+
+	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} log
+	 * of {@link Throwable}
+	 *
+	 * @param tag custom value of the log
+	 */
+	public static void verbose(Tag tag, Throwable th) {
+		appendToAll(VERBOSE, tag, null, th);
 	}
 
 	/**
@@ -489,6 +865,29 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#VERBOSE VERBOSE} message
+	 * with {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void verbose(Tag tag, Object message, Throwable th) {
+		appendToAll(VERBOSE, tag, message, th);
+	}
+
+	/**
 	 * Send an {@link Level#WARNING WARNING} message<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -510,6 +909,28 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#WARNING WARNING} message<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void warning(Tag tag, Object message) {
+		appendToAll(WARNING, tag, message, null);
+	}
+
+	/**
 	 * Send an {@link Level#WARNING WARNING} message formatted with args objects<p>
 	 * <p>
 	 * You can also use auto generated values:<p>
@@ -528,6 +949,28 @@ public abstract class Logger extends BaseLogger {
 	 */
 	public static void warningF(String message, Object... args) {
 		appendToAll(WARNING, String.format(message, args), null);
+	}
+
+	/**
+	 * Send an {@link Level#WARNING WARNING} message formatted with args objects<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void warningF(Tag tag, String message, Object... args) {
+		appendToAll(WARNING, tag, String.format(message, args), null);
 	}
 
 	/**
@@ -553,11 +996,44 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#WARNING WARNING} message
+	 * created with multiple part<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message parts to send
+	 */
+	public static void warning(Tag tag, Object... message) {
+		appendToAll(WARNING, tag, LoggerUtils.array2String(getLoggerConfig().getSeparator(), message), null);
+	}
+
+	/**
 	 * Send an {@link Level#WARNING WARNING} log
 	 * of {@link Throwable}
 	 */
 	public static void warning(Throwable th) {
 		appendToAll(WARNING, null, th);
+	}
+
+	/**
+	 * Send an {@link Level#WARNING WARNING} log
+	 * of {@link Throwable}
+	 *
+	 * @param tag custom value of the log
+	 */
+	public static void warning(Tag tag, Throwable th) {
+		appendToAll(WARNING, tag, null, th);
 	}
 
 	/**
@@ -583,20 +1059,56 @@ public abstract class Logger extends BaseLogger {
 	}
 
 	/**
+	 * Send an {@link Level#WARNING WARNING} message
+	 * with {@link Throwable} log<p>
+	 * <p>
+	 * You can also use auto generated values:<p>
+	 * {@link Logger#CLASS_NAME
+	 * CLASS_NAME}<p>
+	 * {@link Logger#FULL_CLASS_NAME FULL_CLASS_NAME}<p>
+	 * {@link Logger#METHOD_NAME METHOD_NAME}<p>
+	 * {@link Logger#FILE_NAME FILE_NAME}<p>
+	 * {@link Logger#LINE_NUMBER LINE_NUMBER}<p>
+	 * {@link Logger#LEVEL LEVEL}<p>
+	 * {@link Logger#SHORT_LEVEL SHORT_LEVEL}<p>
+	 * {@link Logger#CURRENT_TIME CURRENT_TIME}<p>
+	 * {@link Logger#CODE_LINE CODE_LINE}
+	 *
+	 * @param tag     custom value of the log
+	 * @param message message to send
+	 */
+	public static void warning(Tag tag, Object message, Throwable th) {
+		appendToAll(WARNING, tag, message, th);
+	}
+
+	/**
 	 * Send an {@link Level#DEBUG DEBUG} message with information where this method was called
 	 */
 	public static void trace() {
 		debug("at " + Logger.FULL_CLASS_NAME + "." + Logger.METHOD_NAME + Logger.CODE_LINE);
 	}
 
+	/**
+	 * Send an {@link Level#DEBUG DEBUG} message with information where this method was called
+	 *
+	 * @param tag custom value of the log
+	 */
+	public static void trace(Tag tag) {
+		debug(tag, "at " + Logger.FULL_CLASS_NAME + "." + Logger.METHOD_NAME + Logger.CODE_LINE);
+	}
+
 	private static void appendToAll(Level level, @Nullable Object message, @Nullable Throwable throwable) {
+		appendToAll(level, null, message, throwable);
+	}
+
+	private static void appendToAll(Level level, Tag tag, @Nullable Object message, @Nullable Throwable throwable) {
 		LoggerConfig loggerConfig = getLoggerConfig();
 		if (loggerConfig.getOverwrittenLevels().containsKey(level)) {
 			level = loggerConfig.getOverwrittenLevels().get(level);
 		}
 		if (loggerConfig.isLevelAllowed(level)) {
 			for (Logger logger : loggerConfig.getLoggerMap().values()) {
-				logger.append(level, message, throwable);
+				logger.append(level, tag, message, throwable);
 			}
 		}
 	}
