@@ -9,4 +9,8 @@ public final class Tag {
 	public Tag(String value) {
 		this.value = value;
 	}
+
+	public static Tag create(String value) {
+		return new Tag(value);
+	}
 }
