@@ -1,7 +1,8 @@
 # Logger
 Simple and useful Android logger library.
 
-## Gradle Dependency (jCenter)
+## Configuration
+### Gradle Dependency (jCenter)
 
 ```Gradle
 dependencies {
@@ -10,6 +11,20 @@ dependencies {
 ```
 
 [ ![Download](https://api.bintray.com/packages/rsquared/maven/android-logger/images/download.svg) ](https://bintray.com/rsquared/maven/android-logger/_latestVersion)
+
+
+### Java
+This library uses java 8, please make sure it is enabled in your project:
+
+```Gradle
+android {
+    ...
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+```
 
 ## Sample Usage
 
